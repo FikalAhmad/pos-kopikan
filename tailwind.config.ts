@@ -11,6 +11,10 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        hijau: "var(--green)",
+        hijaugelap: "var(--darkgreen)",
+        biru: "var(--blue)",
+        birugelap: "var(--darkblue)",
       },
     },
   },

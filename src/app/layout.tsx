@@ -3,14 +3,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SidebarBase from "@/_components/Sidebar/SidebarBase";
 
-const geistSans = localFont({
-  src: "../public/fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../public/fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+const plusJakarta = localFont({
+  src: "../public/fonts/PlusJakartaSans-VariableFont_wght.ttf",
+  variable: "--font-plus-jakarta",
   weight: "100 900",
 });
 
@@ -26,10 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <main className="w-[1024px] px-4 flex justify-between gap-[22px]">
+      <body className={`${plusJakarta.variable} antialiased`}>
+        <main className="w-[1024px] px-4 flex justify-between gap-[22px] mx-auto my-0 shadow-lg">
           <SidebarBase />
           {children}
         </main>

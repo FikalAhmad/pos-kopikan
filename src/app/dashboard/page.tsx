@@ -9,7 +9,8 @@ import CashIcon from "@/public/assets/images/cash-1.svg";
 import OrderIcon from "@/public/assets/images/orders.svg";
 import CustomerIcon from "@/public/assets/images/customers.svg";
 import cursorIcon from "@/public/assets/images/onlineOrders.svg";
-import TableDashboard from "@/_components/Dashboard/TableDashboard";
+import TableDashboard from "@/app/dashboard/_components/TableDashboard";
+import StatisticDashboard from "./_components/StatisticDashboard";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(
@@ -59,7 +60,7 @@ const Dashboard = () => {
   }, []);
   return (
     <div className="w-full flex gap-[22px]">
-      <div className="w-[509px] border-2">
+      <div className="w-[509px]">
         <div className="text-[16px]">{currentTime}</div>
         <div className="flex justify-between my-[30px]">
           {menu.map((item) => {
@@ -79,7 +80,7 @@ const Dashboard = () => {
         </div>
         <TableDashboard />
       </div>
-      <div>Overall</div>
+      <StatisticDashboard />
     </div>
   );
 };

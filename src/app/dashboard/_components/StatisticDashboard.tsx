@@ -11,6 +11,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const StatisticDashboard = () => {
   const signature = [
@@ -77,125 +78,139 @@ const StatisticDashboard = () => {
             This year
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="week" className="flex flex-col gap-[30px]">
-          <div>
-            <div className="text-lg font-bold">Signature</div>
-            <ResponsiveContainer width="100%" height={500} className="text-xs">
-              <BarChart
-                width={500}
-                height={300}
-                data={signature}
-                margin={{
-                  top: 20,
-                  right: 0,
-                  left: 0,
-                  bottom: 20,
-                }}
+        <ScrollArea className="h-[580px]">
+          <TabsContent value="week" className="flex flex-col gap-[30px]">
+            <div>
+              <div className="text-lg font-bold">Signature</div>
+              <ResponsiveContainer
+                width="100%"
+                height={500}
+                className="text-xs"
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip wrapperStyle={{ fontSize: "12px" }} />
-                <Legend />
-                <Bar
-                  dataKey="ArenLatte"
-                  fill="#8884d8"
-                  // activeBar={<Rectangle fill="pink" stroke="blue" />}
-                />
-                <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                <Bar dataKey="NuttyOatLatte" fill="blue" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div>
-            <div className="text-lg font-bold">Coffee</div>
-            <ResponsiveContainer width="100%" height={500} className="text-xs">
-              <BarChart
-                width={500}
-                height={300}
-                data={signature}
-                margin={{
-                  top: 20,
-                  right: 0,
-                  left: 0,
-                  bottom: 20,
-                }}
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={signature}
+                  margin={{
+                    top: 20,
+                    right: 0,
+                    left: 0,
+                    bottom: 20,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip wrapperStyle={{ fontSize: "12px" }} />
+                  <Legend />
+                  <Bar
+                    dataKey="ArenLatte"
+                    fill="#8884d8"
+                    // activeBar={<Rectangle fill="pink" stroke="blue" />}
+                  />
+                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
+                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
+                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
+                  <Bar dataKey="NuttyOatLatte" fill="blue" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div>
+              <div className="text-lg font-bold">Coffee</div>
+              <ResponsiveContainer
+                width="100%"
+                height={500}
+                className="text-xs"
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip wrapperStyle={{ fontSize: "12px" }} />
-                <Legend />
-                <Bar
-                  dataKey="ArenLatte"
-                  fill="#8884d8"
-                  // activeBar={<Rectangle fill="pink" stroke="blue" />}
-                />
-                <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                <Bar dataKey="NuttyOatLatte" fill="blue" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div>
-            <div className="text-lg font-bold">Non Coffee</div>
-            <ResponsiveContainer width="100%" height={500} className="text-xs">
-              <BarChart
-                width={500}
-                height={300}
-                data={signature}
-                margin={{
-                  top: 20,
-                  right: 0,
-                  left: 0,
-                  bottom: 20,
-                }}
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={signature}
+                  margin={{
+                    top: 20,
+                    right: 0,
+                    left: 0,
+                    bottom: 20,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip wrapperStyle={{ fontSize: "12px" }} />
+                  <Legend />
+                  <Bar
+                    dataKey="ArenLatte"
+                    fill="#8884d8"
+                    // activeBar={<Rectangle fill="pink" stroke="blue" />}
+                  />
+                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
+                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
+                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
+                  <Bar dataKey="NuttyOatLatte" fill="blue" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div>
+              <div className="text-lg font-bold">Non Coffee</div>
+              <ResponsiveContainer
+                width="100%"
+                height={500}
+                className="text-xs"
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip wrapperStyle={{ fontSize: "12px" }} />
-                <Legend />
-                <Bar
-                  dataKey="ArenLatte"
-                  fill="#8884d8"
-                  // activeBar={<Rectangle fill="pink" stroke="blue" />}
-                />
-                <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                <Bar dataKey="NuttyOatLatte" fill="blue" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </TabsContent>
-        <TabsContent value="month">
-          <div className="flex flex-col gap-[30px]">
-            <div>(Icon)Signatureawdawdawd</div>
-            <div>Chart</div>
-            <div>Jenis kopi</div>
-          </div>
-          <div className="flex flex-col gap-[30px]">
-            <div>(Icon)Signature</div>
-            <div>Chart</div>
-            <div>Jenis kopi</div>
-          </div>
-        </TabsContent>
-        <TabsContent value="year">
-          <div className="flex flex-col gap-[30px]">
-            <div>(Icon)Year</div>
-            <div>Chart</div>
-            <div>Jenis kopi</div>
-          </div>
-          <div className="flex flex-col gap-[30px]">
-            <div>(Icon)Signature</div>
-            <div>Chart</div>
-            <div>Jenis kopi</div>
-          </div>
-        </TabsContent>
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={signature}
+                  margin={{
+                    top: 20,
+                    right: 0,
+                    left: 0,
+                    bottom: 20,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip wrapperStyle={{ fontSize: "12px" }} />
+                  <Legend />
+                  <Bar
+                    dataKey="ArenLatte"
+                    fill="#8884d8"
+                    // activeBar={<Rectangle fill="pink" stroke="blue" />}
+                  />
+                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
+                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
+                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
+                  <Bar dataKey="NuttyOatLatte" fill="blue" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </TabsContent>
+          <TabsContent value="month">
+            <div className="flex flex-col gap-[30px]">
+              <div>(Icon)Signatureawdawdawd</div>
+              <div>Chart</div>
+              <div>Jenis kopi</div>
+            </div>
+            <div className="flex flex-col gap-[30px]">
+              <div>(Icon)Signature</div>
+              <div>Chart</div>
+              <div>Jenis kopi</div>
+            </div>
+          </TabsContent>
+          <TabsContent value="year">
+            <div className="flex flex-col gap-[30px]">
+              <div>(Icon)Year</div>
+              <div>Chart</div>
+              <div>Jenis kopi</div>
+            </div>
+            <div className="flex flex-col gap-[30px]">
+              <div>(Icon)Signature</div>
+              <div>Chart</div>
+              <div>Jenis kopi</div>
+            </div>
+          </TabsContent>
+        </ScrollArea>
       </Tabs>
     </div>
   );

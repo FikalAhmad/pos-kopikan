@@ -12,66 +12,35 @@ import {
   YAxis,
 } from "recharts";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { BarChartExample } from "./BarChartExample";
+import { signatureName, signatureSelling } from "@/lib/datadummy";
 
 const StatisticDashboard = () => {
-  const signature = [
-    {
-      name: "Day 1",
-      ArenLatte: 124,
-      PandanLatte: 122,
-      CaramelPralineMacchiato: 58,
-      ButterscotchSeaSaltLatte: 210,
-      NuttyOatLatte: 80,
-    },
-    {
-      name: "Day 2",
-      ArenLatte: 156,
-      PandanLatte: 184,
-      CaramelPralineMacchiato: 38,
-      ButterscotchSeaSaltLatte: 190,
-      NuttyOatLatte: 57,
-    },
-    {
-      name: "Day 3",
-      ArenLatte: 198,
-      PandanLatte: 154,
-      CaramelPralineMacchiato: 99,
-      ButterscotchSeaSaltLatte: 230,
-      NuttyOatLatte: 30,
-    },
-    {
-      name: "Day 4",
-      ArenLatte: 115,
-      PandanLatte: 134,
-      CaramelPralineMacchiato: 58,
-      ButterscotchSeaSaltLatte: 150,
-      NuttyOatLatte: 20,
-    },
-    {
-      name: "Day 5",
-      ArenLatte: 156,
-      PandanLatte: 184,
-      CaramelPralineMacchiato: 38,
-      ButterscotchSeaSaltLatte: 190,
-      NuttyOatLatte: 57,
-    },
-    {
-      name: "Day 6",
-      ArenLatte: 115,
-      PandanLatte: 134,
-      CaramelPralineMacchiato: 58,
-      ButterscotchSeaSaltLatte: 150,
-      NuttyOatLatte: 20,
-    },
-    {
-      name: "Day 7",
-      ArenLatte: 124,
-      PandanLatte: 122,
-      CaramelPralineMacchiato: 58,
-      ButterscotchSeaSaltLatte: 210,
-      NuttyOatLatte: 80,
-    },
-  ];
+  const dataname = signatureName;
+  const dataselling = signatureSelling;
+
+  // const signature = [
+  //   {
+  //     name: "ArenLatte",
+  //     sellingProduct: 124,
+  //   },
+  //   {
+  //     name: "PandanLatte",
+  //     sellingProduct: 122,
+  //   },
+  //   {
+  //     name: "CaramelPralineMacchiato",
+  //     sellingProduct: 58,
+  //   },
+  //   {
+  //     name: "ButterscotchSeaSaltLatte",
+  //     sellingProduct: 210,
+  //   },
+  //   {
+  //     name: "NuttyOatLatte",
+  //     sellingProduct: 80,
+  //   },
+  // ];
 
   return (
     <div className="flex flex-col py-[34px] px-[10px] gap-[30px] bg-white shadow-md">
@@ -105,41 +74,13 @@ const StatisticDashboard = () => {
         <ScrollArea className="h-[73vh]">
           <TabsContent value="week" className="flex flex-col gap-[30px]">
             <div>
-              <div className="text-lg font-bold">Signature</div>
-              <ResponsiveContainer
-                width="100%"
-                height={500}
-                className="text-xs"
-              >
-                <BarChart
-                  width={500}
-                  height={300}
-                  data={signature}
-                  margin={{
-                    top: 20,
-                    right: 0,
-                    left: 0,
-                    bottom: 20,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip wrapperStyle={{ fontSize: "12px" }} />
-                  <Legend />
-                  <Bar
-                    dataKey="ArenLatte"
-                    fill="#8884d8"
-                    // activeBar={<Rectangle fill="pink" stroke="blue" />}
-                  />
-                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                  <Bar dataKey="NuttyOatLatte" fill="blue" />
-                </BarChart>
-              </ResponsiveContainer>
+              <BarChartExample
+                name={dataname}
+                label="Signature"
+                sellingProduct={dataselling}
+              />
             </div>
-            <div>
+            {/* <div>
               <div className="text-lg font-bold">Coffee</div>
               <ResponsiveContainer
                 width="100%"
@@ -157,20 +98,16 @@ const StatisticDashboard = () => {
                     bottom: 20,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="5 5" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip wrapperStyle={{ fontSize: "12px" }} />
                   <Legend />
                   <Bar
-                    dataKey="ArenLatte"
+                    dataKey="sellingProduct"
                     fill="#8884d8"
                     // activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
-                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                  <Bar dataKey="NuttyOatLatte" fill="blue" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -192,20 +129,16 @@ const StatisticDashboard = () => {
                     bottom: 20,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="5 5" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip wrapperStyle={{ fontSize: "12px" }} />
                   <Legend />
                   <Bar
-                    dataKey="ArenLatte"
+                    dataKey="sellingProduct"
                     fill="#8884d8"
                     // activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
-                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                  <Bar dataKey="NuttyOatLatte" fill="blue" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -230,20 +163,16 @@ const StatisticDashboard = () => {
                     bottom: 20,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="5 5" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip wrapperStyle={{ fontSize: "12px" }} />
                   <Legend />
                   <Bar
-                    dataKey="ArenLatte"
+                    dataKey="sellingProduct"
                     fill="#8884d8"
                     // activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
-                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                  <Bar dataKey="NuttyOatLatte" fill="blue" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -265,20 +194,16 @@ const StatisticDashboard = () => {
                     bottom: 20,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="5 5" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip wrapperStyle={{ fontSize: "12px" }} />
                   <Legend />
                   <Bar
-                    dataKey="ArenLatte"
+                    dataKey="sellingProduct"
                     fill="#8884d8"
                     // activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
-                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                  <Bar dataKey="NuttyOatLatte" fill="blue" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -300,20 +225,16 @@ const StatisticDashboard = () => {
                     bottom: 20,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="5 5" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip wrapperStyle={{ fontSize: "12px" }} />
                   <Legend />
                   <Bar
-                    dataKey="ArenLatte"
+                    dataKey="sellingProduct"
                     fill="#8884d8"
                     // activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
-                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                  <Bar dataKey="NuttyOatLatte" fill="blue" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -338,20 +259,16 @@ const StatisticDashboard = () => {
                     bottom: 20,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="5 5" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip wrapperStyle={{ fontSize: "12px" }} />
                   <Legend />
                   <Bar
-                    dataKey="ArenLatte"
+                    dataKey="sellingProduct"
                     fill="#8884d8"
                     // activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
-                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                  <Bar dataKey="NuttyOatLatte" fill="blue" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -373,20 +290,16 @@ const StatisticDashboard = () => {
                     bottom: 20,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="5 5" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip wrapperStyle={{ fontSize: "12px" }} />
                   <Legend />
                   <Bar
-                    dataKey="ArenLatte"
+                    dataKey="sellingProduct"
                     fill="#8884d8"
                     // activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
-                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                  <Bar dataKey="NuttyOatLatte" fill="blue" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -408,23 +321,19 @@ const StatisticDashboard = () => {
                     bottom: 20,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="5 5" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip wrapperStyle={{ fontSize: "12px" }} />
                   <Legend />
                   <Bar
-                    dataKey="ArenLatte"
+                    dataKey="sellingProduct"
                     fill="#8884d8"
                     // activeBar={<Rectangle fill="pink" stroke="blue" />}
                   />
-                  <Bar dataKey="PandanLatte" fill="#82ca9d" />
-                  <Bar dataKey="CaramelPralineMacchiato" fill="brown" />
-                  <Bar dataKey="ButterscotchSeaSaltLatte" fill="red" />
-                  <Bar dataKey="NuttyOatLatte" fill="blue" />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </div> */}
           </TabsContent>
         </ScrollArea>
       </Tabs>

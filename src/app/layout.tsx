@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import SidebarBase from "@/_components/Sidebar/SidebarBase";
 
 const plusJakarta = localFont({
   src: "../public/fonts/PlusJakartaSans-VariableFont_wght.ttf",
@@ -21,9 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${plusJakarta.variable} antialiased`}>
-        <main className="w-[1024px] px-4 flex justify-between gap-[22px] mx-auto my-0 shadow-lg">
-          <SidebarBase />
+      <body
+        className={`${plusJakarta.variable} antialiased flex justify-center`}
+      >
+        <main className="w-[768px] lg:w-[1024px] h-auto shadow-xl">
           {children}
         </main>
       </body>

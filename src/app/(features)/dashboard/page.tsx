@@ -4,13 +4,12 @@ import moment from "moment";
 import "moment/locale/id";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import toRupiah from "@develoka/angka-rupiah-js";
 import CashIcon from "@/public/assets/images/cash-1.svg";
 import OrderIcon from "@/public/assets/images/orders.svg";
 import CustomerIcon from "@/public/assets/images/customers.svg";
 import cursorIcon from "@/public/assets/images/onlineOrders.svg";
-import TableDashboard from "@/app/dashboard/_components/TableDashboard";
-import StatisticDashboard from "./_components/StatisticDashboard";
+import TableDashboard from "./components/TableDashboard";
+import StatisticDashboard from "./components/StatisticDashboard";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(
@@ -21,13 +20,7 @@ const Dashboard = () => {
     {
       id: 1,
       icon: CashIcon,
-      value: toRupiah(50000, {
-        symbol: "IDR",
-        formal: false,
-        useUnit: true,
-        k: true,
-        floatingPoint: 0,
-      }),
+      value: "50000",
       detail: "Total Revenue",
     },
     {
@@ -53,13 +46,12 @@ const Dashboard = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTime(moment().locale("id").format("Do MMMM YYYY, dddd | h:mm"));
-    }, 1000); // Update every second
+    }, 1000);
 
-    // Cleanup the interval on component unmount
     return () => clearInterval(intervalId);
   }, []);
   return (
-    <div className="w-full flex gap-[22px]">
+    <div className="w-full flex gap-[22px] flex-col lg:flex-row">
       <div className="w-[509px]">
         <div className="text-[16px]">{currentTime}</div>
         <div className="flex justify-between my-[30px]">

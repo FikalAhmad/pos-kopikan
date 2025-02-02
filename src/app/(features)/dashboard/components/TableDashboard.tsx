@@ -45,6 +45,42 @@ const TableDashboard = () => {
             <TableCell className="text-center">24324</TableCell>
             <TableCell className="text-center">325235</TableCell>
           </TableRow>
+          <TableRow className="text-xs">
+            <TableCell className="font-medium" colSpan={2}>
+              <div className="flex items-center gap-5">
+                <Image
+                  src={AlmondChoco}
+                  alt="Coffee"
+                  width={30}
+                  height={30}
+                  className="rounded"
+                  priority
+                />
+                Almond Choco
+              </div>
+            </TableCell>
+            <TableCell className="text-center">12312</TableCell>
+            <TableCell className="text-center">24324</TableCell>
+            <TableCell className="text-center">325235</TableCell>
+          </TableRow>
+          <TableRow className="text-xs">
+            <TableCell className="font-medium" colSpan={2}>
+              <div className="flex items-center gap-5">
+                <Image
+                  src={AlmondChoco}
+                  alt="Coffee"
+                  width={30}
+                  height={30}
+                  className="rounded"
+                  priority
+                />
+                Almond Choco
+              </div>
+            </TableCell>
+            <TableCell className="text-center">12312</TableCell>
+            <TableCell className="text-center">24324</TableCell>
+            <TableCell className="text-center">325235</TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </div>

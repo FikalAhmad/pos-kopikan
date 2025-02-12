@@ -1,5 +1,8 @@
+"use client";
 // import type { Metadata } from "next";
+import { usePathname } from "next/navigation";
 import SidebarBase from "./components/Sidebar/SidebarBase";
+import SidebarNewOrder from "./neworder/components/SidebarNewOrder";
 
 // export async function generateMetadata({
 //   params,
@@ -17,9 +20,10 @@ export default function FeaturesLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
   return (
-    <div className="flex justify-between gap-6 w-[768px] lg:w-[1024px] shadow-xl px-4">
-      <SidebarBase />
+    <div className="flex justify-evenly gap-1 lg:gap-6 w-[768px] lg:w-[1024px] px-4 bg-gray-200">
+      {pathname.startsWith("/neworder") ? <SidebarNewOrder /> : <SidebarBase />}
       <div>{children}</div>
     </div>
   );

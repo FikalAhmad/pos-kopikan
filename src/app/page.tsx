@@ -13,10 +13,12 @@ export default function Home() {
         alt="Landing Image"
         className="w-full absolute -z-10 opacity-75"
       />
-      <Card className="w-96 py-10">
+      <Card className="w-80 md:w-96 py-10">
         <CardContent className="flex flex-col justify-center items-center gap-10">
           <Image src={Logo} width={100} height={100} alt="Kopikan Logo" />
-          <div className="text-3xl font-semibold">Good Morning Haikal!</div>
+          <div className="text-3xl font-semibold text-center">
+            Good Morning Haikal!
+          </div>
           <Button>
             <Link href={"/login"}>Login Disini</Link>
           </Button>

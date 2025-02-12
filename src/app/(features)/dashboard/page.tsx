@@ -1,21 +1,13 @@
-"use client";
-
-import moment from "moment";
-import "moment/locale/id";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
 import CashIcon from "@/public/assets/images/cash-1.svg";
 import OrderIcon from "@/public/assets/images/orders.svg";
 import CustomerIcon from "@/public/assets/images/customers.svg";
 import cursorIcon from "@/public/assets/images/onlineOrders.svg";
 import TableDashboard from "./components/TableDashboard";
 import StatisticDashboard from "./components/StatisticDashboard";
+import Clock from "./components/Clock";
 
 const Dashboard = () => {
-  const [currentTime, setCurrentTime] = useState(
-    moment().locale("id").format("Do MMMM YYYY dddd | h:mm")
-  );
-
   const menu = [
     {
       id: 1,
@@ -42,18 +34,12 @@ const Dashboard = () => {
       detail: "Online Orders",
     },
   ];
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(moment().locale("id").format("Do MMMM YYYY, dddd | h:mm"));
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
   return (
-    <div className="w-full flex gap-[22px] flex-col lg:flex-row">
+    <div className="w-full flex gap-6 flex-col lg:flex-row">
       <div className="w-[509px]">
-        <div className="text-[16px]">{currentTime}</div>
+        <div className="text-[16px]">
+          <Clock />
+        </div>
         <div className="flex justify-between my-[30px]">
           {menu.map((item) => {
             return (

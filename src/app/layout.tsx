@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import ReactQueryProvider from "../../providers/ReactQueryProviders";
 
 const plusJakarta = localFont({
   src: "../public/fonts/PlusJakartaSans-VariableFont_wght.ttf",
@@ -19,14 +20,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${plusJakarta.variable} antialiased flex justify-center`}
-      >
-        <main className="w-[768px] lg:w-[1024px] h-auto shadow-xl">
-          {children}
-        </main>
-      </body>
-    </html>
+    <ReactQueryProvider>
+      <html lang="en">
+        <body
+          className={`${plusJakarta.variable} antialiased flex justify-center`}
+        >
+          <main className="w-[768px] lg:w-[1024px] h-screen shadow-xl">
+            {children}
+          </main>
+        </body>
+      </html>
+    </ReactQueryProvider>
   );
 }

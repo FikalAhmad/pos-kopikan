@@ -17,18 +17,16 @@ import {
 
 interface DataSellingWeek {
   label: string;
-  name: { name: string }[];
-  sellingProduct: { sellingProduct: number }[];
+  data: {
+    name: string;
+    sellingProduct: number;
+  }[];
 }
 
-export const BarChartExample = ({
-  label,
-  name,
-  sellingProduct,
-}: DataSellingWeek) => {
-  const chartData = name.map((item, index) => ({
+export const BarChartExample = ({ label, data }: DataSellingWeek) => {
+  const chartData = data.map((item) => ({
     name: item.name,
-    sellingProduct: sellingProduct[index].sellingProduct,
+    sellingProduct: item.sellingProduct,
   }));
   const colors = [
     "#4EA824",
@@ -66,7 +64,7 @@ export const BarChartExample = ({
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 7)}
+              tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}

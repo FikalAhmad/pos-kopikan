@@ -11,8 +11,14 @@ import {
   onlineOrder,
   settings,
 } from "@/lib/icons";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 
 const SidebarBase = () => {
+  const { user, logout: logoutUser } = useAuth();
+  const handleClick = () => {
+    logoutUser();
+  };
   return (
     <div className="w-[130px] h-screen pt-5 flex flex-col gap-3 items-center">
       <Link href={"/"}>
@@ -43,7 +49,21 @@ const SidebarBase = () => {
         exactMatch
       />
       <NavButton href="/setting" icon={settings} label="Setting" exactMatch />
-      <NavButton href="/logout" icon={logout} label="Logout" exactMatch />
+      <Button
+        variant="ghost"
+        className="flex flex-col group justify-center items-center w-20 h-20 p-[10px] gap-[10px] rounded bg-white hover:bg-hijaugelap hover:text-white"
+        onClick={handleClick}
+      >
+        <Image
+          src={logout}
+          alt={"Logout"}
+          width={24}
+          height={24}
+          className="transition-all group-hover:invert"
+        />
+        <div className="text-[12px] text-center">Logout</div>
+      </Button>
+      <div>{user?.name}</div>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import CashIcon from "@/public/assets/images/cash-1.svg";
 import OrderIcon from "@/public/assets/images/orders.svg";

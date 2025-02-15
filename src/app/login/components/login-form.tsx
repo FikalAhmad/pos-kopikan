@@ -8,20 +8,26 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import BGHome from "@/public/assets/images/bg-home.jpg";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [form, setForm] = useState({ email: "", password: "" });
+  const { login, isLoading, error } = useAuth();
 
   const handleEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    login({ email: form.email, password: form.password });
   };
+  if (error) {
+    <div>{error}</div>;
+  }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
@@ -64,7 +70,7 @@ export function LoginForm({
                 />
               </div>
               <Button type="submit" className="w-full">
-                Login
+                {isLoading ? "Loading..." : "Login"}
               </Button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-white px-2 text-muted-foreground">
@@ -112,6 +118,7 @@ export function LoginForm({
               src={BGHome}
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              priority
             />
           </div>
         </CardContent>

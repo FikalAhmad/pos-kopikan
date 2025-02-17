@@ -17,7 +17,7 @@ export const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_USER_API_URL}/api/users/login`,
+        `${process.env.NEXT_PUBLIC_USER_API_URL}/api/login`,
         credentials,
         {
           withCredentials: true,
@@ -37,6 +37,7 @@ export const useAuth = () => {
           accessToken: data.accessToken,
         })
       );
+      document.cookie = `refreshToken = ${data.refreshToken};secure`;
       router.push("/dashboard");
     },
     onError: (error) => {

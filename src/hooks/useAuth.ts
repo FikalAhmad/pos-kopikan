@@ -19,7 +19,12 @@ export const useAuth = () => {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_USER_API_URL}/api/users/login`,
         credentials,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       return response.data;
@@ -34,9 +39,10 @@ export const useAuth = () => {
       );
       router.push("/dashboard");
     },
-    onError: () => {
+    onError: (error) => {
       dispatch(logout());
       window.location.href = "/login";
+      console.error(error);
     },
   });
 

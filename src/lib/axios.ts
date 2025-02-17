@@ -25,6 +25,9 @@ const refreshAccessToken = async () => {
   try {
     const response = await axios.get(`${baseURL}/token`, {
       withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
     const decoded = jwtDecode(response.data.accessToken) as User;
 

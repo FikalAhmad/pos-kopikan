@@ -37,8 +37,10 @@ export const useAuth = () => {
           accessToken: data.accessToken,
         })
       );
-      document.cookie = `refreshToken = ${data.refreshToken};secure`;
-      router.push("/dashboard");
+      // document.cookie = `refreshToken=${data.refreshToken};max-age=${
+      //   24 * 60 * 60 * 1000
+      // }secure`;
+      // router.push("/dashboard");
     },
     onError: (error) => {
       dispatch(logout());

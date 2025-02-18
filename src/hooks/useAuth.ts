@@ -16,6 +16,7 @@ export const useAuth = () => {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
+      console.log("Sending login request");
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_USER_API_URL}/api/login`,
         credentials,
@@ -37,14 +38,15 @@ export const useAuth = () => {
           accessToken: data.accessToken,
         })
       );
+      console.log("Login response:", data);
       // document.cookie = `refreshToken=${data.refreshToken};max-age=${
       //   24 * 60 * 60 * 1000
       // }secure`;
-      // router.push("/dashboard");
+      router.push("/dashboard");
     },
     onError: (error) => {
       dispatch(logout());
-      window.location.href = "/login";
+      router.push("/");
       console.error(error);
     },
   });

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -16,7 +17,6 @@ export const useAuth = () => {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
-      console.log("Sending login request");
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_USER_API_URL}/api/login`,
         credentials,
@@ -38,10 +38,13 @@ export const useAuth = () => {
           accessToken: data.accessToken,
         })
       );
-      console.log("Login response:", data);
       // document.cookie = `refreshToken=${data.refreshToken};max-age=${
       //   24 * 60 * 60 * 1000
       // }secure`;
+      Cookies.set("token", data.refreshToken, {
+        expires: 1,
+        secure: true,
+      });
       router.push("/dashboard");
     },
     onError: (error) => {
@@ -56,10 +59,9 @@ export const useAuth = () => {
       const response = await axiosJWT.patch("/api/logout");
       return response.data;
     },
-    onSuccess: (data) => {
-      console.log(data);
-
+    onSuccess: () => {
       dispatch(logout());
+      Cookies.remove("token");
       router.push("/");
     },
     onError: (error) => {

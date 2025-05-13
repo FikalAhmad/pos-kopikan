@@ -80,7 +80,15 @@ const Payment = () => {
           </div>
           <Button
             className="bg-hijaugelap flex justify-between pl-5 pr-[10px] py-3 text-base"
-            onClick={showToast}
+            onClick={() =>
+              toast("Event has been created", {
+                description: "Sunday, December 03, 2023 at 9:00 AM",
+                action: {
+                  label: "Undo",
+                  onClick: () => console.log("Undo"),
+                },
+              })
+            }
           >
             {/* <Link
               href="/neworder/checkout"

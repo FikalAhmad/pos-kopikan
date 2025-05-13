@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import BGHome from "@/public/assets/images/bg-home.jpg";
+import BGHome from "@/public/assets/images/bg-home.webp";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -26,7 +26,7 @@ export function LoginForm({
     login({ email: form.email, password: form.password });
   };
   if (error) {
-    <div>{error}</div>;
+    console.error(error);
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    domains: ["kopikan.vercel.app"],
+  },
+};
 
 export default nextConfig;

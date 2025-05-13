@@ -8,7 +8,7 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
 };
-
+//TODO: pake dispatch kalo ada payload, klo gaada gauseh
 const authSlice = createSlice({
   name: "auth",
   initialState,

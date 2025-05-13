@@ -18,7 +18,7 @@ export const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_USER_API_URL}/api/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
         credentials,
         {
           withCredentials: true,
@@ -38,9 +38,6 @@ export const useAuth = () => {
           accessToken: data.accessToken,
         })
       );
-      // document.cookie = `refreshToken=${data.refreshToken};max-age=${
-      //   24 * 60 * 60 * 1000
-      // }secure`;
       Cookies.set("token", data.refreshToken, {
         expires: 1,
         secure: true,
@@ -48,7 +45,7 @@ export const useAuth = () => {
       router.push("/dashboard");
     },
     onError: (error) => {
-      dispatch(logout());
+      logout();
       router.push("/");
       console.error(error);
     },
@@ -60,8 +57,9 @@ export const useAuth = () => {
       return response.data;
     },
     onSuccess: () => {
-      dispatch(logout());
       Cookies.remove("token");
+      Cookies.remove("refreshToken");
+      logout();
       router.push("/");
     },
     onError: (error) => {

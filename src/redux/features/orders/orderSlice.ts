@@ -25,7 +25,11 @@ const initialState: OrderState = {
 const orderSlice = createSlice({
   name: "checkoutFlow",
   initialState,
-  reducers: {},
+  reducers: {
+    resetStatus: (state) => {
+      state.success = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createOrder.pending, (state) => {

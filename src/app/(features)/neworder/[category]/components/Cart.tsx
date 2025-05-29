@@ -7,15 +7,23 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, TrashIcon } from "@/lib/icons";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { createOrder } from "@/redux/features/orders/orderSlice";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { removeAllCart } from "@/redux/features/carts/cartSlice";
 import { CartDataProps } from "@/types/cart.types";
+import { useEffect } from "react";
 
 const Cart = () => {
-  // const router = useRouter();
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { cart, totalPrice } = useAppSelector((state) => state.cart);
+  const { success } = useAppSelector((state) => state.order);
   const { user } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (success) {
+      router.push("/neworder/checkout");
+    }
+  }, [success, router]);
 
   const handleCheckout = () => {
     const cartItem = cart.map((item) => ({

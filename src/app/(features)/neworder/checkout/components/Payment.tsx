@@ -14,7 +14,7 @@ type HandlePaymentProps = {
 };
 const Payment = () => {
   const dispatch = useAppDispatch();
-  const { totalPrice } = useAppSelector((state) => state.checkoutFlow);
+  const { totalPrice } = useAppSelector((state) => state.cart);
 
   const handlePayment = (paymentMethod: string) => {
     dispatch(

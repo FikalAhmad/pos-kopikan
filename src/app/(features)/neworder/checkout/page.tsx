@@ -10,7 +10,7 @@ import { Cart } from "@/types/order.type";
 
 const Checkout = () => {
   const dispatch = useAppDispatch();
-  const { cart } = useAppSelector((state) => state.checkoutFlow);
+  const { cart } = useAppSelector((state) => state.cart);
   return (
     <div className="w-full flex gap-6 flex-col lg:flex-row">
       <div className="w-[417px] pt-[34px] px-[10px] pb-5 flex flex-col gap-6 bg-white">

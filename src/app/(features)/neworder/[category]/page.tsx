@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import ListProduct from "./components/ListProduct";
 import Cart from "./components/Cart";
-import { useProducts } from "@/redux/features/products/productsAPI";
+import { useProducts } from "@/redux/features/products/productAPI";
 
 const CategoryOrder = ({ params }: { params: { category: string } }) => {
   const { category } = params;

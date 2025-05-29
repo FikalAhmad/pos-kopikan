@@ -1,10 +1,11 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { addItemIcon, removeItemIcon, removeIcon } from "@/lib/icons";
 import {
-  increaseQty,
   decreaseQty,
+  increaseQty,
   removeToCart,
-} from "@/redux/features/checkout-flow/checkoutFlowSlice";
+} from "@/redux/features/carts/cartSlice";
 import { useAppDispatch } from "@/redux/store";
 import Image, { StaticImageData } from "next/image";
 

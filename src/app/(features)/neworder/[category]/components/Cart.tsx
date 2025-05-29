@@ -1,20 +1,43 @@
+"use client";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
 import CartItem from "./CartItem";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, TrashIcon } from "@/lib/icons";
-import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { Product } from "@/types/product.types";
-import { removeAllCart } from "@/redux/features/checkout-flow/checkoutFlowSlice";
+import { createOrder } from "@/redux/features/orders/orderSlice";
+// import { useRouter } from "next/navigation";
+import { removeAllCart } from "@/redux/features/carts/cartSlice";
+import { CartDataProps } from "@/types/cart.types";
 
-type CartDataProps = {
-  productItem: Product;
-  qty: number;
-};
 const Cart = () => {
+  // const router = useRouter();
   const dispatch = useAppDispatch();
-  const { cart } = useAppSelector((state) => state.checkoutFlow);
+  const { cart, totalPrice } = useAppSelector((state) => state.cart);
+  const { user } = useAppSelector((state) => state.auth);
+
+  const handleCheckout = () => {
+    const cartItem = cart.map((item) => ({
+      product_id: item.productItem.id,
+      qty: item.qty,
+    }));
+    if (!user) {
+      throw new Error("User not found");
+    }
+    const { id } = user;
+    dispatch(
+      createOrder({
+        customer_id: id,
+        order_type: "dine-in",
+        order_source: "offline",
+        order_items: cartItem,
+        total: totalPrice,
+        status: "pending",
+      })
+    );
+  };
+
   return (
     <div className="flex flex-col py-[34px] px-[10px] gap-5 w-[309px] bg-white h-screen shadow-md">
       <div className="flex justify-between items-center">
@@ -24,7 +47,9 @@ const Cart = () => {
         <Button
           size={"icon"}
           variant={"ghost"}
-          onClick={() => dispatch(removeAllCart())}
+          onClick={() => {
+            dispatch(removeAllCart());
+          }}
         >
           <Image src={TrashIcon} alt="Delete Icon" />
         </Button>
@@ -43,17 +68,15 @@ const Cart = () => {
           );
         })}
       </ScrollArea>
-      <Button className="bg-hijaugelap" asChild>
-        <Link
-          href="/neworder/checkout"
-          className="flex justify-between pl-5 pr-[10px] py-3 text-base"
-        >
-          <div className="font-bold">Rp.200.000.000</div>
-          <div className="flex gap-[5px] justify-between items-center">
-            <span className="font-normal">Pay</span>
-            <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
-          </div>
-        </Link>
+      <Button
+        className="bg-hijaugelap flex justify-between"
+        onClick={() => handleCheckout()}
+      >
+        <div className="font-bold">Rp. {totalPrice}</div>
+        <div className="flex gap-[5px] justify-between items-center">
+          <span className="font-normal">Pay</span>
+          <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
+        </div>
       </Button>
     </div>
   );

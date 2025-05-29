@@ -6,8 +6,27 @@ import { ArrowRight, CashIcon, CeklisIcon, EWalletIcon } from "@/lib/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { createPayment } from "@/redux/features/orders/orderSlice";
 
+type HandlePaymentProps = {
+  paymentMethod: string;
+};
 const Payment = () => {
+  const dispatch = useAppDispatch();
+  const { totalPrice } = useAppSelector((state) => state.checkoutFlow);
+
+  const handlePayment = (paymentMethod: string) => {
+    dispatch(
+      createPayment({
+        order_id: "tet",
+        amount: totalPrice,
+        status: "pending",
+        payment_method: paymentMethod,
+      })
+    );
+  };
+
   const showToast = () => {
     toast.success(
       <Card className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl w-[300px] h-[300px] justify-center gap-8">
@@ -55,13 +74,13 @@ const Payment = () => {
           <div className="flex justify-center h-[65vh]">CASH</div>
           <Button
             className="bg-hijaugelap flex justify-between pl-5 pr-[10px] py-3 text-base"
-            onClick={showToast}
+            onClick={() => handlePayment("cash")}
           >
             {/* <Link
               href="/neworder/checkout"
               className="flex justify-between pl-5 pr-[10px] py-3 text-base"
             > */}
-            <div className="font-bold">Rp.200.000.000</div>
+            <div className="font-bold">Rp. {totalPrice}</div>
             <div className="flex gap-[5px] justify-between items-center">
               <span className="font-normal">Pay</span>
               <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
@@ -80,21 +99,13 @@ const Payment = () => {
           </div>
           <Button
             className="bg-hijaugelap flex justify-between pl-5 pr-[10px] py-3 text-base"
-            onClick={() =>
-              toast("Event has been created", {
-                description: "Sunday, December 03, 2023 at 9:00 AM",
-                action: {
-                  label: "Undo",
-                  onClick: () => console.log("Undo"),
-                },
-              })
-            }
+            onClick={() => handlePayment("ewallet")}
           >
             {/* <Link
               href="/neworder/checkout"
               className="flex justify-between pl-5 pr-[10px] py-3 text-base"
             > */}
-            <div className="font-bold">Rp.200.000.000</div>
+            <div className="font-bold">Rp. {totalPrice}</div>
             <div className="flex gap-[5px] justify-between items-center">
               <span className="font-normal">Pay</span>
               <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />

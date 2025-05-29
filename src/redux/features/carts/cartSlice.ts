@@ -1,20 +1,16 @@
-import { Cart, CartState } from "@/types/checkoutFlow.type";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export const createOrder = createAsyncThunk(
-  "checkoutFlow/createOrder"
-  // fetchProducts
-);
+import { CartDataProps, CartState } from "@/types/cart.types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: CartState = {
   cart: [],
+  totalPrice: 0,
 };
-// kalau dah ke beli stocknya kurangin di BE
-const checkoutFlowSlice = createSlice({
-  name: "checkoutFlow",
+
+const cartSlice = createSlice({
+  name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<Cart>) => {
+    addToCart: (state, action: PayloadAction<CartDataProps>) => {
       const itemInCart = state.cart.find(
         (product) => product.productItem.id === action.payload.productItem.id
       );
@@ -23,6 +19,10 @@ const checkoutFlowSlice = createSlice({
       } else {
         state.cart.push(action.payload);
       }
+      state.totalPrice = state.cart.reduce(
+        (acc, curr) => acc + curr.qty * curr.productItem.price,
+        0
+      );
     },
     increaseQty: (state, action: PayloadAction<{ id: string }>) => {
       const item = state.cart.find(
@@ -30,12 +30,12 @@ const checkoutFlowSlice = createSlice({
       );
       if (item) {
         item.qty += 1;
+
+        state.totalPrice = state.cart.reduce(
+          (acc, curr) => acc + curr.qty * curr.productItem.price,
+          0
+        );
       }
-      //  else {
-      //   state.cart = state.cart.filter(
-      //     (product) => product.productItem.id !== action.payload.id
-      //   );
-      // }
     },
     decreaseQty: (state, action: PayloadAction<{ id: string }>) => {
       const item = state.cart.find(
@@ -43,9 +43,17 @@ const checkoutFlowSlice = createSlice({
       );
       if (item && item.qty > 1) {
         item.qty -= 1;
+        state.totalPrice = state.cart.reduce(
+          (acc, curr) => acc + curr.qty * curr.productItem.price,
+          0
+        );
       } else {
         state.cart = state.cart.filter(
           (product) => product.productItem.id !== action.payload.id
+        );
+        state.totalPrice = state.cart.reduce(
+          (acc, curr) => acc + curr.qty * curr.productItem.price,
+          0
         );
       }
     },
@@ -57,26 +65,17 @@ const checkoutFlowSlice = createSlice({
         state.cart = state.cart.filter(
           (item) => item.productItem.id !== action.payload.id
         );
+        state.totalPrice = state.cart.reduce(
+          (acc, curr) => acc + curr.qty * curr.productItem.price,
+          0
+        );
       }
     },
     removeAllCart: (state) => {
       state.cart = [];
+      state.totalPrice = 0;
     },
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(getProducts.pending, (state) => {
-  //       state.isLoading = true;
-  //     })
-  //     .addCase(getProducts.fulfilled, (state, action) => {
-  //       state.isLoading = false;
-  //       state.product = action.payload;
-  //     })
-  //     .addCase(getProducts.rejected, (state, action) => {
-  //       state.isLoading = false;
-  //       state.error = action.error.message ?? null;
-  //     });
-  // },
 });
 export const {
   addToCart,
@@ -84,5 +83,5 @@ export const {
   decreaseQty,
   removeToCart,
   removeAllCart,
-} = checkoutFlowSlice.actions;
-export default checkoutFlowSlice.reducer;
+} = cartSlice.actions;
+export default cartSlice.reducer;

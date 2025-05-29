@@ -1,7 +1,7 @@
 import { Product } from "@/types/product.types";
 import ProductCard from "./ProductCard";
 import { useAppDispatch } from "@/redux/store";
-import { addToCart } from "@/redux/features/checkout-flow/checkoutFlowSlice";
+import { addToCart } from "@/redux/features/carts/cartSlice";
 
 interface ProductListProps {
   data: Product[];

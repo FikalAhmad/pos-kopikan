@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["kopikan.vercel.app"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "kopikan.vercel.app",
+      },
+    ],
   },
 };
 

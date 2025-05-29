@@ -27,7 +27,7 @@ const SidebarBase = () => {
           alt="Kopikan Logo"
           width={102}
           height={102}
-          loading="lazy"
+          priority
         />
       </Link>
       <NavButton

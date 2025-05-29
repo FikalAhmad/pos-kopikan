@@ -10,7 +10,9 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import authSlice from "./features/auth/authSlice";
 import productSlice from "./features/products/productSlice";
-import checkoutFlowSlice from "./features/checkout-flow/checkoutFlowSlice";
+import cartSlice from "./features/carts/cartSlice";
+import orderSlice from "./features/orders/orderSlice";
+import paymentSlice from "./features/payments/paymentSlice";
 
 const persistConfig = {
   key: "root",
@@ -21,7 +23,9 @@ const persistConfig = {
 const reducer = combineReducers({
   auth: authSlice,
   product: productSlice,
-  checkoutFlow: checkoutFlowSlice,
+  cart: cartSlice,
+  order: orderSlice,
+  payment: paymentSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

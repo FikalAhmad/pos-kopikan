@@ -7,6 +7,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { removeAllCart } from "@/redux/features/orders/orderSlice";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -60,6 +61,7 @@ export const useAuth = () => {
       Cookies.remove("token");
       Cookies.remove("refreshToken");
       logout();
+      dispatch(removeAllCart());
       router.push("/");
     },
     onError: (error) => {

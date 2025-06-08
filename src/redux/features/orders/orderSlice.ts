@@ -23,7 +23,7 @@ const initialState: OrderState = {
 
 // kalau dah ke beli stocknya kurangin di BE
 const orderSlice = createSlice({
-  name: "checkoutFlow",
+  name: "order",
   initialState,
   reducers: {
     resetStatus: (state) => {
@@ -47,5 +47,5 @@ const orderSlice = createSlice({
       });
   },
 });
-export const {} = orderSlice.actions;
+export const { resetStatus } = orderSlice.actions;
 export default orderSlice.reducer;

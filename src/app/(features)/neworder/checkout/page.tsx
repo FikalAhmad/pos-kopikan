@@ -1,12 +1,12 @@
 "use client";
 
-import { ArrowLeft, TrashIcon } from "@/lib/icons";
+import { ArrowLeft } from "@/lib/icons";
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import CartItem from "../[category]/components/CartItem";
 import Payment from "./components/Payment";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { Cart } from "@/types/order.type";
+import CheckoutItem from "./components/CheckoutItem";
+import { CartDataProps } from "@/types/cart.types";
 
 const Checkout = () => {
   const dispatch = useAppDispatch();
@@ -19,14 +19,12 @@ const Checkout = () => {
             <Image src={ArrowLeft} alt="Back Icon" />
             <div>Checkout</div>
           </div>
-          <Image src={TrashIcon} alt="Delete Icon" />
         </div>
         <ScrollArea className="h-[85vh]">
-          {cart.map((item: Cart) => {
+          {cart.map((item: CartDataProps) => {
             return (
-              <CartItem
+              <CheckoutItem
                 key={item.productItem.id}
-                id={item.productItem.id}
                 image_url={item.productItem.image}
                 name={item.productItem.product_name}
                 price={item.productItem.price}

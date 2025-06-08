@@ -6,11 +6,12 @@ import CartItem from "./CartItem";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, TrashIcon } from "@/lib/icons";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { createOrder } from "@/redux/features/orders/orderSlice";
+import { createOrder, resetStatus } from "@/redux/features/orders/orderSlice";
 import { useRouter } from "next/navigation";
 import { removeAllCart } from "@/redux/features/carts/cartSlice";
 import { CartDataProps } from "@/types/cart.types";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 const Cart = () => {
   const router = useRouter();
@@ -23,7 +24,10 @@ const Cart = () => {
     if (success) {
       router.push("/neworder/checkout");
     }
-  }, [success, router]);
+    setTimeout(() => {
+      dispatch(resetStatus());
+    }, 1000);
+  }, [success, router, dispatch]);
 
   const handleCheckout = () => {
     const cartItem = cart.map((item) => ({
@@ -33,17 +37,21 @@ const Cart = () => {
     if (!user) {
       throw new Error("User not found");
     }
-    const { id } = user;
-    dispatch(
-      createOrder({
-        customer_id: id,
-        order_type: "dine-in",
-        order_source: "offline",
-        order_items: cartItem,
-        total: totalPrice,
-        status: "pending",
-      })
-    );
+    if (cartItem.length <= 0) {
+      toast.error("Produk Belum Ditambahkan");
+    } else {
+      const { id } = user;
+      dispatch(
+        createOrder({
+          customer_id: id,
+          order_type: "dine-in",
+          order_source: "offline",
+          order_items: cartItem,
+          total: totalPrice,
+          status: "pending",
+        })
+      );
+    }
   };
 
   return (

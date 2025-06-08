@@ -7,34 +7,44 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { createPayment } from "@/redux/features/orders/orderSlice";
+import { createPayment } from "@/redux/features/payments/paymentSlice";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
-type HandlePaymentProps = {
-  paymentMethod: string;
-};
 const Payment = () => {
   const dispatch = useAppDispatch();
   const { totalPrice } = useAppSelector((state) => state.cart);
+  const { success } = useAppSelector((state) => state.payment);
+  const [customerCash, setCustomerCash] = useState<number>(0);
+  const [changesTotal, setChangesTotal] = useState<number>(0);
 
   const handlePayment = (paymentMethod: string) => {
     dispatch(
       createPayment({
-        order_id: "tet",
+        order_id: "tet", //sepertinya harus fetching order dulu
         amount: totalPrice,
         status: "pending",
         payment_method: paymentMethod,
       })
     );
+    if (success) {
+      toast.success(
+        <Card className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl w-[300px] h-[300px] justify-center gap-8">
+          <Image src={CeklisIcon} alt="Check Icon" className="w-24 h-24" />
+          <span className="font-semibold text-lg mt-2">Payment Successful</span>
+        </Card>,
+        { duration: 2000 }
+      );
+    }
   };
 
-  const showToast = () => {
-    toast.success(
-      <Card className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl w-[300px] h-[300px] justify-center gap-8">
-        <Image src={CeklisIcon} alt="Check Icon" className="w-24 h-24" />
-        <span className="font-semibold text-lg mt-2">Payment Successful</span>
-      </Card>,
-      { duration: 2000 }
-    );
+  const changeCheck = () => {
+    const changes = customerCash - totalPrice;
+    if (changes < 0) {
+      console.log("error");
+    } else {
+      setChangesTotal(changes);
+    }
   };
 
   return (
@@ -71,7 +81,30 @@ const Payment = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="cash" className="flex flex-col w-[377px]">
-          <div className="flex justify-center h-[65vh]">CASH</div>
+          <div className="flex flex-col items-center h-[65vh]">
+            <div className="font-bold text-2xl py-5">Order Summary</div>
+            <div className="flex flex-col w-full px-5 mt-5 gap-5">
+              <div>
+                <div>Subtotal: {totalPrice}</div>
+                <div>Discount: -</div>
+                <br />
+                <div className="font-bold text-lg">Total: {totalPrice}</div>
+              </div>
+
+              <div>
+                <div>Bayar:</div>
+                <Input
+                  type="number"
+                  placeholder="Masukkan Nominal Pembayaran"
+                  value={customerCash ?? 0}
+                  onChange={(e) => setCustomerCash(e.target.valueAsNumber)}
+                />
+                <Button onClick={() => changeCheck()}>Kembalian</Button>
+              </div>
+
+              <div>Kembalian: {changesTotal}</div>
+            </div>
+          </div>
           <Button
             className="bg-hijaugelap flex justify-between pl-5 pr-[10px] py-3 text-base"
             onClick={() => handlePayment("cash")}

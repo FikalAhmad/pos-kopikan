@@ -9,8 +9,6 @@ import StatisticDashboard from "./components/StatisticDashboard";
 import Clock from "./components/Clock";
 
 const Dashboard = () => {
-  console.log(crypto.randomUUID());
-
   const menu = [
     {
       id: 1,

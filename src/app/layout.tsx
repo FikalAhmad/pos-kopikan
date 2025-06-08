@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "@/providers/Providers";
+import { Toaster } from "sonner";
 
 const plusJakarta = localFont({
   src: "../public/fonts/PlusJakartaSans-VariableFont_wght.ttf",
@@ -25,6 +26,8 @@ export default function RootLayout({
         className={`${plusJakarta.variable} antialiased flex justify-center`}
       >
         <Providers>
+          <Toaster />
+
           <main className="w-[768px] lg:w-[1024px] h-screen shadow-xl">
             {children}
           </main>

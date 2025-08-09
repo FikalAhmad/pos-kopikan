@@ -25,9 +25,6 @@ export function LoginForm({
     e.preventDefault();
     login({ email: form.email, password: form.password });
   };
-  if (error) {
-    console.error(error);
-  }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
@@ -69,6 +66,7 @@ export function LoginForm({
                   required
                 />
               </div>
+              <p className="text-xs text-red-700 text-center h-5">{error}</p>
               <Button type="submit" className="w-full">
                 {isLoading ? "Loading..." : "Login"}
               </Button>

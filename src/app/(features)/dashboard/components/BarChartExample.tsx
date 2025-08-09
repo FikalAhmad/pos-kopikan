@@ -21,9 +21,10 @@ interface DataSellingWeek {
     name: string;
     sellingProduct: number;
   }[];
+  type: string;
 }
 
-export const BarChartExample = ({ label, data }: DataSellingWeek) => {
+export const BarChartExample = ({ label, data, type }: DataSellingWeek) => {
   const chartData = data.map((item) => ({
     name: item.name,
     sellingProduct: item.sellingProduct,
@@ -52,41 +53,45 @@ export const BarChartExample = ({ label, data }: DataSellingWeek) => {
       <CardHeader>
         <CardTitle>{label}</CardTitle>
         <CardDescription>
-          Showing total selling for the last 7 days
+          Showing total selling for the last {type}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="name"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideIndicator />}
-            />
-            <Bar
-              dataKey="sellingProduct"
-              fill="var(--color-sellingProduct)"
-              radius={8}
-            >
-              {colors.map((color, index) => (
-                <Cell key={`color-${index}`} fill={color} />
-              ))}
-              <LabelList
-                position="insideTop"
-                offset={10}
-                className="fill-white font-bold"
-                fontSize={12}
+        {chartData.length > 0 ? (
+          <ChartContainer config={chartConfig}>
+            <BarChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="name"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 3)}
               />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideIndicator />}
+              />
+              <Bar
+                dataKey="sellingProduct"
+                fill="var(--color-sellingProduct)"
+                radius={8}
+              >
+                {colors.map((color, index) => (
+                  <Cell key={`color-${index}`} fill={color} />
+                ))}
+                <LabelList
+                  position="insideTop"
+                  offset={10}
+                  className="fill-white font-bold"
+                  fontSize={12}
+                />
+              </Bar>
+            </BarChart>
+          </ChartContainer>
+        ) : (
+          <div className="text-xs text-red-600">Belum ada data penjualan</div>
+        )}
       </CardContent>
     </Card>
   );

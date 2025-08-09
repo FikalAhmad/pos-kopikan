@@ -9,10 +9,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import AlmondChoco from "@/public/assets/product-images/AlmondChoco.png";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const TableDashboard = () => {
+type ProductSummaryProps = {
+  product_image: string;
+  product_name: string;
+  total_order: number;
+  total_price: number;
+  total_qty: number;
+};
+
+const TableDashboard = ({ data }: { data: ProductSummaryProps[] }) => {
   return (
     <div className="py-9 px-3 shadow-lg h-[485px] bg-white">
       <div className="text-[16px] font-bold">Ordered Items</div>
@@ -31,26 +38,30 @@ const TableDashboard = () => {
       <ScrollArea className="h-96 pb-3">
         <Table>
           <TableBody>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => {
+            {data?.map((item: ProductSummaryProps, index) => {
               return (
                 <TableRow className="text-xs" key={`prp-${index}`}>
                   <TableCell className="font-medium w-[150px]" colSpan={1}>
                     <div className="flex items-center gap-5">
                       <Image
-                        src={AlmondChoco}
+                        src={item.product_image}
                         alt="Coffee"
                         width={30}
                         height={30}
                         className="rounded"
                         priority
                       />
-                      <span>Butterscotch Sea Salt Latte</span>
+                      <span>{item.product_name}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="w-[100px] text-center">12312</TableCell>
-                  <TableCell className="w-[100px] text-center">24324</TableCell>
                   <TableCell className="w-[100px] text-center">
-                    325235
+                    {item.total_order}
+                  </TableCell>
+                  <TableCell className="w-[100px] text-center">
+                    {item.total_qty}
+                  </TableCell>
+                  <TableCell className="w-[100px] text-center">
+                    {item.total_price}
                   </TableCell>
                 </TableRow>
               );

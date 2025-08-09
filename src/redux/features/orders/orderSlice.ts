@@ -18,7 +18,7 @@ const initialState: OrderState = {
   isLoading: false,
   error: null,
   success: false,
-  data: null,
+  dataOrder: null,
 };
 
 // kalau dah ke beli stocknya kurangin di BE
@@ -37,9 +37,10 @@ const orderSlice = createSlice({
         state.success = false;
         state.error = null;
       })
-      .addCase(createOrder.fulfilled, (state) => {
+      .addCase(createOrder.fulfilled, (state, action) => {
         state.isLoading = false;
         state.success = true;
+        state.dataOrder = action.payload;
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.isLoading = false;

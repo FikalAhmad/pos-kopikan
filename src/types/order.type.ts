@@ -1,3 +1,5 @@
+import { Product } from "./product.types";
+
 export interface OrderDataProps {
   customer_id: string;
   order_type: string;
@@ -11,9 +13,32 @@ export interface OrderDataProps {
   status: string;
 }
 
+export interface OrderDataResponse {
+  id: string;
+  customer_id: string;
+  order_date: string;
+  order_type: string;
+  order_source: string;
+  delivery_address?: string;
+  order_details: OrderDetailResponse[];
+  total: number;
+  status: string;
+  createdAt: string;
+}
+
 export interface OrderState {
   isLoading: boolean;
   error: unknown;
   success: boolean;
-  data: OrderDataProps | null;
+  dataOrder: { data: OrderDataResponse } | null;
+}
+
+export interface OrderDetailResponse {
+  id: string;
+  order_id: string;
+  product_id: string;
+  product: Product;
+  qty: number;
+  total_price: number;
+  unit_price: number;
 }

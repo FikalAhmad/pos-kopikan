@@ -1,18 +1,48 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { axiosJWT } from "@/lib/axios";
 import { ArrowRight } from "@/lib/icons";
+import { OrderDataResponse, OrderDetailResponse } from "@/types/order.type";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import Link from "next/link";
+import { useState } from "react";
 
-const OnlineOrderDetail = () => {
-  // { orderId }: { orderId: string }
-  // nanti kasih props ini
+type CheckedItemsProps = {
+  [key: string]: boolean;
+};
+
+const OnlineOrderDetail = ({ data }: { data: OrderDataResponse }) => {
+  const [checkedItems, setCheckedItems] = useState<CheckedItemsProps>({});
+  const queryClient = useQueryClient();
+
+  const handleChange = (id: string) => {
+    setCheckedItems((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const allChecked =
+    data.order_details.length > 0 &&
+    data.order_details.every((item: { id: string }) => checkedItems[item.id]);
+
+  const allCompleted = useMutation({
+    mutationFn: (id: string) => {
+      return axiosJWT.patch(`/api/orders/${id}`, {
+        status: "completed",
+      });
+    },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ["omlineorders"] });
+    },
+  });
+
   return (
     <div className="flex flex-col py-[34px] px-[10px] gap-5 w-[309px] bg-white h-screen shadow-md">
       <div className="flex flex-col gap-5 justify-between">
         <div className="text-xl">
-          <strong>Order</strong> #2240
+          <strong>Order</strong> #{data.id}
         </div>
         <div className="flex justify-between mr-10">
           <div>Item</div>
@@ -21,64 +51,31 @@ const OnlineOrderDetail = () => {
       </div>
       <ScrollArea className="h-[90vh]">
         <div className="flex flex-col gap-[10px]">
-          <div className="flex justify-between shadow-sm">
-            <div className="flex justify-between mr-[10px] w-[239px] text-sm font-medium min-h-10">
-              <div>Butterscotch Sea Salt Latte</div>
-              <div>1</div>
-            </div>
-            <div>
-              <Checkbox />
-            </div>
-          </div>
-          <div className="flex justify-between shadow-sm">
-            <div className="flex justify-between mr-[10px] w-[239px] text-sm font-medium min-h-10">
-              <div>Butterscotch Sea Salt Latte</div>
-              <div>1</div>
-            </div>
-            <div>
-              <Checkbox />
-            </div>
-          </div>
-          <div className="flex justify-between shadow-sm">
-            <div className="flex justify-between mr-[10px] w-[239px] text-sm font-medium min-h-10">
-              <div>Butterscotch Sea Salt Latte</div>
-              <div>1</div>
-            </div>
-            <div>
-              <Checkbox />
-            </div>
-          </div>
-          <div className="flex justify-between shadow-sm">
-            <div className="flex justify-between mr-[10px] w-[239px] text-sm font-medium min-h-10">
-              <div>Butterscotch Sea Salt Latte</div>
-              <div>1</div>
-            </div>
-            <div>
-              <Checkbox />
-            </div>
-          </div>
-          <div className="flex justify-between shadow-sm">
-            <div className="flex justify-between mr-[10px] w-[239px] text-sm font-medium min-h-10">
-              <div>Butterscotch Sea Salt Latte</div>
-              <div>1</div>
-            </div>
-            <div>
-              <Checkbox />
-            </div>
-          </div>
+          {data.order_details.map((item: OrderDetailResponse) => {
+            return (
+              <div className="flex justify-between shadow-sm" key={item.id}>
+                <div className="flex justify-between mr-[10px] w-[239px] text-sm font-medium min-h-10">
+                  <div>{item.product.product_name}</div>
+                  <div>{item.qty}</div>
+                </div>
+                <div>
+                  <Checkbox onCheckedChange={() => handleChange(item.id)} />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </ScrollArea>
-      <Button className="bg-hijaugelap" asChild>
-        <Link
-          href="/neworder/checkout"
-          className="flex justify-between pl-5 pr-[10px] py-3 text-base"
-        >
-          <div className="font-bold">Rp.200.000.000</div>
-          <div className="flex gap-[5px] justify-between items-center">
-            <span className="font-normal">Pay</span>
-            <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
-          </div>
-        </Link>
+      <Button
+        className={`flex justify-between ${
+          allChecked ? "bg-hijaugelap" : "bg-gray-200 text-gray-400"
+        }`}
+        disabled={!allChecked}
+        onClick={() => allCompleted.mutate(data.id)}
+      >
+        <div className="font-bold">Complete</div>
+
+        <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
       </Button>
     </div>
   );

@@ -4,12 +4,11 @@ import { ArrowLeft } from "@/lib/icons";
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Payment from "./components/Payment";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { useAppSelector } from "@/redux/store";
 import CheckoutItem from "./components/CheckoutItem";
 import { CartDataProps } from "@/types/cart.types";
 
 const Checkout = () => {
-  const dispatch = useAppDispatch();
   const { cart } = useAppSelector((state) => state.cart);
   return (
     <div className="w-full flex gap-6 flex-col lg:flex-row">

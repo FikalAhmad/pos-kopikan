@@ -4,46 +4,56 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CashIcon, CeklisIcon, EWalletIcon } from "@/lib/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { createPayment } from "@/redux/features/payments/paymentSlice";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { removeAllCart } from "@/redux/features/carts/cartSlice";
+import { Card } from "@/components/ui/card";
+import MidtransPaymentPage from "./MidtransPayment";
 
 const Payment = () => {
   const dispatch = useAppDispatch();
   const { totalPrice } = useAppSelector((state) => state.cart);
   const { success } = useAppSelector((state) => state.payment);
+  const { dataOrder } = useAppSelector((state) => state.order);
   const [customerCash, setCustomerCash] = useState<number>(0);
   const [changesTotal, setChangesTotal] = useState<number>(0);
 
-  const handlePayment = (paymentMethod: string) => {
-    dispatch(
-      createPayment({
-        order_id: "tet", //sepertinya harus fetching order dulu
-        amount: totalPrice,
-        status: "pending",
-        payment_method: paymentMethod,
-      })
-    );
+  const router = useRouter();
+
+  const handlePayment = async (paymentMethod: string) => {
+    if (dataOrder?.data) {
+      await dispatch(
+        createPayment({
+          order_id: dataOrder.data.id,
+          amount: totalPrice,
+          status: "pending",
+          payment_method: paymentMethod,
+        })
+      );
+      dispatch(removeAllCart());
+    } else {
+      console.log("data gaada");
+    }
     if (success) {
       toast.success(
-        <Card className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl w-[300px] h-[300px] justify-center gap-8">
+        <Card className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl w-[300px] h-[300px] justify-center">
           <Image src={CeklisIcon} alt="Check Icon" className="w-24 h-24" />
           <span className="font-semibold text-lg mt-2">Payment Successful</span>
         </Card>,
-        { duration: 2000 }
+        {
+          action: {
+            label: "Back to Dashboard",
+            onClick: () => router.push("/dashboard"),
+          },
+        }
       );
-    }
-  };
-
-  const changeCheck = () => {
-    const changes = customerCash - totalPrice;
-    if (changes < 0) {
-      console.log("error");
-    } else {
-      setChangesTotal(changes);
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 4000);
     }
   };
 
@@ -90,61 +100,21 @@ const Payment = () => {
                 <br />
                 <div className="font-bold text-lg">Total: {totalPrice}</div>
               </div>
-
-              <div>
-                <div>Bayar:</div>
-                <Input
-                  type="number"
-                  placeholder="Masukkan Nominal Pembayaran"
-                  value={customerCash ?? 0}
-                  onChange={(e) => setCustomerCash(e.target.valueAsNumber)}
-                />
-                <Button onClick={() => changeCheck()}>Kembalian</Button>
-              </div>
-
-              <div>Kembalian: {changesTotal}</div>
             </div>
           </div>
           <Button
             className="bg-hijaugelap flex justify-between pl-5 pr-[10px] py-3 text-base"
             onClick={() => handlePayment("cash")}
           >
-            {/* <Link
-              href="/neworder/checkout"
-              className="flex justify-between pl-5 pr-[10px] py-3 text-base"
-            > */}
             <div className="font-bold">Rp. {totalPrice}</div>
             <div className="flex gap-[5px] justify-between items-center">
               <span className="font-normal">Pay</span>
               <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
             </div>
-            {/* </Link> */}
           </Button>
         </TabsContent>
         <TabsContent value="ewallet" className="flex flex-col w-[377px]">
-          <div className="flex justify-center h-[65vh]">
-            <Image
-              src={EWalletIcon}
-              alt="EWallet Icon"
-              width={300}
-              className="invert"
-            />
-          </div>
-          <Button
-            className="bg-hijaugelap flex justify-between pl-5 pr-[10px] py-3 text-base"
-            onClick={() => handlePayment("ewallet")}
-          >
-            {/* <Link
-              href="/neworder/checkout"
-              className="flex justify-between pl-5 pr-[10px] py-3 text-base"
-            > */}
-            <div className="font-bold">Rp. {totalPrice}</div>
-            <div className="flex gap-[5px] justify-between items-center">
-              <span className="font-normal">Pay</span>
-              <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
-            </div>
-            {/* </Link> */}
-          </Button>
+          <MidtransPaymentPage />
         </TabsContent>
       </Tabs>
     </div>

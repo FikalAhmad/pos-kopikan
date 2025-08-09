@@ -1,3 +1,5 @@
+"use client";
+
 import { useMutation } from "@tanstack/react-query";
 import { axiosJWT } from "@/lib/axios";
 import { setCredentials, logout } from "@/redux/features/auth/authSlice";
@@ -7,14 +9,14 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { removeAllCart } from "@/redux/features/orders/orderSlice";
+import { removeAllCart } from "@/redux/features/carts/cartSlice";
+import { useState } from "react";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { user, isAuthenticated, error } = useAppSelector(
-    (state) => state.auth
-  );
+  const { user, isAuthenticated  } = useAppSelector((state) => state.auth);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
@@ -46,9 +48,13 @@ export const useAuth = () => {
       router.push("/dashboard");
     },
     onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(error.response?.data.msg);
+      } else {
+        console.error(error);
+      }
       logout();
       router.push("/");
-      console.error(error);
     },
   });
 
@@ -72,7 +78,7 @@ export const useAuth = () => {
   return {
     user,
     isAuthenticated,
-    error,
+    error: errorMessage,
     login: loginMutation.mutate,
     logout: logoutMutation.mutate,
     isLoading: loginMutation.isPending || logoutMutation.isPending,

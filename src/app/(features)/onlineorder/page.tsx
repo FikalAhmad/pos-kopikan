@@ -1,9 +1,23 @@
+"use client";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Clock from "../dashboard/components/Clock";
 import OnlineOrderList from "./components/OnlineOrderList";
 import OnlineOrderDetail from "./components/OnlineOrderDetail";
+import { useFetch } from "@/hooks/api/useFetch";
+import { OrderDataResponse } from "@/types/order.type";
+import { useState } from "react";
 
 const OnlineOrder = () => {
+  const [orderDetail, setOrderDetail] = useState<OrderDataResponse>();
+
+  const { data: PendingData, isSuccess: PendingDataSuccess } = useFetch(
+    ["onlineorders"],
+    "/api/online"
+  );
+
+  // console.log(PendingData?.filter((item) => item.status == "completed"));
+
   return (
     <div className="w-full flex gap-6 flex-col lg:flex-row">
       <div className="w-[509px] flex flex-col gap-[30px]">
@@ -27,24 +41,74 @@ const OnlineOrder = () => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="pending" className="flex flex-col gap-[10px]">
-              <OnlineOrderList />
-              <OnlineOrderList />
-              <OnlineOrderList />
+              {PendingDataSuccess ? (
+                PendingData.filter(
+                  (item: { status: string }) => item.status == "pending"
+                ).map((item: OrderDataResponse) => {
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setOrderDetail(item)}
+                      className="cursor-pointer"
+                    >
+                      <OnlineOrderList
+                        id={item.id}
+                        timestamp={item.order_date}
+                        total_items={item.order_details.reduce(
+                          (acc, curr) => acc + curr.qty,
+                          0
+                        )}
+                        total_price={item.total}
+                        status={item.status}
+                        buttonActive={orderDetail?.id == item.id}
+                      />
+                    </div>
+                  );
+                })
+              ) : (
+                <div>Loading...</div>
+              )}
             </TabsContent>
             <TabsContent
               value="completed"
               className="flex flex-col gap-[10px] mt-0"
             >
-              <OnlineOrderList />
-              <OnlineOrderList />
-              <OnlineOrderList />
+              {PendingDataSuccess ? (
+                PendingData.filter(
+                  (item: { status: string }) => item.status == "completed"
+                ).map((item: OrderDataResponse) => {
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => setOrderDetail(item)}
+                      className="cursor-pointer"
+                    >
+                      <OnlineOrderList
+                        id={item.id}
+                        timestamp={item.order_date}
+                        total_items={item.order_details.reduce(
+                          (acc, curr) => acc + curr.qty,
+                          0
+                        )}
+                        total_price={item.total}
+                        status={item.status}
+                        buttonActive={orderDetail?.id == item.id}
+                      />
+                    </div>
+                  );
+                })
+              ) : (
+                <div>Loading...</div>
+              )}
             </TabsContent>
           </Tabs>
         </div>
       </div>
-      <OnlineOrderDetail />
-      {/* orderId: dapet dari looping online order list idnya kirim ke usestate nnti baru ambil dari usestate */}
-      
+      {orderDetail ? (
+        <OnlineOrderDetail data={orderDetail} />
+      ) : (
+        <div className="flex flex-col py-[34px] px-[10px] gap-5 w-[309px] bg-white h-screen shadow-md"></div>
+      )}
     </div>
   );
 };

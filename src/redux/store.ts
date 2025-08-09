@@ -14,10 +14,29 @@ import cartSlice from "./features/carts/cartSlice";
 import orderSlice from "./features/orders/orderSlice";
 import paymentSlice from "./features/payments/paymentSlice";
 
+// Create a safe storage that works on both client and server
+const createNoopStorage = () => {
+  return {
+    getItem(): Promise<string | null> {
+      return Promise.resolve(null);
+    },
+    setItem(): Promise<void> {
+      return Promise.resolve();
+    },
+    removeItem(): Promise<void> {
+      return Promise.resolve();
+    },
+  };
+};
+
+// Use safe storage - localStorage on client, noop on server
+const safeStorage =
+  typeof window !== "undefined" ? storage : createNoopStorage();
+
 const persistConfig = {
   key: "root",
   version: 1,
-  storage,
+  storage: safeStorage,
 };
 
 const reducer = combineReducers({

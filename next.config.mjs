@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "kopikan.vercel.app",
       },
+      {
+        protocol: "https",
+        hostname: "api.sandbox.midtrans.com",
+      },
     ],
   },
 };

@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -40,7 +41,7 @@ const SidebarNewOrder = () => {
   return (
     <div className="w-[130px] h-screen pt-5 flex flex-col gap-3 items-center">
       <Dialog>
-        <DialogTrigger>
+        <DialogTrigger asChild>
           <Button variant={"ghost"}>
             <ArrowLeft />
             Back
@@ -49,6 +50,7 @@ const SidebarNewOrder = () => {
         <DialogContent className="sm:max-w-[425px] bg-white">
           <DialogHeader>
             <DialogTitle>Do you want to cancel your order?</DialogTitle>
+            <DialogDescription></DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>

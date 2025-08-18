@@ -1,7 +1,7 @@
 import { axiosJWT } from "@/lib/axios";
 
 import { PaymentDataProps, PaymentState } from "@/types/payment.types";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const createPayment = createAsyncThunk(
   "checkoutFlow/createPayment",
@@ -25,7 +25,21 @@ const initialState: PaymentState = {
 const paymentSlice = createSlice({
   name: "payment",
   initialState,
-  reducers: {},
+  reducers: {
+    setPayment: (
+      state,
+      action: PayloadAction<{
+        order_id: string;
+        status: string;
+        payment_method: string;
+        transaction_id?: string;
+        amount: number;
+        qrUrl?: string;
+      }>
+    ) => {
+      state.data = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createPayment.pending, (state) => {
@@ -44,5 +58,5 @@ const paymentSlice = createSlice({
       });
   },
 });
-export const {} = paymentSlice.actions;
+export const { setPayment } = paymentSlice.actions;
 export default paymentSlice.reducer;

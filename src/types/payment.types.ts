@@ -1,8 +1,10 @@
 export interface PaymentDataProps {
   order_id: string;
-  amount: number;
   status: string;
   payment_method: string;
+  transaction_id?: string;
+  amount: number;
+  qrUrl?: string;
 }
 
 export interface PaymentState {

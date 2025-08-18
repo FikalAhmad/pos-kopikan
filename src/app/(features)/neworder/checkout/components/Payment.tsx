@@ -28,9 +28,11 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import CoreMidtransPayment from "./CoreMidtransPayment";
+import { usePayment } from "@/hooks/api/usePayment";
 
 const Payment = () => {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
   const { totalPrice } = useAppSelector((state) => state.cart);
   const { success } = useAppSelector((state) => state.payment);
   const { dataOrder } = useAppSelector((state) => state.order);
@@ -39,14 +41,17 @@ const Payment = () => {
 
   const router = useRouter();
 
-  const handlePayment = async (paymentMethod: string) => {
+  const { payWithCash, payWithQris } = usePayment();
+
+  const handleCash = async (order_id: string, amount: number) => {
+    await payWithCash(order_id, amount);
     if (dataOrder?.data) {
       await dispatch(
         createPayment({
           order_id: dataOrder.data.id,
           amount: totalPrice,
           status: "pending",
-          payment_method: paymentMethod,
+          payment_method: "cash",
         })
       );
       dispatch(removeAllCart());
@@ -68,9 +73,28 @@ const Payment = () => {
       );
       setTimeout(() => {
         router.push("/dashboard");
-      }, 4000);
+      }, 3000);
     }
   };
+
+  const handleQris = async (
+    order_id: string,
+    amount: number,
+    customer_name: string,
+    customer_email: string
+  ) => {
+    await payWithQris(order_id, amount, customer_name, customer_email);
+  };
+
+  // useEffect(() => {
+  //   if (payment?.orderId) {
+  //     // contoh auto-polling status tiap 10 detik
+  //     const interval = setInterval(() => {
+  //       checkStatus(payment.orderId);
+  //     }, 10000);
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [payment?.orderId]);
 
   return (
     <div className="w-[417px] pt-[34px] px-[20px] pb-5 flex flex-col gap-6 bg-white h-screen shadow-md">
@@ -95,6 +119,14 @@ const Payment = () => {
           <TabsTrigger
             value="ewallet"
             className="data-[state=active]:bg-hijaugelap data-[state=active]:text-white shadow-sm text-white text-sm font-bold p-5 flex flex-col gap-[10px] items-center w-28 hover:bg-hijaugelap hover:text-white bg-[#B8B8B8]"
+            onClick={() =>
+              handleQris(
+                dataOrder!.data.id,
+                totalPaymentAfterTax,
+                user?.name || "Cashier",
+                user?.email || "admin@kopikan.com"
+              )
+            }
           >
             <Image
               src={EWalletIcon}
@@ -149,7 +181,7 @@ const Payment = () => {
                 <div className="text-sm text-gray-500">Tax(10%)</div>
                 <div className="font-bold">{totalPrice * (10 / 100)}</div>
               </div>
-              <Separator className="" />
+              <Separator />
               <div className="flex justify-between">
                 <div className="text-sm text-gray-500">Total Payment</div>
                 <div className="font-bold">{totalPaymentAfterTax}</div>
@@ -158,7 +190,7 @@ const Payment = () => {
           </div>
           <Button
             className="bg-hijaugelap flex justify-between pl-5 pr-[10px] py-3 text-base"
-            onClick={() => handlePayment("cash")}
+            onClick={() => handleCash(dataOrder!.data.id, totalPaymentAfterTax)}
           >
             <div className="font-bold">Rp. {totalPaymentAfterTax}</div>
             <div className="flex gap-[5px] justify-between items-center">

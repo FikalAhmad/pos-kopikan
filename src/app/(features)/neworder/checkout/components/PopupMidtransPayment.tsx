@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-const MidtransPaymentPage = () => {
+const PopupMidtransPaymentPage = () => {
   const [snapToken, setSnapToken] = useState<string | null>(null);
   const { dataOrder } = useAppSelector((state) => state.order);
   const { user } = useAppSelector((state) => state.auth);
@@ -107,4 +107,4 @@ const MidtransPaymentPage = () => {
   );
 };
 
-export default MidtransPaymentPage;
+export default PopupMidtransPaymentPage;

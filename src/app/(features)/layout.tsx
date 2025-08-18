@@ -2,7 +2,7 @@
 // import type { Metadata } from "next";
 import { usePathname } from "next/navigation";
 import SidebarBase from "./components/Sidebar/SidebarBase";
-import SidebarNewOrder from "./neworder/components/SidebarNewOrder";
+import SidebarNewOrder from "./components/Sidebar/SidebarNewOrder";
 
 // export async function generateMetadata({
 //   params,

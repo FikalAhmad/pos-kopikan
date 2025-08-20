@@ -1,8 +1,5 @@
-"use client";
 // import type { Metadata } from "next";
-import { usePathname } from "next/navigation";
-import SidebarBase from "./components/Sidebar/SidebarBase";
-import SidebarNewOrder from "./components/Sidebar/SidebarNewOrder";
+import SidebarNewOrder from "./neworder/[category]/components/SidebarNewOrder";
 
 // export async function generateMetadata({
 //   params,
@@ -15,15 +12,14 @@ import SidebarNewOrder from "./components/Sidebar/SidebarNewOrder";
 //   };
 // }
 
-export default function FeaturesLayout({
+export default function OrderLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
   return (
     <div className="flex justify-evenly gap-1 lg:gap-6 w-[768px] lg:w-[1024px] px-4 bg-gray-200">
-      {pathname.startsWith("/neworder") ? <SidebarNewOrder /> : <SidebarBase />}
+      <SidebarNewOrder />
       <div>{children}</div>
     </div>
   );

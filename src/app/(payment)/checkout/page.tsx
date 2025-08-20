@@ -7,17 +7,21 @@ import Payment from "./components/Payment";
 import { useAppSelector } from "@/redux/store";
 import CheckoutItem from "./components/CheckoutItem";
 import { CartDataProps } from "@/types/cart.types";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const Checkout = () => {
   const { cart } = useAppSelector((state) => state.cart);
   return (
-    <div className="w-full flex gap-6 flex-col lg:flex-row">
-      <div className="w-[417px] pt-[34px] px-[10px] pb-5 flex flex-col gap-6 bg-white">
+    <div className="w-full flex gap-6 flex-col lg:flex-row lg:justify-between">
+      <div className="w-full pt-[34px] px-[10px] pb-5 flex flex-col gap-6 bg-white">
         <div className="flex justify-between">
-          <div className="flex gap-[10px] items-center">
-            <Image src={ArrowLeft} alt="Back Icon" />
-            <div>Checkout</div>
-          </div>
+          <Link href={"/neworder/signature"}>
+            <Button className="flex gap-[10px] items-center" variant={"ghost"}>
+              <Image src={ArrowLeft} alt="Back Icon" />
+              <div>Checkout</div>
+            </Button>
+          </Link>
         </div>
         <ScrollArea className="h-[85vh]">
           {cart.map((item: CartDataProps) => {

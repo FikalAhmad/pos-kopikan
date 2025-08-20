@@ -8,12 +8,12 @@ type CheckoutDetailProps = {
 };
 const CheckoutItem = ({ image_url, name, price, qty }: CheckoutDetailProps) => {
   return (
-    <div className="max-w-[397px] h-full flex">
+    <div className="w-full h-full flex">
       <div>
         <Image src={image_url} width={72} height={72} alt={name} />
       </div>
       <div className="h-[130px] max-h-[130px] flex text-sm py-5 px-[10px] gap-[10px] w-full">
-        <div className="flex flex-col justify-between w-full max-w-[305px]">
+        <div className="flex flex-col justify-between w-full">
           <div>{name}</div>
           <div className="flex gap-[30px] items-center justify-between">
             <span className="font-bold">{qty}x</span>

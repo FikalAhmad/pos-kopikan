@@ -22,7 +22,7 @@ const Cart = () => {
 
   useEffect(() => {
     if (success) {
-      router.push("/neworder/checkout");
+      router.push("/checkout");
     }
     setTimeout(() => {
       dispatch(resetStatus());

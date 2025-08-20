@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { coffeeIcon, kopikanLogo, nonCoffee, signatureIcon } from "@/lib/icons";
-import { NavButton } from "./NavButton";
+import { NavButton } from "../../../../../components/NavButton";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import {
@@ -23,19 +25,26 @@ const SidebarNewOrder = () => {
   const { dataOrder } = useAppSelector((state) => state.order);
   const dispatch = useAppDispatch();
 
-  const handleCancelOrder = async (id: string) => {
-    try {
-      const response = await axiosJWT.patch(`/api/orders/${id}`, {
-        status: "canceled",
-      });
-      if (response.data) {
-        setTimeout(() => {
-          router.push("/dashboard");
-          dispatch(removeAllCart());
-        }, 3000);
+  const handleCancelOrder = async (id?: string) => {
+    if (!id) {
+      setTimeout(() => {
+        router.push("/dashboard");
+        dispatch(removeAllCart());
+      }, 1500);
+    } else {
+      try {
+        const response = await axiosJWT.patch(`/api/orders/${id}`, {
+          status: "canceled",
+        });
+        if (response.data) {
+          setTimeout(() => {
+            router.push("/dashboard");
+            dispatch(removeAllCart());
+          }, 3000);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
   };
   return (

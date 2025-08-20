@@ -1,12 +1,12 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Clock from "../dashboard/components/Clock";
 import OnlineOrderList from "./components/OnlineOrderList";
 import OnlineOrderDetail from "./components/OnlineOrderDetail";
 import { useFetch } from "@/hooks/api/useFetch";
 import { OrderDataResponse } from "@/types/order.type";
 import { useState } from "react";
+import Clock from "@/app/(main)/dashboard/components/Clock";
 
 const OnlineOrder = () => {
   const [orderDetail, setOrderDetail] = useState<OrderDataResponse>();
@@ -41,7 +41,7 @@ const OnlineOrder = () => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="pending" className="flex flex-col gap-[10px]">
-              {PendingDataSuccess ? (
+              {PendingData?.length > 0 ? (
                 PendingData.filter(
                   (item: { status: string }) => item.status == "pending"
                 ).map((item: OrderDataResponse) => {
@@ -66,7 +66,9 @@ const OnlineOrder = () => {
                   );
                 })
               ) : (
-                <div>Loading...</div>
+                <div className="flex justify-center items-center h-[400px]">
+                  All online orders have been completed!
+                </div>
               )}
             </TabsContent>
             <TabsContent
@@ -107,7 +109,7 @@ const OnlineOrder = () => {
       {orderDetail ? (
         <OnlineOrderDetail data={orderDetail} />
       ) : (
-        <div className="flex flex-col py-[34px] px-[10px] gap-5 w-[309px] bg-white h-screen shadow-md"></div>
+        <div className="py-[34px] px-[10px] gap-5 w-[309px] h-screen"></div>
       )}
     </div>
   );

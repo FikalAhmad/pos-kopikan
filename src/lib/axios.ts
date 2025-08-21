@@ -20,7 +20,6 @@ export const axiosJWT = axios.create({
   withCredentials: true,
 });
 
-// Fungsi untuk memperbarui token
 const refreshAccessToken = async () => {
   try {
     const response = await axios.get(`${baseURL}/api/token`, {
@@ -48,29 +47,15 @@ const refreshAccessToken = async () => {
   } catch (error) {
     console.error("Token refresh failed:", error);
     logout();
-    // window.location.href = "/"
     return null;
   }
 };
 
-// Interceptor request
 axiosJWT.interceptors.request.use(
   async (config) => {
     const state = store.getState();
     const { accessToken } = state.auth;
 
-    // if (accessToken) {
-    //   const decoded = jwtDecode(accessToken) as User;
-
-    //   // Jika token sudah expired, coba refresh
-    //   if (decoded.exp * 1000 < Date.now()) {
-    //     const newAccessToken = await refreshAccessToken();
-    //   }
-
-    //   if (accessToken) {
-    //     config.headers.Authorization = `Bearer ${newAccessToken}`;
-    //   }
-    // }
     if (accessToken) {
       const decoded = jwtDecode(accessToken) as User;
       if (decoded.exp * 1000 < Date.now()) {

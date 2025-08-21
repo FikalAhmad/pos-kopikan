@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const authToken = request.cookies.get("token");
+  const authToken = request.cookies.get("refreshToken");
   const publicPaths = ["/login", "/register"];
   const path = request.nextUrl.pathname;
 

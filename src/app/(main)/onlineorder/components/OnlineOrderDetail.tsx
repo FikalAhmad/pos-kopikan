@@ -34,7 +34,7 @@ const OnlineOrderDetail = ({ data }: { data: OrderDataResponse }) => {
       });
     },
     onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ["omlineorders"] });
+      await queryClient.refetchQueries({ queryKey: ["onlineorders"] });
     },
   });
 

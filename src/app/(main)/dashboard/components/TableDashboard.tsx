@@ -10,16 +10,23 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useFetch } from "@/hooks/api/useFetch";
 
 type ProductSummaryProps = {
+  product_id: string;
   product_image: string;
   product_name: string;
-  total_order: number;
-  total_price: number;
+  total_orders: number;
   total_qty: number;
+  total_sales: number;
 };
 
-const TableDashboard = ({ data }: { data: ProductSummaryProps[] }) => {
+const TableDashboard = () => {
+  const { data: dataOrderSummary } = useFetch(
+    ["order-summary"],
+    "/api/dashboard/order-summary"
+  );
+
   return (
     <div className="py-9 px-3 shadow-lg h-[485px] bg-white">
       <div className="text-[16px] font-bold">Ordered Items</div>
@@ -38,9 +45,9 @@ const TableDashboard = ({ data }: { data: ProductSummaryProps[] }) => {
       <ScrollArea className="h-96 pb-3">
         <Table>
           <TableBody>
-            {data?.map((item: ProductSummaryProps, index) => {
+            {dataOrderSummary?.map((item: ProductSummaryProps) => {
               return (
-                <TableRow className="text-xs" key={`prp-${index}`}>
+                <TableRow className="text-xs" key={item.product_id}>
                   <TableCell className="font-medium w-[150px]" colSpan={1}>
                     <div className="flex items-center gap-5">
                       <Image
@@ -55,13 +62,13 @@ const TableDashboard = ({ data }: { data: ProductSummaryProps[] }) => {
                     </div>
                   </TableCell>
                   <TableCell className="w-[100px] text-center">
-                    {item.total_order}
+                    {item.total_orders}
                   </TableCell>
                   <TableCell className="w-[100px] text-center">
                     {item.total_qty}
                   </TableCell>
                   <TableCell className="w-[100px] text-center">
-                    {item.total_price}
+                    {item.total_sales}
                   </TableCell>
                 </TableRow>
               );

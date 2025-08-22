@@ -23,59 +23,34 @@ export type ProductDetailProps = Product & {
 };
 
 const Dashboard = () => {
-  const { data: ProductSummary } = useFetch(["products"], "/api/products");
-  const { data: OrderSummary } = useFetch(["orders"], "/api/orders");
-
-  const productSum = ProductSummary?.map((product: ProductDetailProps) => {
-    const totalOrder = new Set(product.order_details.map((od) => od.order_id))
-      .size;
-    const totalQty = product.order_details.reduce((acc, od) => acc + od.qty, 0);
-    const totalPrice = product.order_details.reduce(
-      (acc, od) => acc + od.total_price,
-      0
-    );
-
-    return {
-      product_image: product.image,
-      product_name: product.product_name,
-      total_order: totalOrder,
-      total_qty: totalQty,
-      total_price: totalPrice,
-    };
-  });
-
-  const totalRevenue = (productSum ?? []).reduce(
-    (acc: { total_price: number }, curr: { total_price: number }) => {
-      return {
-        total_price: acc.total_price + (curr.total_price ?? 0),
-      };
-    },
-    { total_price: 0 }
+  const { data: dataTotalSummary } = useFetch(
+    ["total-summary"],
+    "/api/dashboard/total-summary"
   );
 
   const menu = [
     {
       id: 1,
       icon: CashIcon,
-      value: totalRevenue.total_price,
+      value: dataTotalSummary?.totalRevenue,
       detail: "Total Revenue",
     },
     {
       id: 2,
       icon: OrderIcon,
-      value: OrderSummary?.length,
+      value: dataTotalSummary?.totalOrder,
       detail: "Total Orders",
     },
     {
       id: 3,
       icon: CustomerIcon,
-      value: "0",
+      value: dataTotalSummary?.totalOrderOffline,
       detail: "Walk-ins",
     },
     {
       id: 4,
       icon: cursorIcon,
-      value: "0",
+      value: dataTotalSummary?.totalOrderOnline,
       detail: "Online Orders",
     },
   ];
@@ -101,7 +76,7 @@ const Dashboard = () => {
             );
           })}
         </div>
-        <TableDashboard data={productSum} />
+        <TableDashboard />
       </div>
       <StatisticDashboard />
     </div>

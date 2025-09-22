@@ -14,9 +14,7 @@ import { useState } from "react";
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { user, accessToken, isAuthenticated } = useAppSelector(
-    (state) => state.auth
-  );
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const [errorMessage, setErrorMessage] = useState("");
 
   const loginMutation = useMutation({

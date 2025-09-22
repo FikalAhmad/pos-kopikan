@@ -13,7 +13,7 @@ export const useProducts = () => {
       const response = await axiosJWT.get("/api/products");
       return response.data.data;
     },
-    enabled: products.length === 0, // hanya fetch kalau redux kosong
+    enabled: products?.length === 0, // hanya fetch kalau redux kosong
     staleTime: 1000 * 60 * 5, // cache 5 menit
     refetchOnWindowFocus: false,
   });

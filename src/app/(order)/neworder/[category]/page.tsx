@@ -9,7 +9,7 @@ const CategoryOrder = ({ params }: { params: { category: string } }) => {
   const { category } = params;
   const { products } = useProducts();
 
-  const filtered = products.filter(
+  const filtered = products?.filter(
     (item) => item.category.toLowerCase() === category
   );
   return (

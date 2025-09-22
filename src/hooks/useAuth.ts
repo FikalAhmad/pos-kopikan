@@ -1,7 +1,6 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { axiosJWT } from "@/lib/axios";
 import { setCredentials, logout } from "@/redux/features/auth/authSlice";
 import { LoginCredentials, User } from "@/types/auth.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
@@ -15,7 +14,9 @@ import { useState } from "react";
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { user, isAuthenticated  } = useAppSelector((state) => state.auth);
+  const { user, accessToken, isAuthenticated } = useAppSelector(
+    (state) => state.auth
+  );
   const [errorMessage, setErrorMessage] = useState("");
 
   const loginMutation = useMutation({
@@ -60,7 +61,16 @@ export const useAuth = () => {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const response = await axiosJWT.patch("/api/logout");
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/logout`
+        // { refresh_token: accessToken },
+        // {
+        //   withCredentials: true,
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // }
+      );
       return response.data;
     },
     onSuccess: () => {

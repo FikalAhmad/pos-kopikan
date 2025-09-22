@@ -52,7 +52,7 @@ const SidebarBase = () => {
       <Button
         variant="ghost"
         className="flex flex-col group justify-center items-center w-20 h-20 p-[10px] gap-[10px] rounded bg-white hover:bg-hijaugelap hover:text-white"
-        onClick={handleClick}
+        onClick={() => handleClick()}
       >
         <Image
           src={logout}

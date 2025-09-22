@@ -77,51 +77,6 @@ const Payment = () => {
     }
   };
 
-  // const handleCash = async (order_id: string, amount: number) => {
-  //   await payWithCash(order_id, amount);
-  //   if (dataOrder?.data) {
-  //     await dispatch(
-  //       createPayment({
-  //         order_id: dataOrder.data.id,
-  //         amount: totalPrice,
-  //         status: "pending",
-  //         payment_method: "cash",
-  //       })
-  //     );
-  //     dispatch(removeAllCart());
-  //   } else {
-  //     console.log("data gaada");
-  //   }
-  //   if (success) {
-  //     toast.success(
-  //       <Card className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl w-[300px] h-[300px] justify-center">
-  //         <Image src={CeklisIcon} alt="Check Icon" className="w-24 h-24" />
-  //         <span className="font-semibold text-lg mt-2">Payment Successful</span>
-  //       </Card>,
-  //       {
-  //         action: {
-  //           label: "Back to Dashboard",
-  //           onClick: () => router.push("/dashboard"),
-  //         },
-  //       }
-  //     );
-  //     setTimeout(() => {
-  //       router.push("/dashboard");
-  //     }, 3000);
-  //   }
-  // };
-
-  // const handleQris = async (
-  //   order_id: string,
-  //   amount: number,
-  //   customer_name: string,
-  //   customer_email: string
-  // ) => {
-  //   await payWithQris(order_id, amount, customer_name, customer_email);
-  // };
-
-  console.log(totalCash);
-
   return (
     <div className="w-full max-w-[417px] pt-[34px] px-[20px] pb-5 flex flex-col gap-6 bg-white h-screen shadow-md justify-between">
       <div className="flex flex-col items-center h-[65vh]">

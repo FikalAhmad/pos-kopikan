@@ -34,11 +34,10 @@ export const usePayment = () => {
     }
   };
 
-  const payWithQris = async (
+  const payWithEWallet = async (
     orderId: string,
     amount: number,
-    customerName: string,
-    customerEmail: string
+    paymentMethod: string
   ) => {
     try {
       setLoading(true);
@@ -47,17 +46,17 @@ export const usePayment = () => {
       const res = await axiosJWT.post("/api/payments/ewallet", {
         order_id: orderId,
         amount,
-        customer_name: customerName,
-        customer_email: customerEmail,
+        customer_name: "Cashier",
+        customer_email: "cashier@kopikan.com",
+        payment_method: paymentMethod,
       });
 
       const data = await res.data;
       dispatch(
         setPayment({
-          status: "pending",
+          status: "PENDING",
           order_id: orderId,
-          payment_method: "qris",
-          transaction_id: data.transaction_id,
+          payment_method: paymentMethod.toUpperCase(),
           amount: amount,
           qrUrl: data.actions?.find(
             (a: { name: string }) => a.name === "generate-qr-code"
@@ -101,7 +100,7 @@ export const usePayment = () => {
     loading,
     error,
     payWithCash,
-    payWithQris,
+    payWithEWallet,
     // checkStatus,
   };
 };

@@ -1,10 +1,11 @@
 // src/hooks/useMutation.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetcher } from "@/lib/fetcher";
+import { axiosJWT } from "@/lib/axios";
 
 type MutationMethod = "POST" | "PUT" | "PATCH" | "DELETE";
 
-export function useMutate<T>(
+export function useMutatePost<T>(
   key: string[],
   url: string,
   method: MutationMethod,
@@ -14,15 +15,9 @@ export function useMutate<T>(
   const queryClient = useQueryClient();
 
   return useMutation<T, Error, unknown>({
-    mutationFn: (data) =>
-      fetcher<T>(url, {
-        method,
-        headers: { "Content-Type": "application/json", ...headers },
-        body: JSON.stringify(data),
-        ...options,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: key }); // Refresh cache setelah perubahan
-    },
-  });
-}
+    mutationFn: (data) => {
+      axiosJWT.
+    }
+  
+    })
+  }

@@ -4,21 +4,28 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setDataProduct } from "./productSlice";
 
 export const useProducts = () => {
+  const { products, success, error } = useAppSelector((state) => state.product);
   const dispatch = useAppDispatch();
-  const { product, error } = useAppSelector((state) => state.product);
 
-  useQuery({
+  const { isSuccess, data } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
       const response = await axiosJWT.get("/api/products");
-      dispatch(setDataProduct(response.data));
       return response.data;
     },
-    enabled: product.length === 0,
+    enabled: products.length === 0, // hanya fetch kalau redux kosong
+    staleTime: 1000 * 60 * 5, // cache 5 menit
+    refetchOnWindowFocus: false,
   });
 
+  if (isSuccess) {
+    dispatch(setDataProduct({ success: data.success, data: data.data }));
+  }
+
   return {
-    product,
+    products,
+    success,
     error,
+    data,
   };
 };

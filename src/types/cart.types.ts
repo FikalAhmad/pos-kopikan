@@ -1,4 +1,4 @@
-import { Product } from "./product.types";
+import { ProductItemCartProps } from "./product.types";
 
 export interface CartState {
   cart: CartDataProps[];
@@ -6,6 +6,27 @@ export interface CartState {
 }
 
 export interface CartDataProps {
-  productItem: Product;
+  productItem: ProductItemCartProps;
+  qty: number;
+}
+
+export interface AddCartProps {
+  productItem: {
+    id: string;
+    product_name: string;
+    image: string;
+    category: string;
+    description: string;
+    price: number;
+    options: {
+      id: string;
+      name: string;
+      values: {
+        id: string;
+        label: string;
+        extra_price: number;
+      };
+    }[];
+  };
   qty: number;
 }

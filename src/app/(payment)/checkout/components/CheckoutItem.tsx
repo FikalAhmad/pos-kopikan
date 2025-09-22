@@ -1,27 +1,45 @@
-import Image, { StaticImageData } from "next/image";
+import { ProductItemCartProps } from "@/types/product.types";
+import Image from "next/image";
 
-type CheckoutDetailProps = {
-  image_url: string | StaticImageData;
-  price: number;
-  name: string;
+const CheckoutItem = ({
+  data,
+  qty,
+}: {
+  data: ProductItemCartProps;
   qty: number;
-};
-const CheckoutItem = ({ image_url, name, price, qty }: CheckoutDetailProps) => {
+}) => {
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex gap-2">
       <div>
-        <Image src={image_url} width={72} height={72} alt={name} />
+        <Image
+          src={data.image}
+          width={72}
+          height={72}
+          alt={data.product_name}
+        />
       </div>
-      <div className="h-[130px] max-h-[130px] flex text-sm py-5 px-[10px] gap-[10px] w-full">
+      <div className="h-[130px] max-h-[130px] flex text-sm px-[10px] gap-[10px] w-full">
         <div className="flex flex-col justify-between w-full">
-          <div>{name}</div>
+          <div>{data.product_name}</div>
+          <div className="flex flex-col text-xs font-light">
+            {data.options.slice(0, 3).map((opt) => {
+              return (
+                <div key={opt.id}>
+                  {opt.name} : {opt.values.label}
+                </div>
+              );
+            })}
+            {data.options.length > 3 ? (
+              <div>+{data.options.length - 2}</div>
+            ) : null}
+          </div>
           <div className="flex gap-[30px] items-center justify-between">
             <span className="font-bold">{qty}x</span>
           </div>
         </div>
         <div className="flex flex-col justify-between items-end">
-          <div>{price}</div>
-          <span className="font-bold">{price * qty}</span>
+          <div>{data.price}</div>
+          <span className="font-bold">{data.price * qty}</span>
         </div>
       </div>
     </div>

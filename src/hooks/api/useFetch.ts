@@ -9,7 +9,7 @@ export function useFetch(key: string[], url: string) {
       return response.data;
     },
     staleTime: 1000 * 60 * 5, // Cache selama 5 menit
-    refetchOnWindowFocus: false, // Tidak refetch saat berpindah tab
+    refetchOnWindowFocus: false,
   });
   return { data, ...rest };
 }

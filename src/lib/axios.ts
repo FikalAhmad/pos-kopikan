@@ -30,7 +30,6 @@ const refreshAccessToken = async () => {
     });
     const decoded = jwtDecode(response.data.accessToken) as User;
 
-    // Perbarui state Redux
     store.dispatch(
       setCredentials({
         user: {

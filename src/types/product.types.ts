@@ -1,15 +1,46 @@
 export interface ProductState {
-  product: Product[];
+  products: ProductWithOption[];
+  success: boolean;
   isLoading: boolean;
   error: string | null;
 }
 
-export interface Product {
+export interface ProductOptionValue {
+  id: string;
+  label: string;
+  extra_price: number;
+}
+
+export interface ProductOption {
+  id: string;
+  name: string;
+  values: ProductOptionValue[];
+}
+
+export interface ProductWithOption {
   id: string;
   product_name: string;
   image: string;
   category: string;
   description: string;
   price: number;
-  stock: number;
+  options: ProductOption[];
+}
+
+export interface ProductItemCartProps {
+  id: string;
+  product_name: string;
+  image: string;
+  category: string;
+  description: string;
+  price: number;
+  options: {
+    id: string;
+    name: string;
+    values: {
+      id: string;
+      label: string;
+      extra_price: number;
+    };
+  }[];
 }

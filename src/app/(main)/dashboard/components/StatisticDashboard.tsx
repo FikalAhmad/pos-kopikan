@@ -23,7 +23,7 @@ const StatisticDashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterStat]);
 
-  const response = dataProductSales?.data?.data[0];
+  const response = dataProductSales.data?.data[0];
 
   const signatureData = response?.signature ?? [];
   const coffeeData = response?.coffee ?? [];

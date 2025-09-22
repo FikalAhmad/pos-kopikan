@@ -15,6 +15,10 @@ export const createPayment = createAsyncThunk(
   }
 );
 
+// export const checkStatusMidtrans = createAsyncThunk("checkoutFlow/checkStatusMidtrans",
+//   async ()
+// )
+
 const initialState: PaymentState = {
   isLoading: false,
   error: null,
@@ -32,12 +36,14 @@ const paymentSlice = createSlice({
         order_id: string;
         status: string;
         payment_method: string;
-        transaction_id?: string;
         amount: number;
         qrUrl?: string;
       }>
     ) => {
       state.data = action.payload;
+    },
+    removePaymentAfterPaid: (state) => {
+      state.data = null;
     },
   },
   extraReducers: (builder) => {
@@ -58,5 +64,5 @@ const paymentSlice = createSlice({
       });
   },
 });
-export const { setPayment } = paymentSlice.actions;
+export const { setPayment, removePaymentAfterPaid } = paymentSlice.actions;
 export default paymentSlice.reducer;

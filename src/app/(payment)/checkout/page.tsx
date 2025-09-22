@@ -76,18 +76,18 @@ const Checkout = () => {
             </DialogContent>
           </Dialog>
         </div>
-        <ScrollArea className="h-[85vh]">
-          {cart.map((item: CartDataProps) => {
-            return (
-              <CheckoutItem
-                key={item.productItem.id}
-                image_url={item.productItem.image}
-                name={item.productItem.product_name}
-                price={item.productItem.price}
-                qty={item.qty}
-              />
-            );
-          })}
+        <ScrollArea className="h-[80vh]">
+          <div className="flex flex-col gap-5">
+            {cart.map((item: CartDataProps, idx: number) => {
+              return (
+                <CheckoutItem
+                  key={item.productItem.id + idx}
+                  data={item.productItem}
+                  qty={item.qty}
+                />
+              );
+            })}
+          </div>
         </ScrollArea>
       </div>
       <Payment />

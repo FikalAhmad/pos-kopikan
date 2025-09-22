@@ -7,9 +7,9 @@ import { useProducts } from "@/redux/features/products/productAPI";
 
 const CategoryOrder = ({ params }: { params: { category: string } }) => {
   const { category } = params;
-  const { product } = useProducts();
+  const { products } = useProducts();
 
-  const filtered = product.filter(
+  const filtered = products.filter(
     (item) => item.category.toLowerCase() === category
   );
   return (
@@ -20,7 +20,6 @@ const CategoryOrder = ({ params }: { params: { category: string } }) => {
           <Search className="absolute left-3 top-12 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
         <ListProduct data={filtered} />
-        {/*  nanti di ListProduct ada param data untuk menerima data yang udah difilter berdasarkan param.category disini */}
       </div>
       <Cart />
     </div>

@@ -1,16 +1,22 @@
-import { Product } from "./product.types";
+import { ProductWithOption } from "./product.types";
 
 export interface OrderDataProps {
   customer_id: string;
-  order_type: string;
   order_source: string;
   delivery_address?: string;
   order_items: {
     product_id: string;
     qty: number;
+    options: {
+      id: string;
+      name: string;
+      values: {
+        id: string;
+        label: string;
+        extra_price: number;
+      };
+    }[];
   }[];
-  total: number;
-  status: string;
 }
 
 export interface OrderDataResponse {
@@ -37,7 +43,7 @@ export interface OrderDetailResponse {
   id: string;
   order_id: string;
   product_id: string;
-  product: Product;
+  product: ProductWithOption;
   qty: number;
   total_price: number;
   unit_price: number;

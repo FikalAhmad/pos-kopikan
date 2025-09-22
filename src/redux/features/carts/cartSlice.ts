@@ -1,4 +1,4 @@
-import { CartDataProps, CartState } from "@/types/cart.types";
+import { AddCartProps, CartState } from "@/types/cart.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: CartState = {
@@ -10,19 +10,36 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<CartDataProps>) => {
-      const itemInCart = state.cart.find(
-        (product) => product.productItem.id === action.payload.productItem.id
+    addToCart: (state, action: PayloadAction<AddCartProps>) => {
+      const itemInCart = state.cart.find((product) =>
+        product.productItem.options.every((opt1) => {
+          return action.payload.productItem.options.some(
+            (opt2) => opt1.id === opt2.id && opt1.values.id === opt2.values.id
+          );
+        })
       );
       if (itemInCart) {
-        itemInCart.qty++;
+        if (action.payload.qty) {
+          itemInCart.qty += action.payload.qty;
+        } else {
+          itemInCart.qty++;
+        }
       } else {
         state.cart.push(action.payload);
       }
-      state.totalPrice = state.cart.reduce(
-        (acc, curr) => acc + curr.qty * curr.productItem.price,
-        0
-      );
+      state.totalPrice = state.cart.reduce((acc, curr) => {
+        // harga dasar produk
+        const basePrice = curr.productItem.price;
+
+        // hitung total extra price untuk produk ini
+        const extraPrice = curr.productItem.options.reduce(
+          (sum, opt) => sum + opt.values.extra_price,
+          0
+        );
+
+        // total untuk 1 produk (harga dasar + tambahan) * qty
+        return acc + curr.qty * (basePrice + extraPrice);
+      }, 0);
     },
     increaseQty: (state, action: PayloadAction<{ id: string }>) => {
       const item = state.cart.find(

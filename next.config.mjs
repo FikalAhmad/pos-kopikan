@@ -10,6 +10,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "api.sandbox.midtrans.com",
       },
+      {
+        protocol: "https",
+        hostname: "static.fore.coffee",
+      },
     ],
   },
 };

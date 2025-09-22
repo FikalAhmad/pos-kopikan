@@ -30,9 +30,10 @@ const Cart = () => {
   }, [success, router, dispatch]);
 
   const handleCheckout = () => {
-    const cartItem = cart.map((item) => ({
+    const cartItem = cart.map((item: CartDataProps) => ({
       product_id: item.productItem.id,
       qty: item.qty,
+      options: item.productItem.options,
     }));
     if (!user) {
       throw new Error("User not found");
@@ -44,11 +45,8 @@ const Cart = () => {
       dispatch(
         createOrder({
           customer_id: id,
-          order_type: "dine-in",
-          order_source: "offline",
+          order_source: "OFFLINE",
           order_items: cartItem,
-          total: totalPrice,
-          status: "pending",
         })
       );
     }
@@ -71,18 +69,17 @@ const Cart = () => {
         </Button>
       </div>
       <ScrollArea className="h-[90vh]">
-        {cart.map((item: CartDataProps) => {
-          return (
-            <CartItem
-              key={item.productItem.id}
-              id={item.productItem.id}
-              image_url={item.productItem.image}
-              name={item.productItem.product_name}
-              price={item.productItem.price}
-              qty={item.qty}
-            />
-          );
-        })}
+        <div className="flex flex-col gap-5">
+          {cart.map((item: CartDataProps, idx: number) => {
+            return (
+              <CartItem
+                key={item.productItem.id + idx}
+                data={item.productItem}
+                qty={item.qty}
+              />
+            );
+          })}
+        </div>
       </ScrollArea>
       <Button
         className="bg-hijaugelap flex justify-between"

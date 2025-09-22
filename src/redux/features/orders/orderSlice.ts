@@ -21,7 +21,6 @@ const initialState: OrderState = {
   dataOrder: null,
 };
 
-// kalau dah ke beli stocknya kurangin di BE
 const orderSlice = createSlice({
   name: "order",
   initialState,

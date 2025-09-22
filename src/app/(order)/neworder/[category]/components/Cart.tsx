@@ -30,7 +30,7 @@ const Cart = () => {
   }, [success, router, dispatch]);
 
   const handleCheckout = () => {
-    const cartItem = cart.map((item: CartDataProps) => ({
+    const cartItem = cart?.map((item: CartDataProps) => ({
       product_id: item.productItem.id,
       qty: item.qty,
       options: item.productItem.options,
@@ -70,7 +70,7 @@ const Cart = () => {
       </div>
       <ScrollArea className="h-[90vh]">
         <div className="flex flex-col gap-5">
-          {cart.map((item: CartDataProps, idx: number) => {
+          {cart?.map((item: CartDataProps, idx: number) => {
             return (
               <CartItem
                 key={item.productItem.id + idx}

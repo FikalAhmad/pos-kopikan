@@ -62,7 +62,7 @@ const Dashboard = () => {
           <Clock />
         </div>
         <div className="flex justify-between my-[30px]">
-          {menu.map((item) => {
+          {menu?.map((item) => {
             return (
               <div
                 key={item.id}

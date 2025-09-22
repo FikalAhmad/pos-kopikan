@@ -22,7 +22,7 @@ const CheckoutItem = ({
         <div className="flex flex-col justify-between w-full">
           <div>{data.product_name}</div>
           <div className="flex flex-col text-xs font-light">
-            {data.options.slice(0, 3).map((opt) => {
+            {data.options.slice(0, 3)?.map((opt) => {
               return (
                 <div key={opt.id}>
                   {opt.name} : {opt.values.label}

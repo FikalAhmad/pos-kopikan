@@ -56,7 +56,7 @@ const ListProduct = ({ data }: ProductListProps) => {
       const exists = prev.some((opt) => opt.id === optionName.id);
 
       if (exists) {
-        return prev.map((opt) =>
+        return prev?.map((opt) =>
           opt.id === optionName.id ? { ...opt, values: optionValue } : opt
         );
       } else {
@@ -70,7 +70,7 @@ const ListProduct = ({ data }: ProductListProps) => {
 
   useEffect(() => {
     if (selectedProduct?.options) {
-      const initialOptions = selectedProduct.options.map((option) => {
+      const initialOptions = selectedProduct.options?.map((option) => {
         const firstValue = option.values[0];
         return {
           id: option.id,
@@ -91,7 +91,7 @@ const ListProduct = ({ data }: ProductListProps) => {
     <>
       <ScrollArea className="h-[560px] w-full">
         <div className="grid grid-cols-3 auto-cols-auto justify-between gap-5">
-          {data.map((item) => (
+          {data?.map((item) => (
             <div
               key={item.id}
               onClick={() => handleSelectedProduct(item)}
@@ -184,7 +184,7 @@ const ListProduct = ({ data }: ProductListProps) => {
                               }}
                             >
                               <TabsList className="grid grid-cols-2 gap-2 w-full h-max bg-white">
-                                {option.values.map((value) => {
+                                {option.values?.map((value) => {
                                   return (
                                     <TabsTrigger
                                       className="flex items-center justify-center px-3 py-2 text-sm flex-1 rounded-md data-[state=active]:bg-hijaugelap data-[state=active]:text-white"

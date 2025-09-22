@@ -25,7 +25,7 @@ interface DataSellingWeek {
 }
 
 export const BarChartExample = ({ label, data, type }: DataSellingWeek) => {
-  const chartData = data.map((item) => ({
+  const chartData = data?.map((item) => ({
     name: item.name,
     sellingProduct: item.sellingProduct,
   }));

@@ -9,9 +9,9 @@ import TableDashboard from "./components/TableDashboard";
 import StatisticDashboard from "./components/StatisticDashboard";
 import Clock from "./components/Clock";
 import { useFetch } from "@/hooks/api/useFetch";
-import { Product } from "@/types/product.types";
+import { ProductWithOption } from "@/types/product.types";
 
-export type ProductDetailProps = Product & {
+export type ProductDetailProps = ProductWithOption & {
   order_details: {
     id: string;
     order_id: string;

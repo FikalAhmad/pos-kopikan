@@ -9,7 +9,6 @@ import {
   logout,
   newOrder,
   onlineOrder,
-  settings,
 } from "@/lib/icons";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -48,7 +47,6 @@ const SidebarBase = () => {
         label="Online Order"
         exactMatch
       />
-      <NavButton href="/setting" icon={settings} label="Setting" exactMatch />
       <Button
         variant="ghost"
         className="flex flex-col group justify-center items-center w-20 h-20 p-[10px] gap-[10px] rounded bg-white hover:bg-hijaugelap hover:text-white"

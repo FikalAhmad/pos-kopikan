@@ -60,14 +60,14 @@ export const useAuth = () => {
   const logoutMutation = useMutation({
     mutationFn: async () => {
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/logout`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/logout`,
         // { refresh_token: accessToken },
-        // {
-        //   withCredentials: true,
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        // }
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
       return response.data;
     },

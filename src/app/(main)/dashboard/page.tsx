@@ -27,6 +27,7 @@ const Dashboard = () => {
     ["total-summary"],
     "/api/dashboard/total-summary"
   );
+  console.log(dataTotalSummary);
 
   const menu = [
     {

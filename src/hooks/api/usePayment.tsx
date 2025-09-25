@@ -10,7 +10,11 @@ export const usePayment = () => {
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
 
-  const payWithCash = async (orderId: string, amount: number) => {
+  const payWithCash = async (
+    orderId: string,
+    amount: number,
+    discounts: string[]
+  ) => {
     try {
       setLoading(true);
       setError(null);
@@ -18,6 +22,8 @@ export const usePayment = () => {
       const res = await axiosJWT.post("/api/payments", {
         order_id: orderId,
         amount,
+        payment_method: "CASH",
+        discounts,
       });
 
       const data = await res.data;

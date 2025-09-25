@@ -13,7 +13,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { addItemIcon, removeItemIcon } from "@/lib/icons";
@@ -38,6 +38,24 @@ const ListProduct = ({ data }: ProductListProps) => {
 
   const handleSelectedProduct = (product: ProductWithOption) => {
     setSelectedProduct(product);
+
+    // prepare initial options before opening the modal
+    if (product.options) {
+      const initialOptions = product.options.map((option) => {
+        const firstValue = option.values[0];
+        return {
+          id: option.id,
+          name: option.name,
+          values: {
+            id: firstValue.id,
+            label: firstValue.label,
+            extra_price: firstValue.extra_price,
+          },
+        };
+      });
+      setOptionProduct(initialOptions);
+    }
+
     setOpen(true);
   };
 
@@ -67,25 +85,6 @@ const ListProduct = ({ data }: ProductListProps) => {
       }
     });
   };
-
-  useEffect(() => {
-    if (selectedProduct?.options) {
-      const initialOptions = selectedProduct.options?.map((option) => {
-        const firstValue = option.values[0];
-        return {
-          id: option.id,
-          name: option.name,
-          values: {
-            id: firstValue.id,
-            label: firstValue.label,
-            extra_price: firstValue.extra_price,
-          },
-        };
-      });
-
-      setOptionProduct(initialOptions);
-    }
-  }, [selectedProduct, open]);
 
   return (
     <>
@@ -210,7 +209,7 @@ const ListProduct = ({ data }: ProductListProps) => {
                     <div>{}</div>
                   </div>
                   <div className="flex justify-between gap-5 mt-5">
-                    <DialogClose className="w-full">
+                    <DialogClose className="w-full" asChild>
                       <Button className="w-full">Cancel</Button>
                     </DialogClose>
                     <Button

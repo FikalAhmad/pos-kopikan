@@ -6,11 +6,7 @@ import { ArrowRight, DiscountIcon } from "@/lib/icons";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import {
-  createPayment,
-  removePaymentAfterPaid,
-} from "@/redux/features/payments/paymentSlice";
-// import { useState } from "react";
+import { removePaymentAfterPaid } from "@/redux/features/payments/paymentSlice";
 import { useRouter } from "next/navigation";
 import { removeAllCart } from "@/redux/features/carts/cartSlice";
 import {
@@ -33,20 +29,59 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { useFetch } from "@/hooks/api/useFetch";
 
+export type DiscountProps = {
+  id: string;
+  code: string;
+  description: string;
+  type: string;
+  value: number;
+  min_purchase: number | null;
+  valid_days: string[] | null;
+  time_start: string | null;
+  time_end: string | null;
+  start_date: Date;
+  end_date: Date;
+  is_active: boolean;
+};
 const Payment = () => {
   const dispatch = useAppDispatch();
   const { totalPrice } = useAppSelector((state) => state.cart);
   const { data: PaymentData } = useAppSelector((state) => state.payment);
   const { dataOrder } = useAppSelector((state) => state.order);
-  // const [discount, setDiscount] = useState<number>();
+  const [discountIds, setDiscountIds] = useState<string[]>([]);
   const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [totalCash, setTotalCash] = useState(0);
 
-  const totalPaymentAfterTax = totalPrice + totalPrice * (10 / 100);
-
   const router = useRouter();
+  const discountData = useFetch(["discounts"], "/api/discounts");
+
+  console.log(discountIds);
+
+  let totalAfterDiscount = totalPrice;
+  if (discountIds.length > 0 && discountData.data) {
+    for (const d of discountData.data) {
+      if (d.min_purchase && totalPrice < d.min_purchase) continue;
+
+      let discountValue = 0;
+
+      if (d.type === "PERCENTAGE") {
+        discountValue = Math.floor((totalPrice * d.value) / 100);
+        if (d.max_discount && discountValue > d.max_discount) {
+          discountValue = d.max_discount;
+        }
+      } else if (d.type === "FIXED_AMOUNT") {
+        discountValue = d.value;
+      }
+
+      totalAfterDiscount -= discountValue;
+    }
+  }
+
+  const totalPaymentAfterTax =
+    totalAfterDiscount + totalAfterDiscount * (10 / 100);
 
   const { payWithCash, payWithEWallet } = usePayment();
 
@@ -63,17 +98,7 @@ const Payment = () => {
       await payWithEWallet(order_id, amount, paymentMethod);
       dispatch(removeAllCart());
     } else {
-      await payWithCash(order_id, amount);
-      if (dataOrder?.data) {
-        await dispatch(
-          createPayment({
-            order_id: dataOrder.data.id,
-            amount: totalPrice,
-            status: "PENDING",
-            payment_method: "CASH",
-          })
-        );
-      }
+      await payWithCash(order_id, amount, discountIds);
     }
   };
 
@@ -86,7 +111,9 @@ const Payment = () => {
           <CoreMidtransPayment />
         ) : (
           <div className="flex flex-col w-full px-5 mt-5 gap-5">
-            <Select>
+            <Select
+              onValueChange={(v) => setDiscountIds((prev) => [...prev, v])}
+            >
               <SelectTrigger className="">
                 <SelectValue
                   placeholder={
@@ -106,11 +133,13 @@ const Payment = () => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Discount</SelectLabel>
-                  <SelectItem value="apple">Promo New User (10%)</SelectItem>
-                  <SelectItem value="banana">Promo Buy 1 Get 1</SelectItem>
-                  <SelectItem value="blueberry">
-                    Promo Evening Summer
-                  </SelectItem>
+                  {discountData.data?.map((discount: DiscountProps) => {
+                    return (
+                      <SelectItem key={discount.id} value={discount.id}>
+                        {discount.description}
+                      </SelectItem>
+                    );
+                  })}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -120,11 +149,17 @@ const Payment = () => {
             </div>
             <div className="flex justify-between">
               <div className="text-sm text-gray-500">Discount</div>
-              <div className="text-gray-500">-</div>
+              <div className="text-gray-500">
+                {totalPrice - totalAfterDiscount > 0
+                  ? `- ${totalPrice - totalAfterDiscount}`
+                  : "-"}
+              </div>
             </div>
             <div className="flex justify-between">
               <div className="text-sm text-gray-500">Tax(10%)</div>
-              <div className=" text-gray-500">{totalPrice * (10 / 100)}</div>
+              <div className=" text-gray-500">
+                {totalAfterDiscount * (10 / 100)}
+              </div>
             </div>
             <Separator />
             {totalCash > 0 ? (
@@ -282,7 +317,7 @@ const Payment = () => {
                 onClick={() => {
                   handleChoosePayment({
                     order_id: dataOrder!.data.id,
-                    amount: totalPaymentAfterTax,
+                    amount: totalPrice,
                     paymentMethod: paymentMethod,
                   });
                   setOpenPaymentDialog(false);

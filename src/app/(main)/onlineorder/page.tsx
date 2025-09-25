@@ -16,8 +16,6 @@ const OnlineOrder = () => {
     "/api/online"
   );
 
-  // console.log(PendingData?.filter((item) => item.status == "completed"));
-
   return (
     <div className="w-full flex gap-6 flex-col lg:flex-row">
       <div className="w-[509px] flex flex-col gap-[30px]">

@@ -10,7 +10,7 @@ import Image from "next/image";
 
 const CoreMidtransPayment = () => {
   const { data } = useAppSelector((state) => state.payment);
-  console.log(data);
+  console.log(data?.qrUrl);
 
   return (
     <Card className="mt-3">

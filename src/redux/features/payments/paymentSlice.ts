@@ -30,16 +30,7 @@ const paymentSlice = createSlice({
   name: "payment",
   initialState,
   reducers: {
-    setPayment: (
-      state,
-      action: PayloadAction<{
-        order_id: string;
-        status: string;
-        payment_method: string;
-        amount: number;
-        qrUrl?: string;
-      }>
-    ) => {
+    setPayment: (state, action: PayloadAction<PaymentDataProps>) => {
       state.data = action.payload;
     },
     removePaymentAfterPaid: (state) => {

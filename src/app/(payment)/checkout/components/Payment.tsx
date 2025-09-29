@@ -33,7 +33,6 @@ import { Card } from "@/components/ui/card";
 import formatPrice from "@/lib/rupiah";
 import { removeOrder } from "@/redux/features/orders/orderSlice";
 import { removeAllCart } from "@/redux/features/carts/cartSlice";
-import { removePaymentAfterPaid } from "@/redux/features/payments/paymentSlice";
 
 export type DiscountProps = {
   id: string;

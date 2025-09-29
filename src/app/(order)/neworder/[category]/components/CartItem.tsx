@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { addItemIcon, removeItemIcon, removeIcon } from "@/lib/icons";
+import formatPrice from "@/lib/rupiah";
 import {
   decreaseQty,
   increaseQty,
@@ -73,7 +74,7 @@ const CartItem = ({
           </div>
         </div>
         <div className="flex flex-col justify-between items-end">
-          <div>{data.price}</div>
+          <div>{formatPrice(data.price)}</div>
           <Button
             size={"icon"}
             variant={"ghost"}

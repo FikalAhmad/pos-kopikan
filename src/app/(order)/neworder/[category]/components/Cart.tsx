@@ -6,28 +6,18 @@ import CartItem from "./CartItem";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, TrashIcon } from "@/lib/icons";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { createOrder, resetStatus } from "@/redux/features/orders/orderSlice";
+import { createOrder } from "@/redux/features/orders/orderSlice";
 import { useRouter } from "next/navigation";
 import { removeAllCart } from "@/redux/features/carts/cartSlice";
 import { CartDataProps } from "@/types/cart.types";
-import { useEffect } from "react";
 import { toast } from "sonner";
+import formatPrice from "@/lib/rupiah";
 
 const Cart = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { cart, totalPrice } = useAppSelector((state) => state.cart);
-  const { success } = useAppSelector((state) => state.order);
   const { user } = useAppSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (success) {
-      router.push("/checkout");
-    }
-    setTimeout(() => {
-      dispatch(resetStatus());
-    }, 1000);
-  }, [success, router, dispatch]);
 
   const handleCheckout = () => {
     const cartItem = cart?.map((item: CartDataProps) => ({
@@ -49,6 +39,7 @@ const Cart = () => {
           order_items: cartItem,
         })
       );
+      router.push("/checkout");
     }
   };
 
@@ -85,7 +76,7 @@ const Cart = () => {
         className="bg-hijaugelap flex justify-between"
         onClick={() => handleCheckout()}
       >
-        <div className="font-bold">Rp. {totalPrice}</div>
+        <div className="font-bold">{formatPrice(totalPrice)}</div>
         <div className="flex gap-[5px] justify-between items-center">
           <span className="font-normal">Pay</span>
           <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />

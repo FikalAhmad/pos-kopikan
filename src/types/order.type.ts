@@ -23,7 +23,6 @@ export interface OrderDataResponse {
   id: string;
   customer_id: string;
   order_date: string;
-  order_type: string;
   order_source: string;
   delivery_address?: string;
   order_details: OrderDetailResponse[];
@@ -41,9 +40,23 @@ export interface OrderState {
 
 export interface OrderDetailResponse {
   id: string;
-  order_id: string;
   product_id: string;
-  product: ProductWithOption;
+  product: Omit<ProductWithOption, "options">;
+  options: {
+    optionValue: {
+      id: string;
+      createdAt: Date;
+      option_id: string;
+      label: string;
+      extra_price: number;
+      option: {
+        id: string;
+        createdAt: Date;
+        product_id: string;
+        name: string;
+      };
+    };
+  }[];
   qty: number;
   total_price: number;
   unit_price: number;

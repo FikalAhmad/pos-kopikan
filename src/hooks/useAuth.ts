@@ -60,8 +60,7 @@ export const useAuth = () => {
   const logoutMutation = useMutation({
     mutationFn: async () => {
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/logout`,
-        // { refresh_token: accessToken },
+        `${process.env.NEXT_PUBLIC_API_URL}/api/logout/${user?.id}`,
         {
           withCredentials: true,
           headers: {

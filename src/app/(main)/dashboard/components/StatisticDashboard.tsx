@@ -1,7 +1,5 @@
 "use client";
 
-import SettingIcon from "@/public/assets/images/settings.svg";
-import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BarChartExample } from "./BarChartExample";
@@ -31,12 +29,10 @@ const StatisticDashboard = () => {
 
   return (
     <div className="flex flex-col py-[34px] px-[10px] gap-7 w-auto lg:w-[309px] bg-white h-screen shadow-md">
-      <div className="flex justify-between items-center">
-        <div className="text-xl">
-          <strong>Overall</strong> Statistics
-        </div>
-        <Image src={SettingIcon} alt="Setting Icon" />
+      <div className="text-xl">
+        <strong>Overall</strong> Statistics
       </div>
+
       <Tabs defaultValue="week" className="w-auto">
         <TabsList className="flex justify-between bg-transparent mb-[30px]">
           <TabsTrigger

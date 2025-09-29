@@ -11,6 +11,7 @@ import {
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useFetch } from "@/hooks/api/useFetch";
+import formatPrice from "@/lib/rupiah";
 
 type ProductSummaryProps = {
   product_id: string;
@@ -68,7 +69,7 @@ const TableDashboard = () => {
                     {item.total_qty}
                   </TableCell>
                   <TableCell className="w-[100px] text-center">
-                    {item.total_sales}
+                    {formatPrice(item.total_sales)}
                   </TableCell>
                 </TableRow>
               );

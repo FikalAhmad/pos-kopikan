@@ -26,9 +26,10 @@ export const usePayment = () => {
         discounts,
       });
 
-      const data = await res.data;
-      dispatch(setPayment(data));
-      return data;
+      if (res) {
+        dispatch(setPayment(res.data.data));
+      }
+      return await res.data.data;
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError("Caught an Error:" + error.message);
@@ -56,21 +57,20 @@ export const usePayment = () => {
         customer_email: "cashier@kopikan.com",
         payment_method: paymentMethod,
       });
+      if (res.data) {
+        console.log(res.data);
 
-      const data = await res.data;
-      dispatch(
-        setPayment({
-          status: "PENDING",
-          order_id: orderId,
-          payment_method: paymentMethod.toUpperCase(),
-          amount: amount,
-          qrUrl: data.actions?.find(
-            (a: { name: string }) => a.name === "generate-qr-code"
-          )?.url,
-        })
-      );
-
-      return data;
+        dispatch(
+          setPayment({
+            order_id: res.data.order_id,
+            status: "PENDING",
+            payment_method: paymentMethod,
+            amount: res.data.gross_amount,
+            qrUrl: res.data.actions[0].url,
+          })
+        );
+      }
+      return await res.data;
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError("Caught an Error:" + error.message);

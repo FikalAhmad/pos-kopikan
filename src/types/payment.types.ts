@@ -3,7 +3,7 @@ export interface PaymentDataProps {
   status: string;
   payment_method: string;
   amount: number;
-  discounts: string[];
+  discounts?: string[];
   qrUrl?: string;
 }
 

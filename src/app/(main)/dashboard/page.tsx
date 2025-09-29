@@ -7,9 +7,9 @@ import CustomerIcon from "@/public/assets/images/customers.svg";
 import cursorIcon from "@/public/assets/images/onlineOrders.svg";
 import TableDashboard from "./components/TableDashboard";
 import StatisticDashboard from "./components/StatisticDashboard";
-import Clock from "./components/Clock";
 import { useFetch } from "@/hooks/api/useFetch";
 import { ProductWithOption } from "@/types/product.types";
+import formatPrice from "@/lib/rupiah";
 
 export type ProductDetailProps = ProductWithOption & {
   order_details: {
@@ -32,7 +32,7 @@ const Dashboard = () => {
     {
       id: 1,
       icon: CashIcon,
-      value: dataTotalSummary?.totalRevenue,
+      value: formatPrice(dataTotalSummary?.totalRevenue),
       detail: "Total Revenue",
     },
     {
@@ -57,9 +57,6 @@ const Dashboard = () => {
   return (
     <div className="w-full flex gap-6 flex-col lg:flex-row">
       <div className="w-[509px]">
-        <div className="text-[16px]">
-          <Clock />
-        </div>
         <div className="flex justify-between my-[30px]">
           {menu?.map((item) => {
             return (
@@ -69,7 +66,9 @@ const Dashboard = () => {
               >
                 <Image src={item.icon} alt="Cash Icon" className="invert" />
                 <div className="flex flex-col gap-1">
-                  <div className="font-bold text-[16px]">{item.value}</div>
+                  <div className="font-bold text-[16px] truncate">
+                    {item.value}
+                  </div>
                   <div className="text-xs">{item.detail}</div>
                 </div>
               </div>

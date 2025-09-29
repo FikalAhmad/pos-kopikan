@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosJWT } from "@/lib/axios";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setDataProduct } from "./productSlice";
+import { useEffect } from "react";
 
 export const useProducts = () => {
   const { products, success, error } = useAppSelector((state) => state.product);
@@ -17,9 +18,11 @@ export const useProducts = () => {
     refetchOnWindowFocus: false,
   });
 
-  if (isSuccess) {
-    dispatch(setDataProduct({ success: data.success, data: data.data }));
-  }
+  useEffect(() => {
+    if (isSuccess && data) {
+      dispatch(setDataProduct({ success: data.success, data: data.data }));
+    }
+  }, [isSuccess, data, dispatch]);
 
   return {
     products,

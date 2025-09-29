@@ -18,6 +18,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { addItemIcon, removeItemIcon } from "@/lib/icons";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import formatPrice from "@/lib/rupiah";
 
 interface ProductListProps {
   data: ProductWithOption[];
@@ -36,10 +37,13 @@ const ListProduct = ({ data }: ProductListProps) => {
     }[]
   >([]);
 
+  const totalExtraPrice = optionProduct.reduce((acc, curr) => {
+    return acc + curr.values.extra_price;
+  }, 0);
+
   const handleSelectedProduct = (product: ProductWithOption) => {
     setSelectedProduct(product);
 
-    // prepare initial options before opening the modal
     if (product.options) {
       const initialOptions = product.options.map((option) => {
         const firstValue = option.values[0];
@@ -165,7 +169,11 @@ const ListProduct = ({ data }: ProductListProps) => {
                           <div>{option.name}</div>
                           <div className="">
                             <Tabs
-                              defaultValue={option.values[0]?.id.toString()}
+                              value={
+                                optionProduct.find(
+                                  (opt) => opt.id === option.id
+                                )?.values.id || option.values[0]?.id
+                              }
                               onValueChange={(val) => {
                                 const chosen = option.values.find(
                                   (v) => v.id == val
@@ -191,7 +199,9 @@ const ListProduct = ({ data }: ProductListProps) => {
                                       key={value.id}
                                     >
                                       <div>{value.label}</div>
-                                      <div>+ Rp. {value.extra_price}</div>
+                                      <div>
+                                        + {formatPrice(value.extra_price)}
+                                      </div>
                                     </TabsTrigger>
                                   );
                                 })}
@@ -206,7 +216,11 @@ const ListProduct = ({ data }: ProductListProps) => {
                 <div className="flex flex-col gap-3 mt-5">
                   <div className="flex justify-between px-10 text-lg font-bold">
                     <div>Total</div>
-                    <div>{}</div>
+                    <div>
+                      {formatPrice(
+                        qtyDisplay * (selectedProduct.price + totalExtraPrice)
+                      )}
+                    </div>
                   </div>
                   <div className="flex justify-between gap-5 mt-5">
                     <DialogClose className="w-full" asChild>

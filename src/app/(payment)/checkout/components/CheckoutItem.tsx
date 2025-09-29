@@ -1,3 +1,4 @@
+import formatPrice from "@/lib/rupiah";
 import { ProductItemCartProps } from "@/types/product.types";
 import Image from "next/image";
 
@@ -38,8 +39,8 @@ const CheckoutItem = ({
           </div>
         </div>
         <div className="flex flex-col justify-between items-end">
-          <div>{data.price}</div>
-          <span className="font-bold">{data.price * qty}</span>
+          <div>{formatPrice(data.price)}</div>
+          <span className="font-bold">{formatPrice(data.price * qty)}</span>
         </div>
       </div>
     </div>

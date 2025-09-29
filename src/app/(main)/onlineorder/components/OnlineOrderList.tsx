@@ -1,3 +1,5 @@
+import formatPrice from "@/lib/rupiah";
+
 type OnlineOrderListProps = {
   id: string;
   timestamp: string;
@@ -36,8 +38,8 @@ const OnlineOrderList = ({
           <div>{total_items}</div>
         </div>
         <div className="flex justify-between gap-5 items-center">
-          <div>Rp. {total_price}</div>
-          <div className=" w-[67px] h-[24px] bg-hijau rounded-full text-xs flex justify-center items-center text-white">
+          <div>{formatPrice(total_price)}</div>
+          <div className="h-[24px] px-4 py-2 bg-hijau rounded-full text-xs flex justify-center items-center text-white">
             {status.charAt(0).toUpperCase() + status.slice(1)}
           </div>
         </div>

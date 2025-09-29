@@ -2,13 +2,11 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, DiscountIcon } from "@/lib/icons";
+import { ArrowRight, CeklisIcon, DiscountIcon } from "@/lib/icons";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { removePaymentAfterPaid } from "@/redux/features/payments/paymentSlice";
 import { useRouter } from "next/navigation";
-import { removeAllCart } from "@/redux/features/carts/cartSlice";
 import {
   Select,
   SelectContent,
@@ -24,12 +22,18 @@ import { usePayment } from "@/hooks/api/usePayment";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useFetch } from "@/hooks/api/useFetch";
+import { Card } from "@/components/ui/card";
+import formatPrice from "@/lib/rupiah";
+import { removeOrder } from "@/redux/features/orders/orderSlice";
+import { removeAllCart } from "@/redux/features/carts/cartSlice";
+import { removePaymentAfterPaid } from "@/redux/features/payments/paymentSlice";
 
 export type DiscountProps = {
   id: string;
@@ -46,7 +50,6 @@ export type DiscountProps = {
   is_active: boolean;
 };
 const Payment = () => {
-  const dispatch = useAppDispatch();
   const { totalPrice } = useAppSelector((state) => state.cart);
   const { data: PaymentData } = useAppSelector((state) => state.payment);
   const { dataOrder } = useAppSelector((state) => state.order);
@@ -54,11 +57,10 @@ const Payment = () => {
   const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [totalCash, setTotalCash] = useState(0);
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
   const discountData = useFetch(["discounts"], "/api/discounts");
-
-  console.log(discountIds);
 
   let totalAfterDiscount = totalPrice;
   if (discountIds.length > 0 && discountData.data) {
@@ -96,7 +98,6 @@ const Payment = () => {
   }) => {
     if (paymentMethod !== "cash") {
       await payWithEWallet(order_id, amount, paymentMethod);
-      dispatch(removeAllCart());
     } else {
       await payWithCash(order_id, amount, discountIds);
     }
@@ -145,20 +146,20 @@ const Payment = () => {
             </Select>
             <div className="flex justify-between">
               <div className="text-sm text-gray-500">Subtotal</div>
-              <div className="font-bold">{totalPrice}</div>
+              <div className="font-bold">{formatPrice(totalPrice)}</div>
             </div>
             <div className="flex justify-between">
               <div className="text-sm text-gray-500">Discount</div>
               <div className="text-gray-500">
                 {totalPrice - totalAfterDiscount > 0
-                  ? `- ${totalPrice - totalAfterDiscount}`
+                  ? `- ${formatPrice(totalPrice - totalAfterDiscount)}`
                   : "-"}
               </div>
             </div>
             <div className="flex justify-between">
               <div className="text-sm text-gray-500">Tax(10%)</div>
               <div className=" text-gray-500">
-                {totalAfterDiscount * (10 / 100)}
+                {formatPrice(totalAfterDiscount * (10 / 100))}
               </div>
             </div>
             <Separator />
@@ -166,13 +167,15 @@ const Payment = () => {
               <div className="flex justify-between">
                 <div className="text-sm text-gray-500">Amount</div>
                 <div className="text-gray-500">
-                  {totalCash - totalPaymentAfterTax}
+                  {formatPrice(totalCash - totalPaymentAfterTax)}
                 </div>
               </div>
             ) : null}
             <div className="flex justify-between">
               <div className="text-sm text-gray-500">Total Payment</div>
-              <div className="font-bold">{totalPaymentAfterTax}</div>
+              <div className="font-bold">
+                {formatPrice(totalPaymentAfterTax)}
+              </div>
             </div>
           </div>
         )}
@@ -182,10 +185,28 @@ const Payment = () => {
           <Button
             className="bg-hijaugelap flex justify-between pl-5 pr-[10px] py-3 text-base"
             onClick={() => {
+              toast("", {
+                description: (
+                  <Card className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl w-[300px] h-[300px] justify-center gap-8">
+                    <Image
+                      src={CeklisIcon}
+                      alt="Check Icon"
+                      className="w-24 h-24"
+                    />
+                    <span className="font-semibold text-lg mt-2">
+                      Payment Successful
+                    </span>
+                  </Card>
+                ),
+                className:
+                  "fixed flex items-center justify-center bg-transparent border-none shadow-none p-0",
+                position: "top-center",
+                duration: 2000,
+              });
               setTimeout(() => {
-                dispatch(removeAllCart());
-                dispatch(removePaymentAfterPaid());
                 router.push("/dashboard");
+                dispatch(removeAllCart());
+                dispatch(removeOrder());
               }, 2000);
             }}
           >
@@ -209,6 +230,7 @@ const Payment = () => {
         <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle className="text-2xl">Payment Method</DialogTitle>
+            <DialogDescription></DialogDescription>
           </DialogHeader>
           <Tabs
             value={paymentMethod}
@@ -223,21 +245,30 @@ const Payment = () => {
                   <Button
                     variant={"outline"}
                     className="border-hijaugelap"
-                    onClick={() => setTotalCash(totalCash + 10000)}
+                    onClick={() => {
+                      setTotalCash(totalCash + 10000);
+                      setPaymentMethod("cash");
+                    }}
                   >
                     Rp. 10000
                   </Button>
                   <Button
                     variant={"outline"}
                     className="border-hijaugelap"
-                    onClick={() => setTotalCash(totalCash + 50000)}
+                    onClick={() => {
+                      setTotalCash(totalCash + 50000);
+                      setPaymentMethod("cash");
+                    }}
                   >
                     Rp. 50000
                   </Button>
                   <Button
                     variant={"outline"}
                     className="border-hijaugelap"
-                    onClick={() => setTotalCash(totalCash + 100000)}
+                    onClick={() => {
+                      setTotalCash(totalCash + 100000);
+                      setPaymentMethod("cash");
+                    }}
                   >
                     Rp. 100000
                   </Button>
@@ -245,6 +276,7 @@ const Payment = () => {
                     placeholder="Rp. 29000"
                     type="number"
                     className="border-hijaugelap"
+                    value={totalCash}
                     onChange={(e) => {
                       setTotalCash(e.target.valueAsNumber);
                       setPaymentMethod("cash");

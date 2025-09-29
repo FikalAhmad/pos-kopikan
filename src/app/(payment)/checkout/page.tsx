@@ -21,6 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { axiosJWT } from "@/lib/axios";
+import { removeOrder } from "@/redux/features/orders/orderSlice";
 
 const Checkout = () => {
   const { cart } = useAppSelector((state) => state.cart);
@@ -31,12 +32,13 @@ const Checkout = () => {
   const handleCancelOrder = async (id: string) => {
     try {
       const response = await axiosJWT.patch(`/api/orders/${id}`, {
-        status: "canceled",
+        status: "CANCELLED",
       });
       if (response.data) {
         setTimeout(() => {
           router.push("/dashboard");
           dispatch(removeAllCart());
+          dispatch(removeOrder());
         }, 3000);
       }
     } catch (error) {

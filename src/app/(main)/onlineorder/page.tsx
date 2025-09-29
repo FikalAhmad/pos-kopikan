@@ -6,7 +6,6 @@ import OnlineOrderDetail from "./components/OnlineOrderDetail";
 import { useFetch } from "@/hooks/api/useFetch";
 import { OrderDataResponse } from "@/types/order.type";
 import { useState } from "react";
-import Clock from "@/app/(main)/dashboard/components/Clock";
 
 const OnlineOrder = () => {
   const [orderDetail, setOrderDetail] = useState<OrderDataResponse>();
@@ -15,13 +14,11 @@ const OnlineOrder = () => {
     ["onlineorders"],
     "/api/online"
   );
+  console.log();
 
   return (
     <div className="w-full flex gap-6 flex-col lg:flex-row">
       <div className="w-[509px] flex flex-col gap-[30px]">
-        <div className="text-[16px]">
-          <Clock />
-        </div>
         <div className="">
           <Tabs defaultValue="pending" className="w-auto mt-[30px]">
             <TabsList className="flex gap-5 bg-transparent justify-start mb-4">
@@ -41,7 +38,7 @@ const OnlineOrder = () => {
             <TabsContent value="pending" className="flex flex-col gap-[10px]">
               {PendingData?.length > 0 ? (
                 PendingData.filter(
-                  (item: { status: string }) => item.status == "pending"
+                  (item: { status: string }) => item.status == "PENDING"
                 ).map((item: OrderDataResponse) => {
                   return (
                     <div
@@ -52,10 +49,7 @@ const OnlineOrder = () => {
                       <OnlineOrderList
                         id={item.id}
                         timestamp={item.order_date}
-                        total_items={item.order_details.reduce(
-                          (acc, curr) => acc + curr.qty,
-                          0
-                        )}
+                        total_items={item.order_details.length}
                         total_price={item.total}
                         status={item.status}
                         buttonActive={orderDetail?.id == item.id}
@@ -75,7 +69,7 @@ const OnlineOrder = () => {
             >
               {PendingDataSuccess ? (
                 PendingData.filter(
-                  (item: { status: string }) => item.status == "completed"
+                  (item: { status: string }) => item.status == "COMPLETED"
                 ).map((item: OrderDataResponse) => {
                   return (
                     <div
@@ -86,10 +80,7 @@ const OnlineOrder = () => {
                       <OnlineOrderList
                         id={item.id}
                         timestamp={item.order_date}
-                        total_items={item.order_details.reduce(
-                          (acc, curr) => acc + curr.qty,
-                          0
-                        )}
+                        total_items={item.order_details.length}
                         total_price={item.total}
                         status={item.status}
                         buttonActive={orderDetail?.id == item.id}

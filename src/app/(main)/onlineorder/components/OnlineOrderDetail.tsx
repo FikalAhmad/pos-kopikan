@@ -30,7 +30,7 @@ const OnlineOrderDetail = ({ data }: { data: OrderDataResponse }) => {
   const allCompleted = useMutation({
     mutationFn: (id: string) => {
       return axiosJWT.patch(`/api/orders/${id}`, {
-        status: "completed",
+        status: "COMPLETED",
       });
     },
     onSuccess: async () => {
@@ -39,10 +39,11 @@ const OnlineOrderDetail = ({ data }: { data: OrderDataResponse }) => {
   });
 
   return (
-    <div className="flex flex-col py-[34px] px-[10px] gap-5 w-[309px] bg-white h-screen shadow-md">
+    <div className="flex flex-col py-9 px-[10px] gap-5 w-[309px] bg-white h-screen shadow-md">
       <div className="flex flex-col gap-5 justify-between">
-        <div className="text-xl">
-          <strong>Order</strong> #{data.id}
+        <div className="text-xl truncate">
+          <strong>Order</strong>
+          <span>#{data.id}</span>
         </div>
         <div className="flex justify-between mr-10">
           <div>Item</div>
@@ -51,32 +52,36 @@ const OnlineOrderDetail = ({ data }: { data: OrderDataResponse }) => {
       </div>
       <ScrollArea className="h-[90vh]">
         <div className="flex flex-col gap-[10px]">
-          {data.order_details.map((item: OrderDetailResponse) => {
+          {data?.order_details.map((item: OrderDetailResponse) => {
             return (
               <div className="flex justify-between shadow-sm" key={item.id}>
                 <div className="flex justify-between mr-[10px] w-[239px] text-sm font-medium min-h-10">
                   <div>{item.product.product_name}</div>
                   <div>{item.qty}</div>
                 </div>
-                <div>
-                  <Checkbox onCheckedChange={() => handleChange(item.id)} />
-                </div>
+                {data.status === "PENDING" && (
+                  <div>
+                    <Checkbox onCheckedChange={() => handleChange(item.id)} />
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
       </ScrollArea>
-      <Button
-        className={`flex justify-between ${
-          allChecked ? "bg-hijaugelap" : "bg-gray-200 text-gray-400"
-        }`}
-        disabled={!allChecked}
-        onClick={() => allCompleted.mutate(data.id)}
-      >
-        <div className="font-bold">Complete</div>
+      {data.status === "PENDING" && (
+        <Button
+          className={`flex justify-between ${
+            allChecked ? "bg-hijaugelap" : "bg-gray-200 text-gray-400"
+          }`}
+          disabled={!allChecked}
+          onClick={() => allCompleted.mutate(data.id)}
+        >
+          <div className="font-bold">Complete</div>
 
-        <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
-      </Button>
+          <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
+        </Button>
+      )}
     </div>
   );
 };

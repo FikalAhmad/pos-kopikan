@@ -14,7 +14,10 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({
+    email: "admin@kopikan.com",
+    password: "admin",
+  });
   const { login, isLoading, error } = useAuth();
 
   const handleEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +47,7 @@ export function LoginForm({
                   type="email"
                   value={form.email}
                   onChange={handleEvent}
-                  placeholder="m@example.com"
+                  placeholder="staff@kopikan.com"
                   required
                 />
               </div>
@@ -61,6 +64,7 @@ export function LoginForm({
                 <Input
                   id="password"
                   value={form.password}
+                  placeholder="*****"
                   onChange={handleEvent}
                   type="password"
                   required
@@ -70,12 +74,6 @@ export function LoginForm({
               <Button type="submit" className="w-full">
                 {isLoading ? "Loading..." : "Login"}
               </Button>
-              <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
-                  Sign up
-                </a>
-              </div>
             </div>
           </form>
           <div className="relative hidden bg-muted md:block">
@@ -88,10 +86,6 @@ export function LoginForm({
           </div>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   );
 }

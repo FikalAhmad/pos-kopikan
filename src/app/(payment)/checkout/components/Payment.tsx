@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import CoreMidtransPayment from "./CoreMidtransPayment";
 import { usePayment } from "@/hooks/api/usePayment";
 import {
   Dialog,
@@ -26,7 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useFetch } from "@/hooks/api/useFetch";
 import { Card } from "@/components/ui/card";
@@ -59,6 +58,7 @@ const Payment = () => {
   const dispatch = useAppDispatch();
 
   const router = useRouter();
+  const CoreMidtransPayment = lazy(() => import("./CoreMidtransPayment"));
   const discountData = useFetch(["discounts"], "/api/discounts");
 
   let totalAfterDiscount = totalPrice;
@@ -108,7 +108,9 @@ const Payment = () => {
         <div className="font-bold text-2xl py-5">Order Summary</div>
 
         {PaymentData?.qrUrl ? (
-          <CoreMidtransPayment />
+          <Suspense fallback={<div>Loading component...</div>}>
+            <CoreMidtransPayment />
+          </Suspense>
         ) : (
           <div className="flex flex-col w-full px-5 mt-5 gap-5">
             <Select

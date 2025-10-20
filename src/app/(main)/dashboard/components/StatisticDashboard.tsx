@@ -4,24 +4,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BarChartExample } from "./BarChartExample";
 import { axiosJWT } from "@/lib/axios";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 const StatisticDashboard = () => {
   const [filterStat, setFilterStat] = useState<string>("7d");
 
-  const dataProductSales = useMutation({
-    mutationFn: (data: { period: string }) => {
-      return axiosJWT.post("/api/products/filter", data);
-    },
+  const { data: response } = useQuery({
+    queryKey: ["productSales", filterStat],
+    queryFn: () =>
+      axiosJWT.post("/api/products/filter", { period: filterStat }),
+    select: (res) => res.data?.data?.[0],
+    placeholderData: keepPreviousData,
+    staleTime: 1000 * 60,
   });
-
-  useEffect(() => {
-    dataProductSales.mutate({ period: filterStat });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterStat]);
-
-  const response = dataProductSales.data?.data.data[0];
 
   const signatureData = response?.signature ?? [];
   const coffeeData = response?.coffee ?? [];

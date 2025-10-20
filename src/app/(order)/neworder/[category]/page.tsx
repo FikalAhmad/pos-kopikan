@@ -23,8 +23,8 @@ const CategoryOrder = ({ params }: { params: { category: string } }) => {
       <div className="w-[525px] flex flex-col gap-[30px]">
         <div className="relative">
           <Input
-            className="mt-7 bg-white"
-            placeholder="        Search"
+            className="mt-7 bg-white pl-10"
+            placeholder="Search"
             onChange={(e) => setSearchProduct(e.target.value)}
           />
           <Search className="absolute left-3 top-12 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

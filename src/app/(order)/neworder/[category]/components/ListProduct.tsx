@@ -42,10 +42,21 @@ const ListProduct = ({ data }: ProductListProps) => {
   }, 0);
 
   const handleSelectedProduct = (product: ProductWithOption) => {
-    setSelectedProduct(product);
+    const standarization = ["Size", "Ice Level", "Sweet Level"];
 
-    if (product.options) {
-      const initialOptions = product.options.map((option) => {
+    const sortedOptions = [...product.options].sort((a, b) => {
+      return standarization.indexOf(a.name) - standarization.indexOf(b.name);
+    });
+
+    const standardizedProduct = {
+      ...product,
+      options: sortedOptions,
+    };
+
+    setSelectedProduct(standardizedProduct);
+
+    if (sortedOptions) {
+      const initialOptions = sortedOptions.map((option) => {
         const firstValue = option.values[0];
         return {
           id: option.id,

@@ -39,13 +39,19 @@ const OnlineOrderDetail = ({ data }: { data: OrderDataResponse }) => {
   });
 
   return (
-    <div className="flex flex-col py-9 px-[10px] gap-5 w-[309px] bg-white h-screen shadow-md">
+    <div className="flex flex-col py-9 px-[10px] gap-5 w-full bg-white h-screen">
       <div className="flex flex-col gap-5 justify-between">
         <div className="text-xl truncate">
           <strong>Order</strong>
           <span>#{data.id}</span>
         </div>
-        <div className="flex justify-between mr-10">
+        <div className="flex items-center text-xs gap-5">
+          <div>Order Status:</div>
+          <div className="text-white bg-hijaugelap p-1 rounded-sm">
+            {data.status}
+          </div>
+        </div>
+        <div className="flex justify-between font-bold min-h-10 shadow-sm">
           <div>Item</div>
           <div>Qty</div>
         </div>
@@ -54,8 +60,8 @@ const OnlineOrderDetail = ({ data }: { data: OrderDataResponse }) => {
         <div className="flex flex-col gap-[10px]">
           {data?.order_details.map((item: OrderDetailResponse) => {
             return (
-              <div className="flex justify-between shadow-sm" key={item.id}>
-                <div className="flex justify-between mr-[10px] w-[239px] text-sm font-medium min-h-10">
+              <div className="flex justify-between" key={item.id}>
+                <div className="flex justify-between w-full text-sm font-medium min-h-10 shadow-sm">
                   <div>{item.product.product_name}</div>
                   <div>{item.qty}</div>
                 </div>

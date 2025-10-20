@@ -27,7 +27,7 @@ const CartItem = ({
       dispatch(decreaseQty({ id: productId }));
     }
     if (type === "REMOVE_ITEM") {
-      dispatch(removeToCart({ id: productId }));
+      dispatch(removeToCart(data));
     }
   };
   return (

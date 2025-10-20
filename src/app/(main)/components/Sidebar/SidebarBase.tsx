@@ -12,6 +12,15 @@ import {
 } from "@/lib/icons";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const SidebarBase = () => {
   const { user, logout: logoutUser } = useAuth();
@@ -48,20 +57,34 @@ const SidebarBase = () => {
           label="Online Order"
           exactMatch
         />
-        <Button
-          variant="ghost"
-          className="flex flex-col group justify-center items-center w-20 h-20 p-[10px] gap-[10px] rounded bg-white hover:bg-hijaugelap hover:text-white"
-          onClick={() => handleClick()}
-        >
-          <Image
-            src={logout}
-            alt={"Logout"}
-            width={24}
-            height={24}
-            className="transition-all group-hover:invert"
-          />
-          <div className="text-[12px] text-center">Logout</div>
-        </Button>
+        <Dialog>
+          <DialogTrigger className="flex flex-col group justify-center items-center w-20 h-20 p-[10px] gap-[10px] rounded bg-white hover:bg-hijaugelap hover:text-white">
+            <Image
+              src={logout}
+              alt={"Logout"}
+              width={24}
+              height={24}
+              className="transition-all group-hover:invert"
+            />
+            <div className="text-[12px] text-center">Logout</div>
+          </DialogTrigger>
+          <DialogContent className="w-72 bg-white">
+            <DialogHeader>
+              <DialogTitle>Are you sure to logout?</DialogTitle>
+              <DialogDescription></DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-between gap-5">
+              <DialogClose asChild>
+                <Button className="w-full" variant={"outline"}>
+                  No
+                </Button>
+              </DialogClose>
+              <Button className="w-full" onClick={handleClick}>
+                Yes
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="mt-2 px-4 py-2 bg-white rounded-lg flex flex-col items-center mb-5">
         <div className="text-xs font-bold">{user?.name}</div>

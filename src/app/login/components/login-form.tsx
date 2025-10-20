@@ -70,17 +70,20 @@ export function LoginForm({
                   required
                 />
               </div>
-              <p className="text-xs text-red-700 text-center h-5">{error}</p>
+              {error && (
+                <p className="text-xs text-red-700 text-center h-5">{error}</p>
+              )}
               <Button type="submit" className="w-full">
                 {isLoading ? "Loading..." : "Login"}
               </Button>
             </div>
           </form>
-          <div className="relative hidden bg-muted md:block">
+          <div className="relative hidden bg-muted md:block w-full">
             <Image
               src={BGHome}
               alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              fill
+              className="absolute inset-0 object-cover dark:brightness-[0.2] dark:grayscale"
               priority
             />
           </div>

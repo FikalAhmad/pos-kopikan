@@ -1,4 +1,5 @@
 import { AddCartProps, CartState } from "@/types/cart.types";
+import { ProductItemCartProps } from "@/types/product.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: CartState = {
@@ -76,20 +77,29 @@ const cartSlice = createSlice({
         );
       }
     },
-    removeToCart: (state, action: PayloadAction<{ id: string }>) => {
-      const itemInCart = state.cart.find(
-        (item) => item.productItem.id === action.payload.id
+    removeToCart: (state, action: PayloadAction<ProductItemCartProps>) => {
+      state.cart = state.cart.filter((item) => {
+        if (item.productItem.id !== action.payload.id) return true;
+
+        if (item.productItem.options.length !== action.payload.options.length)
+          return true;
+
+        const isSameOptions = item.productItem.options.every((opt1) =>
+          action.payload.options.some(
+            (opt2) => opt1.id === opt2.id && opt1.values.id === opt2.values.id
+          )
+        );
+
+        return !isSameOptions;
+      });
+
+      // Update totalPrice
+      state.totalPrice = state.cart.reduce(
+        (acc, curr) => acc + curr.qty * curr.productItem.price,
+        0
       );
-      if (itemInCart) {
-        state.cart = state.cart.filter(
-          (item) => item.productItem.id !== action.payload.id
-        );
-        state.totalPrice = state.cart.reduce(
-          (acc, curr) => acc + curr.qty * curr.productItem.price,
-          0
-        );
-      }
     },
+
     removeAllCart: (state) => {
       state.cart = [];
       state.totalPrice = 0;

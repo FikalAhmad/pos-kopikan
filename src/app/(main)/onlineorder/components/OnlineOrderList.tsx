@@ -24,7 +24,7 @@ const OnlineOrderList = ({
 
   return (
     <div
-      className={`flex flex-col px-[10px] py-5 hover:bg-hijaugelap hover:text-white gap-5 font-bold text-xs ${
+      className={`w-full flex flex-col px-[10px] py-5 hover:bg-hijaugelap hover:text-white gap-5 font-bold text-xs rounded-lg ${
         buttonActive ? "bg-hijaugelap text-white" : "bg-white"
       }`}
     >

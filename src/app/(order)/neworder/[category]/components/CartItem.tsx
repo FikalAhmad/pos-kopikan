@@ -19,15 +19,15 @@ const CartItem = ({
   qty: number;
 }) => {
   const dispatch = useAppDispatch();
-  const updateCart = (type: string, productId: string) => {
+  const updateCart = (type: string, productItem: ProductItemCartProps) => {
     if (type === "INCREASE_QTY") {
-      dispatch(increaseQty({ id: productId }));
+      dispatch(increaseQty(productItem));
     }
     if (type === "DECREASE_QTY") {
-      dispatch(decreaseQty({ id: productId }));
+      dispatch(decreaseQty(productItem));
     }
     if (type === "REMOVE_ITEM") {
-      dispatch(removeToCart(data));
+      dispatch(removeToCart(productItem));
     }
   };
   return (
@@ -59,7 +59,7 @@ const CartItem = ({
             <Button
               className="w-[30px] h-[30px] bg-hijaugelap rounded-full"
               size={"icon"}
-              onClick={() => updateCart("DECREASE_QTY", data.id)}
+              onClick={() => updateCart("DECREASE_QTY", data)}
             >
               <Image src={removeItemIcon} width={20} alt="Remove Icon" />
             </Button>
@@ -67,7 +67,7 @@ const CartItem = ({
             <Button
               className="w-[30px] h-[30px] bg-hijaugelap rounded-full"
               size={"icon"}
-              onClick={() => updateCart("INCREASE_QTY", data.id)}
+              onClick={() => updateCart("INCREASE_QTY", data)}
             >
               <Image src={addItemIcon} width={20} alt="Add Icon" />
             </Button>
@@ -78,7 +78,7 @@ const CartItem = ({
           <Button
             size={"icon"}
             variant={"ghost"}
-            onClick={() => updateCart("REMOVE_ITEM", data.id)}
+            onClick={() => updateCart("REMOVE_ITEM", data)}
           >
             <Image src={removeIcon} width={15} alt="Remove Product Icon" />
           </Button>

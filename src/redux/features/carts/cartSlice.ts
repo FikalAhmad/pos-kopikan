@@ -44,33 +44,66 @@ const cartSlice = createSlice({
         return acc + curr.qty * (basePrice + extraPrice);
       }, 0);
     },
-    increaseQty: (state, action: PayloadAction<{ id: string }>) => {
-      const item = state.cart.find(
-        (product) => product.productItem.id === action.payload.id
-      );
-      if (item) {
-        item.qty += 1;
-
-        state.totalPrice = state.cart.reduce(
-          (acc, curr) => acc + curr.qty * curr.productItem.price,
-          0
+    increaseQty: (state, action: PayloadAction<ProductItemCartProps>) => {
+      const itemInCart = state.cart.find((product) => {
+        if (product.productItem.id !== action.payload.id) return false;
+        if (
+          product.productItem.options.length !== action.payload.options.length
+        )
+          return false;
+        return product.productItem.options.every((opt1) =>
+          action.payload.options.some(
+            (opt2) => opt1.id === opt2.id && opt1.values.id === opt2.values.id
+          )
         );
+      });
+      if (itemInCart) {
+        itemInCart.qty += 1;
+
+        state.totalPrice = state.cart.reduce((acc, curr) => {
+          const basePrice = curr.productItem.price;
+          const extraPrice = curr.productItem.options.reduce(
+            (sum, opt) => sum + opt.values.extra_price,
+            0
+          );
+          return acc + curr.qty * (basePrice + extraPrice);
+        }, 0);
       }
     },
-    decreaseQty: (state, action: PayloadAction<{ id: string }>) => {
-      const item = state.cart.find(
-        (product) => product.productItem.id === action.payload.id
-      );
-      if (item && item.qty > 1) {
-        item.qty -= 1;
+    decreaseQty: (state, action: PayloadAction<ProductItemCartProps>) => {
+      const itemInCart = state.cart.find((product) => {
+        if (product.productItem.id !== action.payload.id) return false;
+        if (
+          product.productItem.options.length !== action.payload.options.length
+        )
+          return false;
+        return product.productItem.options.every((opt1) =>
+          action.payload.options.some(
+            (opt2) => opt1.id === opt2.id && opt1.values.id === opt2.values.id
+          )
+        );
+      });
+      if (itemInCart && itemInCart.qty > 1) {
+        itemInCart.qty -= 1;
         state.totalPrice = state.cart.reduce(
           (acc, curr) => acc + curr.qty * curr.productItem.price,
           0
         );
       } else {
-        state.cart = state.cart.filter(
-          (product) => product.productItem.id !== action.payload.id
-        );
+        state.cart = state.cart.filter((item) => {
+          if (item.productItem.id !== action.payload.id) return true;
+
+          if (item.productItem.options.length !== action.payload.options.length)
+            return true;
+
+          const isSameOptions = item.productItem.options.every((opt1) =>
+            action.payload.options.some(
+              (opt2) => opt1.id === opt2.id && opt1.values.id === opt2.values.id
+            )
+          );
+
+          return !isSameOptions;
+        });
         state.totalPrice = state.cart.reduce(
           (acc, curr) => acc + curr.qty * curr.productItem.price,
           0
@@ -93,7 +126,6 @@ const cartSlice = createSlice({
         return !isSameOptions;
       });
 
-      // Update totalPrice
       state.totalPrice = state.cart.reduce(
         (acc, curr) => acc + curr.qty * curr.productItem.price,
         0

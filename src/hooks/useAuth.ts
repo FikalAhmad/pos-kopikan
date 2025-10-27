@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { removeAllCart } from "@/redux/features/carts/cartSlice";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -44,6 +45,7 @@ export const useAuth = () => {
         expires: 1,
         secure: true,
       });
+      toast("Login has been success!");
       router.push("/dashboard");
     },
     onError: (error) => {

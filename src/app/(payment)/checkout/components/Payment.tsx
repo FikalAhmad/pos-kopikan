@@ -332,13 +332,13 @@ const Payment = () => {
                     QRIS
                   </TabsTrigger>
                   <TabsTrigger
-                    value=""
+                    value="banktransfer"
                     className="flex items-center justify-center px-3 py-2 text-sm flex-1 border-[1px] border-hijaugelap text-hijaugelap rounded-md data-[state=active]:bg-hijaugelap data-[state=active]:text-white"
                   >
                     Bank Transfer
                   </TabsTrigger>
                   <TabsTrigger
-                    value=""
+                    value="bcaqr"
                     className="flex items-center justify-center px-3 py-2 text-sm flex-1 border-[1px] border-hijaugelap text-hijaugelap rounded-md data-[state=active]:bg-hijaugelap data-[state=active]:text-white"
                   >
                     BCA QR

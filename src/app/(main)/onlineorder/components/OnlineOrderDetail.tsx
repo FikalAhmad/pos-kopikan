@@ -5,6 +5,7 @@ import { axiosJWT } from "@/lib/axios";
 import { ArrowRight } from "@/lib/icons";
 import { OrderDataResponse, OrderDetailResponse } from "@/types/order.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CheckCircle, Clock } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -47,7 +48,12 @@ const OnlineOrderDetail = ({ data }: { data: OrderDataResponse }) => {
         </div>
         <div className="flex items-center text-xs gap-5">
           <div>Order Status:</div>
-          <div className="text-white bg-hijaugelap p-1 rounded-sm">
+          <div className="text-white bg-hijaugelap p-1 rounded-sm flex gap-1">
+            {data.status === "PENDING" ? (
+              <Clock className="w-4 h-4" />
+            ) : (
+              <CheckCircle className="w-4 h-4" />
+            )}
             {data.status}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { AddCartProps, CartState } from "@/types/cart.types";
 import { ProductItemCartProps } from "@/types/product.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { toast } from "sonner";
 
 const initialState: CartState = {
   cart: [],
@@ -34,6 +35,9 @@ const cartSlice = createSlice({
       } else {
         state.cart.push(action.payload);
       }
+      toast.success("Added to cart", {
+        description: `${action.payload.productItem.product_name} has been successfully added.`,
+      });
 
       state.totalPrice = state.cart.reduce((acc, curr) => {
         const basePrice = curr.productItem.price;
@@ -104,6 +108,7 @@ const cartSlice = createSlice({
 
           return !isSameOptions;
         });
+        toast.info("Removed from cart");
         state.totalPrice = state.cart.reduce(
           (acc, curr) => acc + curr.qty * curr.productItem.price,
           0
@@ -125,6 +130,7 @@ const cartSlice = createSlice({
 
         return !isSameOptions;
       });
+      toast.info("Removed from cart");
 
       state.totalPrice = state.cart.reduce(
         (acc, curr) => acc + curr.qty * curr.productItem.price,
@@ -135,6 +141,7 @@ const cartSlice = createSlice({
     removeAllCart: (state) => {
       state.cart = [];
       state.totalPrice = 0;
+      toast.info("All products removed from cart");
     },
   },
 });

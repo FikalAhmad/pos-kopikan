@@ -5,15 +5,18 @@ import ListProduct from "./components/ListProduct";
 import Cart from "./components/Cart";
 import { useProducts } from "@/redux/features/products/productAPI";
 import { useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const CategoryOrder = ({ params }: { params: { category: string } }) => {
   const { category } = params;
   const { products } = useProducts();
   const [searchProduct, setSearchProduct] = useState("");
 
+  const debouncedSearchTerm = useDebounce(searchProduct, 300);
+
   const filtered =
     products?.filter((item) =>
-      searchProduct
+      debouncedSearchTerm
         ? item.product_name.toLowerCase().includes(searchProduct.toLowerCase())
         : item.category.toLowerCase() === category.toLowerCase()
     ) || [];

@@ -18,7 +18,6 @@ import { toast } from "sonner";
 
 const CoreMidtransPayment = () => {
   const { data } = useAppSelector((state) => state.payment);
-  console.log(data?.qrUrl);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -49,6 +48,9 @@ const CoreMidtransPayment = () => {
           dispatch(removeOrder());
           dispatch(removePaymentAfterPaid());
         }, 2000);
+      }
+      if (result.transaction_status === "pending") {
+        toast.info("Belum Dibayar");
       }
     } catch (error) {
       console.error("Error checking status:", error);

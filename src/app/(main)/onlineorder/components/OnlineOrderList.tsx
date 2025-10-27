@@ -1,4 +1,5 @@
 import formatPrice from "@/lib/rupiah";
+import { CheckCircle, Clock } from "lucide-react";
 
 type OnlineOrderListProps = {
   id: string;
@@ -39,7 +40,12 @@ const OnlineOrderList = ({
         </div>
         <div className="flex justify-between gap-5 items-center">
           <div>{formatPrice(total_price)}</div>
-          <div className="h-[24px] px-4 py-2 bg-hijau rounded-full text-xs flex justify-center items-center text-white">
+          <div className="h-[24px] px-4 py-2 bg-hijau rounded-full text-xs flex justify-center items-center text-white gap-1">
+            {status === "PENDING" ? (
+              <Clock className="w-4 h-4" />
+            ) : (
+              <CheckCircle className="w-4 h-4" />
+            )}
             {status.charAt(0).toUpperCase() + status.slice(1)}
           </div>
         </div>

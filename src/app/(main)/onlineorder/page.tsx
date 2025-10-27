@@ -6,6 +6,7 @@ import { useFetch } from "@/hooks/api/useFetch";
 import { OrderDataResponse } from "@/types/order.type";
 import { lazy, Suspense, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { CheckCircle, Clock } from "lucide-react";
 
 const OnlineOrder = () => {
   const [orderDetail, setOrderDetail] = useState<OrderDataResponse>();
@@ -67,8 +68,14 @@ const OnlineOrder = () => {
                     );
                   })
                 ) : (
-                  <div className="flex justify-center items-center h-[400px]">
-                    All online orders have been completed!
+                  <div className="flex flex-col justify-center items-center h-[400px]">
+                    <Clock className="h-16 w-16 text-hijaugelap mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-foreground mb-2">
+                      Tidak ada pesanan menunggu
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Semua pesanan sudah diselesaikan
+                    </p>
                   </div>
                 )}
               </TabsContent>
@@ -98,8 +105,14 @@ const OnlineOrder = () => {
                     );
                   })
                 ) : (
-                  <div className="flex justify-center items-center h-[400px]">
-                    No online orders have been completed!
+                  <div className="flex flex-col justify-center items-center h-[400px]">
+                    <CheckCircle className="h-16 w-16 text-hijaugelap mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-foreground mb-2">
+                      Belum ada pesanan selesai
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Pesanan yang sudah diselesaikan akan muncul di sini
+                    </p>
                   </div>
                 )}
               </TabsContent>

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { axiosJWT } from "@/lib/axios";
-import { setCredentials, logout } from "@/redux/features/auth/authSlice";
+import { setCredentials, logout, setError } from "@/redux/features/auth/authSlice";
 import { LoginCredentials, User } from "@/types/auth.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import axios from "axios";
@@ -17,6 +17,7 @@ export const useAuth = () => {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
+      dispatch(setError(""));
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_USER_API_URL}/api/login`,
         credentials,
@@ -47,10 +48,12 @@ export const useAuth = () => {
       });
       router.push("/dashboard");
     },
-    onError: (error) => {
+    onError: (err: any) => {
       dispatch(logout());
-      router.push("/");
-      console.error(error);
+      const message = "Email or password is incorrect";
+      dispatch(setError(message));
+      console.error("Login error:", message);
+      console.error(err);
     },
   });
 

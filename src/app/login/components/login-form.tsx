@@ -25,11 +25,13 @@ export function LoginForm({
     e.preventDefault();
     login({ email: form.email, password: form.password });
   };
-  if (error) {
-    <div>{error}</div>;
-  }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
+      {error && (
+        <div className="p-3 text-sm text-white bg-red-500 rounded-md text-center">
+          {error}
+        </div>
+      )}
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>

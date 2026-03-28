@@ -1,18 +1,37 @@
 "use client";
 
 import { Provider } from "react-redux";
-import ReactQueryProvider from "./ReactQueryProviders";
-import { store } from "@/redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import dynamic from "next/dynamic";
+import ReactQueryProvider from "./ReactQueryProviders";
+import { store } from "@/redux/store";
+import { kopikanLogo } from "@/lib/icons";
+import Image from "next/image";
 
-export function Providers({ children }: { children: React.ReactNode }) {
-  const persister = persistStore(store);
+const ProvidersComponent = ({ children }: { children: React.ReactNode }) => {
+  const persistor = persistStore(store);
+
   return (
     <Provider store={store}>
       <ReactQueryProvider>
-        <PersistGate persistor={persister}>{children}</PersistGate>
+        <PersistGate
+          loading={
+            <div className="flex-col gap-4 w-full flex items-center justify-center border-2 h-screen">
+              <div className="w-28 h-28 animate-bounce flex items-center justify-center">
+                <Image src={kopikanLogo} alt="Loading" />
+              </div>
+            </div>
+          }
+          persistor={persistor}
+        >
+          {children}
+        </PersistGate>
       </ReactQueryProvider>
     </Provider>
   );
-}
+};
+
+export const Providers = dynamic(() => Promise.resolve(ProvidersComponent), {
+  ssr: false,
+});

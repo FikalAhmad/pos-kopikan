@@ -1,3 +1,5 @@
+"use client";
+
 import { useMutation } from "@tanstack/react-query";
 import { axiosJWT } from "@/lib/axios";
 import { setCredentials, logout, setError } from "@/redux/features/auth/authSlice";
@@ -7,19 +9,21 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { removeAllCart } from "@/redux/features/carts/cartSlice";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { user, isAuthenticated, error } = useAppSelector(
-    (state) => state.auth
-  );
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
       dispatch(setError(""));
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_USER_API_URL}/api/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
         credentials,
         {
           withCredentials: true,
@@ -39,13 +43,11 @@ export const useAuth = () => {
           accessToken: data.accessToken,
         })
       );
-      // document.cookie = `refreshToken=${data.refreshToken};max-age=${
-      //   24 * 60 * 60 * 1000
-      // }secure`;
       Cookies.set("token", data.refreshToken, {
         expires: 1,
         secure: true,
       });
+      toast("Login has been success!");
       router.push("/dashboard");
     },
     onError: (err: any) => {
@@ -59,12 +61,22 @@ export const useAuth = () => {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const response = await axiosJWT.patch("/api/logout");
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/logout/${user?.id}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data;
     },
     onSuccess: () => {
-      dispatch(logout());
       Cookies.remove("token");
+      Cookies.remove("refreshToken");
+      logout();
+      dispatch(removeAllCart());
       router.push("/");
     },
     onError: (error) => {
@@ -75,7 +87,7 @@ export const useAuth = () => {
   return {
     user,
     isAuthenticated,
-    error,
+    error: errorMessage,
     login: loginMutation.mutate,
     logout: logoutMutation.mutate,
     isLoading: loginMutation.isPending || logoutMutation.isPending,

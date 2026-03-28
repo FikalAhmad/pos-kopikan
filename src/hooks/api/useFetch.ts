@@ -1,18 +1,17 @@
-// src/hooks/useFetch.ts
 import { useQuery } from "@tanstack/react-query";
-import { fetcher } from "@/lib/fetcher";
+import { axiosJWT } from "@/lib/axios";
 
-export function useFetch<T>(
-  key: string[],
-  url: string,
-  headers?: HeadersInit,
-  options?: RequestInit
-) {
-  const { data } = useQuery<T>({
+export function useFetch(key: string[], url: string) {
+  const { data, ...rest } = useQuery({
     queryKey: key,
-    queryFn: async () => await fetcher<T>(url, { headers, ...options }),
+    queryFn: async () => {
+      const response = await axiosJWT.get(url);
+      if (response) {
+        return response.data.data;
+      }
+    },
     staleTime: 1000 * 60 * 5, // Cache selama 5 menit
-    refetchOnWindowFocus: false, // Tidak refetch saat berpindah tab
+    refetchOnWindowFocus: false,
   });
-  return { data };
+  return { data, ...rest };
 }

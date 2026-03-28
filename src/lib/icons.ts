@@ -19,6 +19,8 @@ import CashIcon from "@/public/assets/images/cash.svg";
 import EWalletIcon from "@/public/assets/images/scanner.svg";
 import CeklisIcon from "@/public/assets/images/ceklis.svg";
 
+import DiscountIcon from "@/public/assets/images/discount.svg";
+
 export {
   kopikanLogo,
   newOrder,
@@ -38,4 +40,5 @@ export {
   CashIcon,
   EWalletIcon,
   CeklisIcon,
+  DiscountIcon,
 };

@@ -75,9 +75,9 @@ export function LoginForm({
                   required
                 />
               </div>
-              {error && (
+              {/* {error && (
                 <p className="text-xs text-red-700 text-center h-5">{error}</p>
-              )}
+              )} */}
               <Button type="submit" className="w-full">
                 {isLoading ? "Loading..." : "Login"}
               </Button>

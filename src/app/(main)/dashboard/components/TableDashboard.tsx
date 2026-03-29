@@ -30,22 +30,24 @@ const TableDashboard = () => {
   );
 
   return (
-    <Card className="h-full max-h-[485px] bg-white">
-      <CardContent className="p-3">
-        <div className="text-[16px] font-bold">Ordered Items</div>
-        <Table className="px-4 py-9">
-          <TableHeader>
-            <TableRow className="text-xs">
-              <TableHead className="w-[150px]" colSpan={1}>
-                Item
-              </TableHead>
-              <TableHead className="w-[100px] text-center">Orders</TableHead>
-              <TableHead className="w-[100px] text-center">PPU</TableHead>
-              <TableHead className="w-[100px] text-center">Revenue</TableHead>
-            </TableRow>
-          </TableHeader>
-        </Table>
-        <ScrollArea className="h-96">
+    <Card className="h-full bg-white flex flex-col overflow-hidden">
+      <CardContent className="p-3 flex-1 flex flex-col overflow-hidden">
+        <div className="text-[16px] font-bold shrink-0 mb-2">Ordered Items</div>
+        <div className="shrink-0 overflow-x-auto">
+          <Table className="px-4">
+            <TableHeader>
+              <TableRow className="text-xs">
+                <TableHead className="w-[150px]" colSpan={1}>
+                  Item
+                </TableHead>
+                <TableHead className="w-[100px] text-center">Orders</TableHead>
+                <TableHead className="w-[100px] text-center">PPU</TableHead>
+                <TableHead className="w-[100px] text-center">Revenue</TableHead>
+              </TableRow>
+            </TableHeader>
+          </Table>
+        </div>
+        <ScrollArea className="flex-1 overflow-y-auto">
           <Table>
             <TableBody>
               {dataOrderSummary?.map((item: ProductSummaryProps) => {

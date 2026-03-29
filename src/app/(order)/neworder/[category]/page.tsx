@@ -21,6 +21,8 @@ const CategoryOrder = ({ params }: { params: { category: string } }) => {
         : item.category.toLowerCase() === category.toLowerCase()
     ) || [];
 
+    console.log(products)
+
   return (
     <div className="w-full flex gap-6 flex-col lg:flex-row">
       <div className="w-[525px] flex flex-col gap-[30px]">

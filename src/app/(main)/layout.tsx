@@ -19,9 +19,9 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex justify-evenly gap-1 lg:gap-6 w-[768px] lg:w-[1024px] px-4 bg-gray-200">
+    <div className="flex justify-evenly gap-1 lg:gap-6 w-[768px] lg:w-[1024px] px-4 h-screen overflow-hidden bg-gray-200">
       <SidebarBase />
-      <div>{children}</div>
+      <div className="flex-1 h-full overflow-hidden">{children}</div>
     </div>
   );
 }

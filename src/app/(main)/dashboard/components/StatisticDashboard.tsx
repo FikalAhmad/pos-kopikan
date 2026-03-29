@@ -24,13 +24,13 @@ const StatisticDashboard = () => {
   const nonCoffeeData = response?.noncoffee ?? [];
 
   return (
-    <div className="flex flex-col py-[34px] px-[10px] gap-7 w-auto lg:w-[309px] bg-white h-screen shadow-md">
+    <div className="flex flex-col py-6 px-[10px] gap-7 w-auto lg:w-[309px] bg-white h-full shadow-md overflow-hidden">
       <div className="text-xl">
         <strong>Overall</strong> Statistics
       </div>
 
-      <Tabs defaultValue="week" className="w-auto">
-        <TabsList className="flex justify-between bg-transparent mb-[30px]">
+      <Tabs defaultValue="week" className="w-auto flex-1 flex flex-col h-0">
+        <TabsList className="shrink-0 flex justify-between bg-transparent mb-[30px]">
           <TabsTrigger
             value="week"
             className="data-[state=active]:bg-hijaugelap data-[state=active]:text-white shadow-sm text-hijau"
@@ -53,8 +53,8 @@ const StatisticDashboard = () => {
             This year
           </TabsTrigger>
         </TabsList>
-        <ScrollArea className="h-[75vh]">
-          <TabsContent value="week" className="flex flex-col gap-[30px]">
+        <ScrollArea className="flex-1 overflow-y-auto">
+          <TabsContent value="week" className="flex flex-col gap-[30px] m-0">
             <div>
               <BarChartExample
                 data={signatureData}
@@ -73,7 +73,7 @@ const StatisticDashboard = () => {
               />
             </div>
           </TabsContent>
-          <TabsContent value="month" className="flex flex-col gap-[30px]">
+          <TabsContent value="month" className="flex flex-col gap-[30px] m-0">
             <div>
               <BarChartExample
                 data={signatureData}
@@ -92,7 +92,7 @@ const StatisticDashboard = () => {
               />
             </div>
           </TabsContent>
-          <TabsContent value="year" className="flex flex-col gap-[30px]">
+          <TabsContent value="year" className="flex flex-col gap-[30px] m-0">
             <div>
               <BarChartExample
                 data={signatureData}

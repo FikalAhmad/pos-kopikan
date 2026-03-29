@@ -11,7 +11,7 @@ export const useProducts = () => {
   const { isSuccess, data } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
-      const response = await axiosJWT.get("/api/products");
+      const response = await axiosJWT.get("/api/products?pageSize=50");
       return response.data;
     },
     staleTime: 1000 * 60 * 5, // cache 5 menit

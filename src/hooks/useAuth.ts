@@ -22,6 +22,7 @@ export const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
       dispatch(setError(""));
+      setErrorMessage("");
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
         credentials,
@@ -52,10 +53,10 @@ export const useAuth = () => {
     },
     onError: (err: any) => {
       dispatch(logout());
-      const message = "Email or password is incorrect";
+      const message = err.response?.data?.msg || "Email or password is incorrect";
       dispatch(setError(message));
+      setErrorMessage(message);
       console.error("Login error:", message);
-      console.error(err);
     },
   });
 
@@ -75,7 +76,7 @@ export const useAuth = () => {
     onSuccess: () => {
       Cookies.remove("token");
       Cookies.remove("refreshToken");
-      logout();
+      dispatch(logout());
       dispatch(removeAllCart());
       router.push("/");
     },

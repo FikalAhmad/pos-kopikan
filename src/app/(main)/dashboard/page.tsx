@@ -55,19 +55,19 @@ const Dashboard = () => {
     },
   ];
   return (
-    <div className="w-full flex gap-6 flex-col lg:flex-row">
-      <div className="w-[509px]">
-        <div className="flex justify-between my-[30px]">
+    <div className="w-full h-full flex gap-6 flex-col lg:flex-row overflow-hidden pb-4">
+      <div className="flex flex-col h-full overflow-hidden">
+        <div className="flex justify-between my-[30px] gap-5">
           {menu?.map((item) => {
             return (
               <div
                 key={item.id}
-                className="flex w-[110px] h-[110px] flex-col bg-hijaugelap text-white gap-4 py-[18px] px-3 rounded"
+                className="flex w-[110px] h-[110px] flex-col bg-hijaugelap text-white gap-4 py-[18px] px-3 rounded shrink-0"
               >
                 <Image src={item.icon} alt="Cash Icon" className="invert" />
                 <div className="flex flex-col gap-1">
                   <div className="font-bold text-[16px] truncate">
-                    {item.value}
+                    {item.value || 0}
                   </div>
                   <div className="text-xs">{item.detail}</div>
                 </div>
@@ -75,7 +75,9 @@ const Dashboard = () => {
             );
           })}
         </div>
-        <TableDashboard />
+        <div className="flex-1 overflow-hidden">
+          <TableDashboard />
+        </div>
       </div>
       <StatisticDashboard />
     </div>

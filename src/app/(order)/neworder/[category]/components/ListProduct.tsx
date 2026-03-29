@@ -103,7 +103,7 @@ const ListProduct = ({ data }: ProductListProps) => {
 
   return (
     <>
-      <ScrollArea className="h-[560px] w-full">
+      <ScrollArea className="h-full w-full">
         <div className="grid grid-cols-3 auto-cols-auto justify-between gap-5">
           {data?.map((item) => (
             <div

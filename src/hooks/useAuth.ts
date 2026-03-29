@@ -1,7 +1,6 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { axiosJWT } from "@/lib/axios";
 import { setCredentials, logout, setError } from "@/redux/features/auth/authSlice";
 import { LoginCredentials, User } from "@/types/auth.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";

@@ -50,7 +50,7 @@ export const useAuth = () => {
       toast("Login has been success!");
       router.push("/dashboard");
     },
-    onError: (err: any) => {
+    onError: (err: {response: {data: {msg: string}}}) => {
       dispatch(logout());
       const message = err.response?.data?.msg || "Email or password is incorrect";
       dispatch(setError(message));

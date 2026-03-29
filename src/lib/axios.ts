@@ -36,6 +36,7 @@ const refreshAccessToken = async () => {
           id: decoded.id,
           name: decoded.name,
           email: decoded.email,
+          role_id: decoded.role_id,
           exp: decoded.exp,
         },
         accessToken: response.data.accessToken,

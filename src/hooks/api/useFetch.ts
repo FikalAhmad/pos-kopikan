@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosJWT } from "@/lib/axios";
 
-export function useFetch(key: string[], url: string) {
-  const { data, ...rest } = useQuery({
+export function useFetch<T>(key: string[], url: string) {
+  const { data, ...rest } = useQuery<T>({
     queryKey: key,
     queryFn: async () => {
       const response = await axiosJWT.get(url);

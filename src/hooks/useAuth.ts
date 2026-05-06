@@ -76,7 +76,7 @@ export const useAuth = () => {
       Cookies.remove("token");
       Cookies.remove("refreshToken");
       dispatch(logout());
-      dispatch(removeAllCart());
+      dispatch(removeAllCart({ silent: true }));
       router.push("/");
     },
     onError: (error) => {

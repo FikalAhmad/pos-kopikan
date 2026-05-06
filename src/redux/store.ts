@@ -7,7 +7,7 @@ import orderSlice from "./features/orders/orderSlice";
 import paymentSlice from "./features/payments/paymentSlice";
 import { injectStore } from "@/lib/axios";
 import storage from "@/lib/persistStorage";
-import { persistReducer } from "redux-persist";
+import { persistReducer, persistStore } from "redux-persist";
 
 const persistConfig = {
   key: "root",
@@ -32,6 +32,8 @@ export const store = configureStore({
       serializableCheck: false,
     }),
 });
+
+export const persistor = persistStore(store);
 
 injectStore(store);
 

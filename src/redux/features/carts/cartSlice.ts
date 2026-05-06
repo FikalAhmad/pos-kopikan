@@ -138,10 +138,12 @@ const cartSlice = createSlice({
       );
     },
 
-    removeAllCart: (state) => {
+    removeAllCart: (state, action: PayloadAction<{ silent?: boolean } | undefined>) => {
       state.cart = [];
       state.totalPrice = 0;
-      toast.info("All products removed from cart");
+      if (!action.payload?.silent) {
+        toast.info("All products removed from cart");
+      }
     },
   },
 });

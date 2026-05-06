@@ -12,19 +12,19 @@ const OnlineOrder = () => {
   const [orderDetail, setOrderDetail] = useState<OrderDataResponse>();
 
   const OnlineOrderDetail = lazy(
-    () => import("@/app/(main)/onlineorder/components/OnlineOrderDetail")
+    () => import("@/app/(main)/onlineorder/components/OnlineOrderDetail"),
   );
 
-  const { data: PendingData, isSuccess } = useFetch(
+  const { data: PendingData, isSuccess } = useFetch<OrderDataResponse[]>(
     ["onlineorders"],
-    "/api/online"
+    "/api/online",
   );
 
   const pending = PendingData?.filter(
-    (item: { status: string }) => item.status == "PENDING"
+    (item: { status: string }) => item.status == "PENDING",
   );
   const completed = PendingData?.filter(
-    (item: { status: string }) => item.status == "COMPLETED"
+    (item: { status: string }) => item.status == "COMPLETED",
   );
 
   return (
@@ -48,7 +48,7 @@ const OnlineOrder = () => {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="pending" className="flex flex-col gap-[10px]">
-                {isSuccess && pending?.length > 0 ? (
+                {isSuccess && pending && pending.length > 0 ? (
                   pending.map((item: OrderDataResponse) => {
                     return (
                       <div
@@ -83,7 +83,7 @@ const OnlineOrder = () => {
                 value="completed"
                 className="flex flex-col gap-[10px] mt-0"
               >
-                {isSuccess && completed.length > 0 ? (
+                {isSuccess && completed && completed.length > 0 ? (
                   completed.map((item: OrderDataResponse) => {
                     return (
                       <div

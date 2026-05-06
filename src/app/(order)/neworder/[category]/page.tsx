@@ -18,10 +18,8 @@ const CategoryOrder = ({ params }: { params: { category: string } }) => {
     products?.filter((item) =>
       debouncedSearchTerm
         ? item.product_name.toLowerCase().includes(searchProduct.toLowerCase())
-        : item.category.toLowerCase() === category.toLowerCase()
+        : item.category.toLowerCase() === category.toLowerCase(),
     ) || [];
-
-    console.log(products)
 
   return (
     <div className="w-full flex gap-6 flex-col lg:flex-row">

@@ -91,7 +91,12 @@ const OnlineOrderDetail = ({ data }: { data: OrderDataResponse }) => {
         >
           <div className="font-bold">Complete</div>
 
-          <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
+          <Image
+            src={ArrowRight}
+            alt="Arrow Right Icon"
+            width={24}
+            unoptimized
+          />
         </Button>
       )}
     </div>

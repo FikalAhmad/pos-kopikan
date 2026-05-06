@@ -61,7 +61,12 @@ const CartItem = ({
               size={"icon"}
               onClick={() => updateCart("DECREASE_QTY", data)}
             >
-              <Image src={removeItemIcon} width={20} alt="Remove Icon" />
+              <Image
+                src={removeItemIcon}
+                width={20}
+                alt="Remove Icon"
+                unoptimized
+              />
             </Button>
             <span>{qty}</span>
             <Button
@@ -69,7 +74,7 @@ const CartItem = ({
               size={"icon"}
               onClick={() => updateCart("INCREASE_QTY", data)}
             >
-              <Image src={addItemIcon} width={20} alt="Add Icon" />
+              <Image src={addItemIcon} width={20} alt="Add Icon" unoptimized />
             </Button>
           </div>
         </div>
@@ -80,7 +85,12 @@ const CartItem = ({
             variant={"ghost"}
             onClick={() => updateCart("REMOVE_ITEM", data)}
           >
-            <Image src={removeIcon} width={15} alt="Remove Product Icon" />
+            <Image
+              src={removeIcon}
+              width={15}
+              alt="Remove Product Icon"
+              unoptimized
+            />
           </Button>
         </div>
       </div>

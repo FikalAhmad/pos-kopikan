@@ -21,7 +21,7 @@ export default function Home() {
             Good Morning Haikal!
           </div>
           <Button>
-            <Link href={"/login"}>Login Disini</Link>
+            <Link href={"/dashboard"}>Masuk ke Dashboard</Link>
           </Button>
         </CardContent>
       </Card>

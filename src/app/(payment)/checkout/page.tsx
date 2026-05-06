@@ -1,7 +1,5 @@
 "use client";
 
-import { ArrowLeft } from "@/lib/icons";
-import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Payment from "./components/Payment";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
@@ -37,7 +35,7 @@ const Checkout = () => {
       if (response.data) {
         setTimeout(() => {
           router.push("/dashboard");
-          dispatch(removeAllCart());
+          dispatch(removeAllCart({ silent: true }));
           dispatch(removeOrder());
         }, 3000);
       }
@@ -47,16 +45,15 @@ const Checkout = () => {
   };
   return (
     <div className="w-full flex gap-6 flex-col lg:flex-row lg:justify-between">
-      <div className="w-full pt-[34px] px-[10px] pb-5 flex flex-col gap-6 bg-white">
+      <div className="w-full p-5 flex flex-col gap-6 bg-white">
         <div className="flex justify-between">
           <Dialog>
             <DialogTrigger asChild>
               <Button
-                className="flex gap-[10px] items-center"
-                variant={"ghost"}
+                className="flex gap-[10px] items-center font-bold"
+                variant={"destructive"}
               >
-                <Image src={ArrowLeft} alt="Back Icon" />
-                <div>Checkout</div>
+                <div>Cancel Order</div>
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] bg-white">

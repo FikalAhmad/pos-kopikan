@@ -30,7 +30,12 @@ const CoreMidtransPayment = () => {
         toast("", {
           description: (
             <Card className="flex flex-col items-center p-6 bg-white shadow-lg rounded-xl w-[300px] h-[300px] justify-center gap-8">
-              <Image src={CeklisIcon} alt="Check Icon" className="w-24 h-24" />
+              <Image
+                src={CeklisIcon}
+                alt="Check Icon"
+                className="w-24 h-24"
+                unoptimized
+              />
               <span className="font-semibold text-lg mt-2">
                 Payment Successful
               </span>

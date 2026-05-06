@@ -45,7 +45,7 @@ const PopupMidtransPaymentPage = () => {
           gross_amount: dataOrder.data.total,
           customer_name: user?.name,
           customer_email: user?.email,
-        }
+        },
       );
 
       const data = response.data;
@@ -79,7 +79,7 @@ const PopupMidtransPaymentPage = () => {
         },
         onClose: function () {
           console.log(
-            "customer closed the popup without finishing the payment"
+            "customer closed the popup without finishing the payment",
           );
         },
       });
@@ -99,7 +99,12 @@ const PopupMidtransPaymentPage = () => {
           <div className="font-bold">Rp. {dataOrder?.data.total}</div>
           <div className="flex gap-[5px] justify-between items-center">
             <span className="font-normal">Pay</span>
-            <Image src={ArrowRight} alt="Arrow Right Icon" width={24} />
+            <Image
+              src={ArrowRight}
+              alt="Arrow Right Icon"
+              width={24}
+              unoptimized
+            />
           </div>
         </Button>
       }

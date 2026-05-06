@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { addItemIcon, removeItemIcon } from "@/lib/icons";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import formatPrice from "@/lib/rupiah";
+import { Separator } from "@/components/ui/separator";
 
 interface ProductListProps {
   data: ProductWithOption[];
@@ -83,14 +84,14 @@ const ListProduct = ({ data }: ProductListProps) => {
 
   const handleChooseOption = (
     optionName: { id: string; name: string },
-    optionValue: { id: string; label: string; extra_price: number }
+    optionValue: { id: string; label: string; extra_price: number },
   ) => {
     setOptionProduct((prev) => {
       const exists = prev.some((opt) => opt.id === optionName.id);
 
       if (exists) {
         return prev?.map((opt) =>
-          opt.id === optionName.id ? { ...opt, values: optionValue } : opt
+          opt.id === optionName.id ? { ...opt, values: optionValue } : opt,
         );
       } else {
         return [
@@ -103,8 +104,8 @@ const ListProduct = ({ data }: ProductListProps) => {
 
   return (
     <>
-      <ScrollArea className="h-full w-full">
-        <div className="grid grid-cols-3 auto-cols-auto justify-between gap-5">
+      <ScrollArea className="h-[calc(100vh-140px)] w-full pr-4">
+        <div className="grid grid-cols-3 gap-5 pb-10">
           {data?.map((item) => (
             <div
               key={item.id}
@@ -135,8 +136,10 @@ const ListProduct = ({ data }: ProductListProps) => {
                     className="object-cover rounded"
                   />
                   <div className="flex flex-col gap-2">
-                    <DialogTitle>{selectedProduct.product_name}</DialogTitle>
-                    <DialogDescription>
+                    <DialogTitle className="font-bold">
+                      {selectedProduct.product_name}
+                    </DialogTitle>
+                    <DialogDescription className="font-medium">
                       {selectedProduct.description}
                     </DialogDescription>
                   </div>
@@ -145,7 +148,7 @@ const ListProduct = ({ data }: ProductListProps) => {
 
               <div className="mt-4 flex flex-col gap-2">
                 <div className="flex justify-between ">
-                  <div>Qty</div>
+                  <div className="font-semibold text-lg">Qty</div>
                   <div className="flex gap-7 items-center">
                     <Button
                       className="w-[30px] h-[30px] bg-hijaugelap rounded-full"
@@ -159,9 +162,10 @@ const ListProduct = ({ data }: ProductListProps) => {
                         src={removeItemIcon}
                         width={20}
                         alt="Remove Icon"
+                        unoptimized
                       />
                     </Button>
-                    <span>{qtyDisplay}</span>
+                    <span className="font-medium text-lg">{qtyDisplay}</span>
                     <Button
                       className="w-[30px] h-[30px] bg-hijaugelap rounded-full"
                       size={"icon"}
@@ -169,25 +173,31 @@ const ListProduct = ({ data }: ProductListProps) => {
                         setQtyDisplay(qtyDisplay + 1);
                       }}
                     >
-                      <Image src={addItemIcon} width={20} alt="Add Icon" />
+                      <Image
+                        src={addItemIcon}
+                        width={20}
+                        alt="Add Icon"
+                        unoptimized
+                      />
                     </Button>
                   </div>
                 </div>
+                <Separator className="my-2" />
                 {selectedProduct.options.length > 0
                   ? selectedProduct.options.map((option) => {
                       return (
                         <div className="flex flex-col gap-1" key={option.id}>
-                          <div>{option.name}</div>
+                          <div className="font-bold text-lg">{option.name}</div>
                           <div className="">
                             <Tabs
                               value={
                                 optionProduct.find(
-                                  (opt) => opt.id === option.id
+                                  (opt) => opt.id === option.id,
                                 )?.values.id || option.values[0]?.id
                               }
                               onValueChange={(val) => {
                                 const chosen = option.values.find(
-                                  (v) => v.id == val
+                                  (v) => v.id == val,
                                 );
                                 if (chosen) {
                                   handleChooseOption(
@@ -196,7 +206,7 @@ const ListProduct = ({ data }: ProductListProps) => {
                                       id: chosen.id,
                                       label: chosen.label,
                                       extra_price: chosen.extra_price,
-                                    }
+                                    },
                                   );
                                 }
                               }}
@@ -205,14 +215,20 @@ const ListProduct = ({ data }: ProductListProps) => {
                                 {option.values?.map((value) => {
                                   return (
                                     <TabsTrigger
-                                      className="flex items-center justify-center px-3 py-2 text-sm flex-1 rounded-md data-[state=active]:bg-hijaugelap data-[state=active]:text-white"
+                                      className="flex items-center justify-center px-3 py-2 text-sm flex-1 rounded-md data-[state=active]:border-hijaugelap data-[state=active]:text-hijaugelap data-[state=active]:bg-green-500/20 "
                                       value={value.id}
                                       key={value.id}
+                                      asChild
                                     >
-                                      <div>{value.label}</div>
-                                      <div>
-                                        + {formatPrice(value.extra_price)}
-                                      </div>
+                                      <Button
+                                        variant="outline"
+                                        className="font-medium"
+                                      >
+                                        <div>{value.label}</div>
+                                        <div>
+                                          + {formatPrice(value.extra_price)}
+                                        </div>
+                                      </Button>
                                     </TabsTrigger>
                                   );
                                 })}
@@ -229,13 +245,15 @@ const ListProduct = ({ data }: ProductListProps) => {
                     <div>Total</div>
                     <div>
                       {formatPrice(
-                        qtyDisplay * (selectedProduct.price + totalExtraPrice)
+                        qtyDisplay * (selectedProduct.price + totalExtraPrice),
                       )}
                     </div>
                   </div>
                   <div className="flex justify-between gap-5 mt-5">
                     <DialogClose className="w-full" asChild>
-                      <Button className="w-full">Cancel</Button>
+                      <Button className="w-full" variant={"secondary"}>
+                        Cancel
+                      </Button>
                     </DialogClose>
                     <Button
                       className="w-full bg-hijaugelap"

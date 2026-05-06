@@ -2,13 +2,13 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface NavButtonProps {
   href: string;
-  icon: string;
+  icon: string | StaticImageData;
   label: string;
   exactMatch?: boolean;
 }
@@ -20,30 +20,47 @@ export function NavButton({
   exactMatch = false,
 }: NavButtonProps) {
   const pathname = usePathname();
-  const isActive = exactMatch ? pathname === href : pathname.startsWith(href);
+
+  // Logic to determine active state, handling the "/" root case
+  const isActive = exactMatch
+    ? pathname === href
+    : href === "/"
+      ? pathname === "/"
+      : pathname.startsWith(href);
 
   return (
     <Button
       asChild
-      variant="ghost"
+      variant="outline"
       className={cn(
-        "flex flex-col group justify-center items-center w-20 h-20 p-[10px] gap-[10px] rounded bg-white",
-        "hover:bg-hijaugelap hover:text-white transition-all duration-300",
-        isActive && "bg-hijaugelap text-white"
+        "flex flex-col group justify-center items-center w-20 h-20 p-[10px] gap-2 rounded-xl bg-white transition-all duration-300",
+        "hover:bg-hijaugelap hover:text-white hover:shadow-md",
+        isActive && "bg-hijaugelap text-white shadow-sm",
       )}
     >
-      <Link href={href}>
-        <Image
-          src={icon || "/placeholder.svg"}
-          alt={label}
-          width={24}
-          height={24}
+      <Link href={href} aria-current={isActive ? "page" : undefined}>
+        <div className="relative w-6 h-6">
+          <Image
+            src={icon || "/placeholder.svg"}
+            alt={label}
+            fill
+            unoptimized
+            className={cn(
+              "transition-all duration-300 object-contain",
+              isActive
+                ? "brightness-0 invert"
+                : "group-hover:brightness-0 group-hover:invert",
+            )}
+          />
+        </div>
+        <div
           className={cn(
-            "transition-all",
-            isActive ? "invert" : "group-hover:invert"
+            "text-[11px] text-center font-bold tracking-tight leading-tight",
+            isActive ? "text-white" : "text-gray-500 group-hover:text-white",
           )}
-        />
-        <div className="text-[12px] text-center">{label}</div>
+        >
+          {label}
+        </div>
       </Link>
     </Button>
   );

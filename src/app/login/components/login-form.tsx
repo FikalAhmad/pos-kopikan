@@ -75,9 +75,6 @@ export function LoginForm({
                   required
                 />
               </div>
-              {/* {error && (
-                <p className="text-xs text-red-700 text-center h-5">{error}</p>
-              )} */}
               <Button type="submit" className="w-full">
                 {isLoading ? "Loading..." : "Login"}
               </Button>
@@ -90,6 +87,7 @@ export function LoginForm({
               fill
               className="absolute inset-0 object-cover dark:brightness-[0.2] dark:grayscale"
               priority
+              sizes="100"
             />
           </div>
         </CardContent>

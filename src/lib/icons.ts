@@ -21,6 +21,12 @@ import CeklisIcon from "@/public/assets/images/ceklis.svg";
 
 import DiscountIcon from "@/public/assets/images/discount.svg";
 
+import GopayIcon from "@/public/assets/images/gopay.svg";
+import OvoIcon from "@/public/assets/images/ovo.svg";
+import DanaIcon from "@/public/assets/images/dana.svg";
+import ShopeePayIcon from "@/public/assets/images/shopeepay.svg";
+import QrisIcon from "@/public/assets/images/qris.svg";
+
 export {
   kopikanLogo,
   newOrder,
@@ -41,4 +47,9 @@ export {
   EWalletIcon,
   CeklisIcon,
   DiscountIcon,
+  GopayIcon,
+  OvoIcon,
+  DanaIcon,
+  ShopeePayIcon,
+  QrisIcon,
 };

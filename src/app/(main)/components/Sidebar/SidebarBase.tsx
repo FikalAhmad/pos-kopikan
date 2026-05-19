@@ -123,7 +123,7 @@ const SidebarBase = () => {
             {user?.name || "Employee"}
           </div>
           <div className="text-[10px] text-hijaugelap font-bold uppercase tracking-wider mt-0.5">
-            {user?.role_name || "Staff"}
+            {user?.role || "Staff"}
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BarChartExample } from "./BarChartExample";
+import { ProductSalesChart } from "./BarChartExample";
 import { axiosJWT } from "@/lib/axios";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -56,17 +56,17 @@ const StatisticDashboard = () => {
         <ScrollArea className="flex-1 overflow-y-auto">
           <TabsContent value="week" className="flex flex-col gap-[30px] m-0">
             <div>
-              <BarChartExample
+              <ProductSalesChart
                 data={signatureData}
                 label="Signature"
                 type="week"
               />
             </div>
             <div>
-              <BarChartExample data={coffeeData} label="Coffee" type="week" />
+              <ProductSalesChart data={coffeeData} label="Coffee" type="week" />
             </div>
             <div>
-              <BarChartExample
+              <ProductSalesChart
                 data={nonCoffeeData}
                 label="Non Coffee"
                 type="week"
@@ -75,17 +75,21 @@ const StatisticDashboard = () => {
           </TabsContent>
           <TabsContent value="month" className="flex flex-col gap-[30px] m-0">
             <div>
-              <BarChartExample
+              <ProductSalesChart
                 data={signatureData}
                 label="Signature"
                 type="month"
               />
             </div>
             <div>
-              <BarChartExample data={coffeeData} label="Coffee" type="month" />
+              <ProductSalesChart
+                data={coffeeData}
+                label="Coffee"
+                type="month"
+              />
             </div>
             <div>
-              <BarChartExample
+              <ProductSalesChart
                 data={nonCoffeeData}
                 label="Non Coffee"
                 type="month"
@@ -94,17 +98,17 @@ const StatisticDashboard = () => {
           </TabsContent>
           <TabsContent value="year" className="flex flex-col gap-[30px] m-0">
             <div>
-              <BarChartExample
+              <ProductSalesChart
                 data={signatureData}
                 label="Signature"
                 type="year"
               />
             </div>
             <div>
-              <BarChartExample data={coffeeData} label="Coffee" type="year" />
+              <ProductSalesChart data={coffeeData} label="Coffee" type="year" />
             </div>
             <div>
-              <BarChartExample
+              <ProductSalesChart
                 data={nonCoffeeData}
                 label="Non Coffee"
                 type="year"

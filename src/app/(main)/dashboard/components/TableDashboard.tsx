@@ -24,9 +24,9 @@ type ProductSummaryProps = {
 };
 
 const TableDashboard = () => {
-  const { data: dataOrderSummary } = useFetch(
+  const { data: dataOrderSummary } = useFetch<ProductSummaryProps[]>(
     ["order-summary"],
-    "/api/dashboard/order-summary"
+    "/api/dashboard/order-summary",
   );
 
   return (

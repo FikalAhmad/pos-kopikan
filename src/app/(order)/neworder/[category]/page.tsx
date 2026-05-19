@@ -3,9 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import ListProduct from "./components/ListProduct";
 import Cart from "./components/Cart";
-import { useProducts } from "@/redux/features/products/productAPI";
+import { useProducts } from "@/hooks/api/useProducts";
 import { useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
+import { ProductWithOption } from "@/types/product.types";
 
 const CategoryOrder = ({ params }: { params: { category: string } }) => {
   const { category } = params;
@@ -15,7 +16,7 @@ const CategoryOrder = ({ params }: { params: { category: string } }) => {
   const debouncedSearchTerm = useDebounce(searchProduct, 300);
 
   const filtered =
-    products?.filter((item) =>
+    products?.filter((item: ProductWithOption) =>
       debouncedSearchTerm
         ? item.product_name.toLowerCase().includes(searchProduct.toLowerCase())
         : item.category.toLowerCase() === category.toLowerCase(),

@@ -16,6 +16,6 @@ export interface User {
   name: string;
   email: string;
   role_id: string;
-  role_name: string;
+  role: string;
   exp: number;
 }

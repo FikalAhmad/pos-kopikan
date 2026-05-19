@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import authSlice from "./features/auth/authSlice";
 import cartSlice from "./features/carts/cartSlice";
-import productSlice from "./features/products/productSlice";
 import orderSlice from "./features/orders/orderSlice";
 import paymentSlice from "./features/payments/paymentSlice";
 import { injectStore } from "@/lib/axios";
@@ -18,7 +17,6 @@ const persistConfig = {
 const reducer = combineReducers({
   auth: authSlice,
   cart: cartSlice,
-  product: productSlice,
   order: orderSlice,
   payment: paymentSlice,
 });

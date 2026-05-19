@@ -1,3 +1,4 @@
+import { IS_ADMIN } from "@/constant/roles";
 import { logout, setCredentials } from "@/redux/features/auth/authSlice";
 import { RootState } from "@/redux/store";
 import { User } from "@/types/auth.types";
@@ -28,22 +29,22 @@ const refreshAccessToken = async () => {
         "Content-Type": "application/json",
       },
     });
-    const decoded = jwtDecode(response.data.accessToken) as User;
+
+    const { accessToken } = response.data;
+    const decoded = jwtDecode(accessToken) as User;
 
     store.dispatch(
       setCredentials({
-        user: {
-          id: decoded.id,
-          name: decoded.name,
-          email: decoded.email,
-          role_id: decoded.role_id,
-          exp: decoded.exp,
-        },
-        accessToken: response.data.accessToken,
-      })
+        accessToken,
+      }),
     );
 
-    return response.data.accessToken;
+    if (decoded.role_id !== IS_ADMIN) {
+      logout();
+      return null;
+    }
+
+    return accessToken;
   } catch (error) {
     console.error("Token refresh failed:", error);
     logout();
@@ -77,7 +78,7 @@ axiosJWT.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Interceptor response untuk menangani logout jika token expired
@@ -90,5 +91,5 @@ axiosJWT.interceptors.response.use(
       // window.location.href = "/";
     }
     return Promise.reject(error);
-  }
+  },
 );

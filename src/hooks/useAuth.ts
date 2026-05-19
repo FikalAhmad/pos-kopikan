@@ -1,7 +1,11 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { setCredentials, logout, setError } from "@/redux/features/auth/authSlice";
+import {
+  setCredentials,
+  logout,
+  setError,
+} from "@/redux/features/auth/authSlice";
 import { LoginCredentials, User } from "@/types/auth.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import axios from "axios";
@@ -30,7 +34,7 @@ export const useAuth = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       return response.data;
@@ -41,7 +45,7 @@ export const useAuth = () => {
         setCredentials({
           user: decoded,
           accessToken: data.accessToken,
-        })
+        }),
       );
       Cookies.set("token", data.refreshToken, {
         expires: 1,
@@ -50,9 +54,10 @@ export const useAuth = () => {
       toast("Login has been success!");
       router.push("/dashboard");
     },
-    onError: (err: {response: {data: {msg: string}}}) => {
+    onError: (err: { response: { data: { msg: string } } }) => {
       dispatch(logout());
-      const message = err.response?.data?.msg || "Email or password is incorrect";
+      const message =
+        err.response?.data?.msg || "Email or password is incorrect";
       dispatch(setError(message));
       setErrorMessage(message);
       console.error("Login error:", message);
@@ -68,7 +73,7 @@ export const useAuth = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
       return response.data;
     },

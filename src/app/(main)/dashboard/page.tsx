@@ -22,8 +22,15 @@ export type ProductDetailProps = ProductWithOption & {
   }[];
 };
 
+export type TotalSummaryProps = {
+  totalRevenue: number;
+  totalOrder: number;
+  totalOrderOffline: number;
+  totalOrderOnline: number;
+};
+
 const Dashboard = () => {
-  const { data: dataTotalSummary } = useFetch(
+  const { data: dataTotalSummary } = useFetch<TotalSummaryProps>(
     ["total-summary"],
     "/api/dashboard/total-summary"
   );
@@ -32,7 +39,7 @@ const Dashboard = () => {
     {
       id: 1,
       icon: CashIcon,
-      value: formatPrice(dataTotalSummary?.totalRevenue),
+      value: formatPrice(dataTotalSummary?.totalRevenue || 0),
       detail: "Total Revenue",
     },
     {

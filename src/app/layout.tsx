@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "@/providers/Providers";
 import { Toaster } from "sonner";
+import { Urbanist } from "next/font/google";
 
-const plusJakarta = localFont({
-  src: "../public/fonts/PlusJakartaSans-VariableFont_wght.ttf",
-  variable: "--font-plus-jakarta",
-  weight: "100 900",
-});
+const urbanist = Urbanist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Kopikan POS",
@@ -22,9 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${plusJakarta.variable} antialiased flex justify-center`}
-      >
+      <body className={`${urbanist.className} antialiased flex justify-center`}>
         <Providers>
           <Toaster />
 

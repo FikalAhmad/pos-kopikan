@@ -1,42 +1,28 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { axiosJWT, axiosPublic, clearAuthSession } from "@/lib/axios";
 import {
-  setCredentials,
   logout,
+  setCredentials,
   setError,
 } from "@/redux/features/auth/authSlice";
-import { LoginCredentials, User } from "@/types/auth.types";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import axios from "axios";
+import { LoginCredentials, User } from "@/types/auth.types";
+import { useMutation } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
-import { removeAllCart } from "@/redux/features/carts/cartSlice";
-import { useState } from "react";
 import { toast } from "sonner";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
-  const [errorMessage, setErrorMessage] = useState("");
+  const { user, isAuthenticated, error } = useAppSelector((state) => state.auth);
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
       dispatch(setError(""));
-      setErrorMessage("");
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
-        credentials,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
+      const response = await axiosPublic.post("/api/login", credentials);
       return response.data;
     },
     onSuccess: (data) => {
@@ -54,34 +40,23 @@ export const useAuth = () => {
       toast("Login has been success!");
       router.push("/dashboard");
     },
-    onError: (err: { response: { data: { msg: string } } }) => {
+    onError: (err: { response?: { data?: { msg?: string } } }) => {
       dispatch(logout());
       const message =
         err.response?.data?.msg || "Email or password is incorrect";
       dispatch(setError(message));
-      setErrorMessage(message);
       console.error("Login error:", message);
     },
   });
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/logout/${user?.id}`,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
+      // logout endpoint typically benefits from authorized JWT interceptor
+      const response = await axiosJWT.patch(`/api/logout/${user?.id}`);
       return response.data;
     },
     onSuccess: () => {
-      Cookies.remove("token");
-      Cookies.remove("refreshToken");
-      dispatch(logout());
-      dispatch(removeAllCart({ silent: true }));
+      clearAuthSession(false);
       router.push("/");
     },
     onError: (error) => {
@@ -92,9 +67,10 @@ export const useAuth = () => {
   return {
     user,
     isAuthenticated,
-    error: errorMessage,
+    error,
     login: loginMutation.mutate,
     logout: logoutMutation.mutate,
     isLoading: loginMutation.isPending || logoutMutation.isPending,
   };
 };
+

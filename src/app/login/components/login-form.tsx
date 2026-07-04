@@ -57,15 +57,7 @@ export function LoginForm({
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   value={form.password}
@@ -75,7 +67,7 @@ export function LoginForm({
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Loading..." : "Login"}
               </Button>
             </div>

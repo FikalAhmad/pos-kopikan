@@ -22,13 +22,10 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useState } from "react";
 
-type SidebarBaseProps = {
-  isOpenSidebar: boolean;
-  setIsOpenSidebar: (open: boolean) => void;
-};
-
-const SidebarBase = ({ isOpenSidebar, setIsOpenSidebar }: SidebarBaseProps) => {
+const Sidebar = () => {
+  const [openSidebar, setOpenSidebar] = useState(false);
   const { user, logout: logoutUser } = useAuth();
 
   const handleLogout = () => {
@@ -36,9 +33,12 @@ const SidebarBase = ({ isOpenSidebar, setIsOpenSidebar }: SidebarBaseProps) => {
   };
 
   return (
-    <Sheet open={isOpenSidebar} onOpenChange={setIsOpenSidebar}>
+    <Sheet open={openSidebar} onOpenChange={setOpenSidebar}>
       <SheetTrigger asChild>
-        <Button className="w-12 h-12 p-0 bg-white rounded-full hover:bg-gray-50 transition-colors shadow-sm cursor-pointer flex items-center justify-center border-none shrink-0">
+        <Button
+          className="w-12 h-12 p-0 bg-white rounded-full hover:bg-gray-50 transition-all cursor-pointer flex items-center justify-center border-gray-200 shrink-0"
+          onClick={() => setOpenSidebar(!openSidebar)}
+        >
           <EqualIcon className="w-5 h-5 text-hijaugelap" />
         </Button>
       </SheetTrigger>
@@ -164,4 +164,4 @@ const SidebarBase = ({ isOpenSidebar, setIsOpenSidebar }: SidebarBaseProps) => {
   );
 };
 
-export default SidebarBase;
+export default Sidebar;

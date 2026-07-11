@@ -15,8 +15,8 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const [form, setForm] = useState({
-    email: "admin@kopikan.com",
-    password: "admin",
+    email: "kasir@kopikan.test",
+    password: "password123",
   });
   const { login, isLoading, error } = useAuth();
 

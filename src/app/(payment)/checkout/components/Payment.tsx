@@ -50,7 +50,6 @@ import {
 } from "@/lib/icons";
 import Image from "next/image";
 
-// Constants
 const TAX_RATE = 0.1;
 
 export type DiscountProps = {

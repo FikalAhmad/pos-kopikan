@@ -8,9 +8,11 @@ import { cn } from "@/lib/utils";
 
 interface NavButtonProps {
   href: string;
-  icon: string | StaticImageData;
+  icon?: string | StaticImageData;
   label: string;
   exactMatch?: boolean;
+  activePrefix?: string;
+  className?: string;
 }
 
 export function NavButton({
@@ -18,49 +20,67 @@ export function NavButton({
   icon,
   label,
   exactMatch = false,
+  activePrefix,
+  className,
 }: NavButtonProps) {
   const pathname = usePathname();
+  const getIsActive = () => {
+    if (exactMatch) return pathname === href;
+    if (activePrefix) return pathname.startsWith(activePrefix);
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
 
-  // Logic to determine active state, handling the "/" root case
-  const isActive = exactMatch
-    ? pathname === href
-    : href === "/"
-      ? pathname === "/"
-      : pathname.startsWith(href);
+  const isActive = getIsActive();
 
   return (
     <Button
       asChild
-      variant="outline"
+      variant="ghost"
       className={cn(
-        "flex flex-col group justify-center items-center w-20 h-20 p-[10px] gap-2 rounded-xl bg-white transition-all duration-300",
-        "hover:bg-hijaugelap hover:text-white hover:shadow-md",
-        isActive && "bg-hijaugelap text-white shadow-sm",
+        "flex items-center w-full transition-all duration-200 justify-start",
+        icon
+          ? cn(
+              "h-14 px-4 gap-4 rounded-xl text-base font-medium",
+              isActive
+                ? "bg-hijaugelap/20 text-hijaugelap font-semibold"
+                : "bg-transparent text-gray-700 hover:bg-gray-50 hover:text-gray-900",
+            )
+          : cn(
+              "h-12 px-4 rounded-xl text-sm font-medium",
+              isActive
+                ? "bg-hijaugelap text-white font-semibold hover:bg-hijaugelap/80 hover:text-white"
+                : "bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900",
+            ),
+        className,
       )}
     >
       <Link href={href} aria-current={isActive ? "page" : undefined}>
-        <div className="relative w-6 h-6">
-          <Image
-            src={icon || "/placeholder.svg"}
-            alt={label}
-            fill
-            unoptimized
+        {icon && (
+          <div
             className={cn(
-              "transition-all duration-300 object-contain",
+              "w-10 h-10 rounded-full flex justify-center items-center shrink-0 transition-colors duration-200",
               isActive
-                ? "brightness-0 invert"
-                : "group-hover:brightness-0 group-hover:invert",
+                ? "bg-hijaugelap"
+                : "bg-gray-100 group-hover:bg-gray-200",
             )}
-          />
-        </div>
-        <div
-          className={cn(
-            "text-[11px] text-center font-bold tracking-tight leading-tight",
-            isActive ? "text-white" : "text-gray-500 group-hover:text-white",
-          )}
-        >
-          {label}
-        </div>
+          >
+            <div className="relative w-5 h-5">
+              <Image
+                src={icon || "/placeholder.svg"}
+                alt={label}
+                fill
+                className={cn(
+                  "transition-all duration-200 object-contain",
+                  isActive
+                    ? "brightness-0 invert"
+                    : "opacity-60 group-hover:opacity-80",
+                )}
+              />
+            </div>
+          </div>
+        )}
+        <div className="tracking-tight leading-tight">{label}</div>
       </Link>
     </Button>
   );

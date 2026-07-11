@@ -55,7 +55,7 @@ const CartItem = ({
               <div>+{data.options.length - 2}</div>
             ) : null}
           </div>
-          <div className="flex gap-[30px] items-center">
+          <div className="flex gap-5 items-center bg-gray-100 rounded-full p-1 w-fit">
             <Button
               className="w-[30px] h-[30px] bg-hijaugelap rounded-full"
               size={"icon"}

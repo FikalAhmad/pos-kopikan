@@ -12,7 +12,6 @@ import {
   DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -21,10 +20,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import formatPrice from "@/lib/rupiah";
 import { Separator } from "@/components/ui/separator";
 
-interface ProductListProps {
-  data: ProductWithOption[];
-}
-const ListProduct = ({ data }: ProductListProps) => {
+const ListProduct = ({ data }: { data: ProductWithOption[] }) => {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] =
@@ -104,23 +100,21 @@ const ListProduct = ({ data }: ProductListProps) => {
 
   return (
     <>
-      <ScrollArea className="h-[calc(100vh-140px)] w-full pr-4">
-        <div className="grid grid-cols-3 gap-5 pb-10">
-          {data?.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => handleSelectedProduct(item)}
-              className="hover:cursor-pointer"
-            >
-              <ProductCard
-                image_url={item.image}
-                price={item.price}
-                name={item.product_name}
-              />
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 pb-10">
+        {data?.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => handleSelectedProduct(item)}
+            className="hover:cursor-pointer"
+          >
+            <ProductCard
+              image_url={item.image}
+              price={item.price}
+              name={item.product_name}
+            />
+          </div>
+        ))}
+      </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="bg-white max-w-md sm:max-w-lg w-full">

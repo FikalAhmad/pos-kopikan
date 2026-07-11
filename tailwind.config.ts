@@ -14,7 +14,7 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         hijau: "var(--green)",
-        hijaugelap: "var(--darkgreen)",
+        hijaugelap: "#43911f",
         biru: "var(--blue)",
         birugelap: "var(--darkblue)",
         card: {

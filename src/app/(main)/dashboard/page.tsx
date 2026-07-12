@@ -1,94 +1,50 @@
-"use client";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Calendar } from "lucide-react";
 
-import Image from "next/image";
-import CashIcon from "@/public/assets/images/cash-1.svg";
-import OrderIcon from "@/public/assets/images/orders.svg";
-import CustomerIcon from "@/public/assets/images/customers.svg";
-import cursorIcon from "@/public/assets/images/onlineOrders.svg";
-import TableDashboard from "./components/TableDashboard";
-import StatisticDashboard from "./components/StatisticDashboard";
-import { useFetch } from "@/hooks/api/useFetch";
-import { ProductWithOption } from "@/types/product.types";
-import formatPrice from "@/lib/rupiah";
-
-export type ProductDetailProps = ProductWithOption & {
-  order_details: {
-    id: string;
-    order_id: string;
-    product_id: string;
-    qty: number;
-    total_price: number;
-    unit_price: number;
-  }[];
-};
-
-export type TotalSummaryProps = {
-  totalRevenue: number;
-  totalOrder: number;
-  totalOrderOffline: number;
-  totalOrderOnline: number;
-};
-
-const Dashboard = () => {
-  const { data: dataTotalSummary } = useFetch<TotalSummaryProps>(
-    ["total-summary"],
-    "/api/dashboard/total-summary"
-  );
-
-  const menu = [
-    {
-      id: 1,
-      icon: CashIcon,
-      value: formatPrice(dataTotalSummary?.totalRevenue || 0),
-      detail: "Total Revenue",
-    },
-    {
-      id: 2,
-      icon: OrderIcon,
-      value: dataTotalSummary?.totalOrder,
-      detail: "Total Orders",
-    },
-    {
-      id: 3,
-      icon: CustomerIcon,
-      value: dataTotalSummary?.totalOrderOffline,
-      detail: "Walk-ins",
-    },
-    {
-      id: 4,
-      icon: cursorIcon,
-      value: dataTotalSummary?.totalOrderOnline,
-      detail: "Online Orders",
-    },
-  ];
+const ReportPage = () => {
   return (
-    <div className="w-full h-full flex gap-6 flex-col lg:flex-row overflow-hidden pb-4">
-      <div className="flex flex-col h-full overflow-hidden">
-        <div className="flex justify-between my-[30px] gap-5">
-          {menu?.map((item) => {
-            return (
-              <div
-                key={item.id}
-                className="flex w-[110px] h-[110px] flex-col bg-hijaugelap text-white gap-4 py-[18px] px-3 rounded shrink-0"
-              >
-                <Image src={item.icon} alt="Cash Icon" className="invert" />
-                <div className="flex flex-col gap-1">
-                  <div className="font-bold text-[16px] truncate">
-                    {item.value || 0}
-                  </div>
-                  <div className="text-xs">{item.detail}</div>
-                </div>
+    <div className="w-full flex flex-col gap-2">
+      <div className="flex justify-between bg-white rounded-lg px-4 py-2">
+        <div className="flex gap-2 items-center">
+          <div>Date Period:</div>
+          <Select>
+            <SelectTrigger className="w-32 h-9 rounded-full [&>svg:last-of-type]:hidden flex items-center pl-2 pr-1">
+              <SelectValue placeholder="Monthly" />
+              <div className="p-1.5 rounded-full bg-hijaugelap/20">
+                <Calendar className="h-4 w-4 text-hijaugelap" />
               </div>
-            );
-          })}
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">Daily</SelectItem>
+              <SelectItem value="2">Weekly</SelectItem>
+              <SelectItem value="3">Monthly</SelectItem>
+              <SelectItem value="4">Yearly</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <div className="flex-1 overflow-hidden">
-          <TableDashboard />
+        <div className="flex items-center space-x-3 bg-white border border-gray-200 rounded-full px-4 py-1.5 shadow-sm">
+          <Label
+            htmlFor="show-graph"
+            className="text-xs font-medium text-gray-600 cursor-pointer select-none"
+          >
+            Show Graph
+          </Label>
+          <Switch
+            id="show-graph"
+            className="data-[state=checked]:bg-hijaugelap [&_span]:bg-white"
+          />
         </div>
       </div>
-      <StatisticDashboard />
     </div>
   );
 };
 
-export default Dashboard;
+export default ReportPage;

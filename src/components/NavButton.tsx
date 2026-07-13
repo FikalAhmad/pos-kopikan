@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 interface NavButtonProps {
   href: string;
-  icon?: string | StaticImageData;
+  icon?: string | StaticImageData | React.ComponentType<{ className?: string }>;
   label: string;
   exactMatch?: boolean;
   activePrefix?: string;
@@ -61,23 +61,30 @@ export function NavButton({
             className={cn(
               "w-10 h-10 rounded-full flex justify-center items-center shrink-0 transition-colors duration-200",
               isActive
-                ? "bg-hijaugelap"
-                : "bg-gray-100 group-hover:bg-gray-200",
+                ? "bg-hijaugelap text-white"
+                : "bg-gray-100 text-gray-600 group-hover:bg-gray-200",
             )}
           >
-            <div className="relative w-5 h-5">
-              <Image
-                src={icon || "/placeholder.svg"}
-                alt={label}
-                fill
-                className={cn(
-                  "transition-all duration-200 object-contain",
-                  isActive
-                    ? "brightness-0 invert"
-                    : "opacity-60 group-hover:opacity-80",
-                )}
-              />
-            </div>
+            {typeof icon === "function" || (typeof icon === "object" && !("src" in icon)) ? (
+              (() => {
+                const IconComponent = icon as React.ComponentType<{ className?: string }>;
+                return <IconComponent className={cn("w-5 h-5", isActive ? "text-white" : "text-gray-600")} />;
+              })()
+            ) : (
+              <div className="relative w-5 h-5">
+                <Image
+                  src={(icon as string | StaticImageData) || "/placeholder.svg"}
+                  alt={label}
+                  fill
+                  className={cn(
+                    "transition-all duration-200 object-contain",
+                    isActive
+                      ? "brightness-0 invert"
+                      : "opacity-60 group-hover:opacity-80",
+                  )}
+                />
+              </div>
+            )}
           </div>
         )}
         <div className="tracking-tight leading-tight">{label}</div>

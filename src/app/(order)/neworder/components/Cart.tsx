@@ -4,8 +4,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import CartItem from "./CartItem";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { createOrder } from "@/redux/features/orders/orderSlice";
-import { useRouter } from "next/navigation";
+// import { createOrder } from "@/redux/features/orders/orderSlice";
+// import { useRouter } from "next/navigation";
 import { removeAllCart } from "@/redux/features/carts/cartSlice";
 import { CartDataProps } from "@/types/cart.types";
 import { toast } from "sonner";
@@ -30,10 +30,10 @@ import PaymentMethod from "./PaymentMethod";
 import { cn } from "@/lib/utils";
 
 const Cart = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const dispatch = useAppDispatch();
   const { cart } = useAppSelector((state) => state.cart);
-  const { user } = useAppSelector((state) => state.auth);
+  // const { user } = useAppSelector((state) => state.auth);
   const { totalPrice } = useAppSelector((state) => state.cart);
   const { dataOrder } = useAppSelector((state) => state.order);
   const { payWithCash, payWithEWallet } = usePayment();
@@ -79,29 +79,29 @@ const Cart = () => {
 
   const changeAmount = Math.max(0, totalCash - totalPaymentAfterTax);
 
-  const handleCheckout = () => {
-    const cartItem = cart?.map((item: CartDataProps) => ({
-      product_id: item.productItem.id,
-      qty: item.qty,
-      options: item.productItem.options,
-    }));
-    if (!user) {
-      throw new Error("User not found");
-    }
-    if (cartItem.length <= 0) {
-      toast.error("Produk Belum Ditambahkan");
-    } else {
-      const { id } = user;
-      dispatch(
-        createOrder({
-          customer_id: id,
-          order_source: "OFFLINE",
-          order_items: cartItem,
-        }),
-      );
-      router.push("/checkout");
-    }
-  };
+  // const handleCheckout = () => {
+  //   const cartItem = cart?.map((item: CartDataProps) => ({
+  //     product_id: item.productItem.id,
+  //     qty: item.qty,
+  //     options: item.productItem.options,
+  //   }));
+  //   if (!user) {
+  //     throw new Error("User not found");
+  //   }
+  //   if (cartItem.length <= 0) {
+  //     toast.error("Produk Belum Ditambahkan");
+  //   } else {
+  //     const { id } = user;
+  //     dispatch(
+  //       createOrder({
+  //         customer_id: id,
+  //         order_source: "OFFLINE",
+  //         order_items: cartItem,
+  //       }),
+  //     );
+  //     router.push("/checkout");
+  //   }
+  // };
 
   const handlePayment = async (paymentMethod: string) => {
     if (!dataOrder?.data.id) return;

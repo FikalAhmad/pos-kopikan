@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { NavButton } from "@/components/NavButton";
-import { dashboard, logout, newOrder, onlineOrder } from "@/lib/icons";
+import { dashboard, logout, newOrder, onlineOrder, settings } from "@/lib/icons";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { EqualIcon, X } from "lucide-react";
+import { EqualIcon, X, Boxes, Users } from "lucide-react";
 import placeholderimage from "@/app/favicon.ico";
 
 import {
@@ -98,6 +98,24 @@ const Sidebar = () => {
                 icon={onlineOrder}
                 label="Activity"
                 activePrefix="/activity"
+              />
+              <NavButton
+                href="/inventory"
+                icon={Boxes}
+                label="Inventory"
+                activePrefix="/inventory"
+              />
+              <NavButton
+                href="/teams"
+                icon={Users}
+                label="Teams"
+                activePrefix="/teams"
+              />
+              <NavButton
+                href="/settings"
+                icon={settings}
+                label="Settings"
+                activePrefix="/settings"
               />
             </nav>
             <Dialog>

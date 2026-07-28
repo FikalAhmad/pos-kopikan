@@ -16,12 +16,13 @@ import {
   CreditCard,
   CheckCircle2,
 } from "lucide-react";
+import Image from "next/image";
 
 interface OrderItem {
   name: string;
   qty: number;
   price: number;
-  notes?: string;
+  image: string;
 }
 
 interface OrderDetailsProps {
@@ -48,9 +49,8 @@ const OrderDetails = ({
       name: "Es Kopi Susu Kopikan",
       qty: 1,
       price: 18000,
-      notes: "Less Sugar, Normal Ice",
+      image: "/images/kopi-susu.png",
     },
-    { name: "Croissant Keju", qty: 1, price: 13000 },
   ],
 }: OrderDetailsProps) => {
   return (
@@ -114,26 +114,35 @@ const OrderDetails = ({
                 Order Items
               </h3>
             </div>
-            <div className="space-y-3 max-h-[160px] overflow-y-auto pr-1">
+            <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1">
               {items.map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex justify-between items-start text-xs"
+                  className="flex justify-between items-center text-xs gap-3 py-1"
                 >
-                  <div className="space-y-0.5">
-                    <p className="font-semibold text-gray-800">
-                      {item.name}{" "}
-                      <span className="text-gray-400 font-normal ml-1">
-                        x{item.qty}
-                      </span>
-                    </p>
-                    {item.notes && (
-                      <p className="text-[10px] text-amber-600 italic">
-                        Note: {item.notes}
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200/60 flex items-center justify-center">
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <Coffee size={18} className="text-gray-400" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-gray-800 truncate">
+                        {item.name}
                       </p>
-                    )}
+                      <p className="text-[10px] text-gray-400 font-medium mt-0.5">
+                        Qty: {item.qty} × {formatPrice(item.price)}
+                      </p>
+                    </div>
                   </div>
-                  <span className="font-semibold text-gray-700">
+                  <span className="font-semibold text-gray-700 flex-shrink-0 text-right">
                     {formatPrice(item.price * item.qty)}
                   </span>
                 </div>

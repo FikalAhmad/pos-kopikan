@@ -1,9 +1,22 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFetch } from "@/hooks/api/useFetch";
 import { FilterIcon, PencilIcon, Plus, SearchIcon } from "lucide-react";
 
+type TableResponse = {
+  id: string;
+  table_number: string;
+  qr_token: string;
+  is_active: boolean;
+};
 const TablesSection = () => {
+  const { data: tableList } = useFetch<TableResponse[]>(
+    ["tables"],
+    "/api/tables",
+  );
   return (
     <div className="w-full flex flex-col justify-between h-[calc(100vh-100px)]">
       <div className="flex flex-col gap-2">
@@ -58,60 +71,20 @@ const TablesSection = () => {
                 value="1"
                 className="w-full data-[state=inactive]:hidden grid grid-cols-3 gap-2"
               >
-                <div className="flex flex-col justify-between items-center bg-hijaugelap/20 text-xs px-2 py-2">
-                  <div className="flex flex-col">
-                    <div className="px-2 py-1 bg-hijaugelap rounded-full text-white">
-                      T-01
+                {tableList?.map((table) => (
+                  <div
+                    className="flex flex-col justify-between items-center bg-hijaugelap/20 text-xs px-2 py-2"
+                    key={table.id}
+                  >
+                    <div className="flex flex-col">
+                      <div className="px-2 py-1 bg-hijaugelap rounded-full text-white">
+                        {table.table_number}
+                      </div>
+                      <div className="text-hijaugelap">Sharon</div>
                     </div>
-                    <div className="text-hijaugelap">Sharon</div>
+                    <div className="">10.00 AM</div>
                   </div>
-                  <div className="">10.00 AM</div>
-                </div>
-                <div className="flex flex-col justify-between items-center bg-hijaugelap/20 text-xs px-2 py-2">
-                  <div className="flex flex-col">
-                    <div className="px-2 py-1 bg-hijaugelap rounded-full text-white">
-                      T-01
-                    </div>
-                    <div className="text-hijaugelap">Sharon</div>
-                  </div>
-                  <div className="">10.00 AM</div>
-                </div>
-                <div className="flex flex-col justify-between items-center bg-hijaugelap/20 text-xs px-2 py-2">
-                  <div className="flex flex-col">
-                    <div className="px-2 py-1 bg-hijaugelap rounded-full text-white">
-                      T-01
-                    </div>
-                    <div className="text-hijaugelap">Sharon</div>
-                  </div>
-                  <div className="">10.00 AM</div>
-                </div>
-                <div className="flex flex-col justify-between items-center bg-hijaugelap/20 text-xs px-2 py-2">
-                  <div className="flex flex-col">
-                    <div className="px-2 py-1 bg-hijaugelap rounded-full text-white">
-                      T-01
-                    </div>
-                    <div className="text-hijaugelap">Sharon</div>
-                  </div>
-                  <div className="">10.00 AM</div>
-                </div>
-                <div className="flex flex-col justify-between items-center bg-hijaugelap/20 text-xs px-2 py-2">
-                  <div className="flex flex-col">
-                    <div className="px-2 py-1 bg-hijaugelap rounded-full text-white">
-                      T-01
-                    </div>
-                    <div className="text-hijaugelap">Sharon</div>
-                  </div>
-                  <div className="">10.00 AM</div>
-                </div>
-                <div className="flex flex-col justify-between items-center bg-hijaugelap/20 text-xs px-2 py-2">
-                  <div className="flex flex-col">
-                    <div className="px-2 py-1 bg-hijaugelap rounded-full text-white">
-                      T-01
-                    </div>
-                    <div className="text-hijaugelap">Sharon</div>
-                  </div>
-                  <div className="">10.00 AM</div>
-                </div>
+                ))}
               </TabsContent>
               <TabsContent
                 value="2"

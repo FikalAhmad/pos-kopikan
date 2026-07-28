@@ -8,33 +8,51 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import BGHome from "@/public/assets/images/bg-home.webp";
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { login } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/store";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+
   const [form, setForm] = useState({
     email: "kasir@kopikan.test",
     password: "password123",
   });
-  const { login, isLoading, error } = useAuth();
 
   const handleEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login({ email: form.email, password: form.password });
+    setIsLoading(true);
+    try {
+      await dispatch(
+        login({ email: form.email, password: form.password }),
+      ).unwrap();
+      toast.success("Login has been success!");
+      router.push("/dashboard");
+    } catch (error) {
+      toast.error(error as string);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      {error && (
+      {/* {error && (
         <div className="p-3 text-sm text-white bg-red-500 rounded-md text-center">
           {error}
         </div>
-      )}
+      )} */}
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>

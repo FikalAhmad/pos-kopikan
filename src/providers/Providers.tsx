@@ -7,6 +7,7 @@ import ReactQueryProvider from "./ReactQueryProviders";
 import { persistor, store } from "@/redux/store";
 import { kopikanLogo } from "@/lib/icons";
 import Image from "next/image";
+import { AuthProvider } from "./AuthProvider";
 
 const ProvidersComponent = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -22,7 +23,7 @@ const ProvidersComponent = ({ children }: { children: React.ReactNode }) => {
           }
           persistor={persistor}
         >
-          {children}
+          <AuthProvider>{children}</AuthProvider>
         </PersistGate>
       </ReactQueryProvider>
     </Provider>

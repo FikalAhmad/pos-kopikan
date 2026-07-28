@@ -1,9 +1,3 @@
-export interface ApiResponse<T> {
-  data: T;
-  message?: string;
-  status?: number;
-}
-
 export interface QueryOptions<T> {
   onSuccess?: (data: T) => void;
   onError?: (error: Error) => void;
@@ -24,3 +18,23 @@ export interface MutationOptions<TData, TVariables> {
     updater: <TCacheData>(oldData: TCacheData, newData: TData) => TCacheData;
   };
 }
+
+export type CreateUserRequest = {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  role_id: string;
+};
+
+export type UserResponse = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role_id: string;
+  createdAt: Date;
+  role: {
+    role_name: string;
+  };
+};

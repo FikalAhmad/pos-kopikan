@@ -18,7 +18,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const ReportPage = () => {
-  const [showGraph, setShowGraph] = useState<boolean>(false);
+  const [showGraph, setShowGraph] = useState<boolean>(true);
   return (
     <div className="w-full flex flex-col gap-2">
       <div className="flex justify-between bg-white rounded-lg px-4 py-2">

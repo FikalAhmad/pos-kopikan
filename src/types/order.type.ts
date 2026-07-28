@@ -1,9 +1,14 @@
 import { ProductWithOption } from "./product.types";
 
 export interface OrderDataProps {
-  customer_id: string;
+  customer_name?: string;
+  table_id?: string;
+  shift_id?: string;
   order_source: string;
-  delivery_address?: string;
+  order_type: string;
+  total: number;
+  payment_method: string;
+  discounts?: string[];
   order_items: {
     product_id: string;
     qty: number;
@@ -21,10 +26,13 @@ export interface OrderDataProps {
 
 export interface OrderDataResponse {
   id: string;
-  customer_id: string;
+  customer_name: string;
   order_date: string;
+  order_number: string;
   order_source: string;
-  delivery_address?: string;
+  order_type: string;
+  shift_id?: string;
+  table_id?: string;
   order_details: OrderDetailResponse[];
   total: number;
   status: string;
@@ -32,10 +40,14 @@ export interface OrderDataResponse {
 }
 
 export interface OrderState {
-  isLoading: boolean;
-  error: unknown;
+  data: OrderDataResponse[];
   success: boolean;
-  dataOrder: { data: OrderDataResponse } | null;
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 export interface OrderDetailResponse {
@@ -60,4 +72,12 @@ export interface OrderDetailResponse {
   qty: number;
   total_price: number;
   unit_price: number;
+}
+
+export interface TableResponse {
+  id: string;
+  table_number: string;
+  qr_token: string;
+  is_active: boolean;
+  createdAt: string;
 }

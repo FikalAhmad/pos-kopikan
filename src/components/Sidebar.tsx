@@ -2,13 +2,19 @@
 
 import Image from "next/image";
 import { NavButton } from "@/components/NavButton";
-import { dashboard, logout, newOrder, onlineOrder, settings } from "@/lib/icons";
-import { useAuth } from "@/hooks/useAuth";
+import {
+  dashboard,
+  newOrder,
+  onlineOrder,
+  settings,
+  logout as logoutIcon,
+} from "@/lib/icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -20,16 +26,29 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetDescription,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { logout } from "@/redux/features/auth/authSlice";
+import { toast } from "sonner";
+import { removeAllCart } from "@/redux/features/carts/cartSlice";
 
 const Sidebar = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
-  const { user, logout: logoutUser } = useAuth();
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
 
-  const handleLogout = () => {
-    logoutUser();
+  const handleLogout = async () => {
+    try {
+      await dispatch(logout()).unwrap();
+      dispatch(removeAllCart({ silent: true }));
+      toast.success("Logout has been success!");
+    } catch {
+      toast.error("Logout failed");
+    }
   };
 
   return (
@@ -47,6 +66,10 @@ const Sidebar = () => {
         className="border-none p-0 w-1/5"
         hideCloseButton
       >
+        <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+        <SheetDescription className="sr-only">
+          Main navigation for the POS Kopikan application.
+        </SheetDescription>
         <aside className="flex flex-col justify-between h-screen bg-white shadow-sm">
           <div className="flex flex-col justify-between h-full">
             <div className="flex items-center w-full p-4 justify-between gap-2">
@@ -65,7 +88,11 @@ const Sidebar = () => {
                     {user?.name || "Employee"}
                   </div>
                   <div className="text-[8px] text-hijaugelap font-bold uppercase tracking-wider mt-0.5">
-                    {user?.role || "Staff"}
+                    {(user &&
+                      (typeof user.role === "object"
+                        ? user.role.role_name
+                        : user.role)) ||
+                      "Staff"}
                   </div>
                 </div>
               </div>
@@ -124,26 +151,22 @@ const Sidebar = () => {
                   <div className="text-sm font-bold text-gray-800 truncate">
                     Log Out
                   </div>
-                  <Button
-                    className="w-10 h-10 rounded-full"
-                    variant={"destructive"}
-                    size={"icon"}
-                  >
+                  <div className="w-10 h-10 rounded-full bg-destructive flex items-center justify-center text-destructive-foreground shrink-0">
                     <Image
-                      src={logout}
+                      src={logoutIcon}
                       alt="Logo"
                       width={20}
                       height={20}
                       className="brightness-0 invert"
                     />
-                  </Button>
+                  </div>
                 </div>
               </DialogTrigger>
               <DialogContent className="max-w-[320px] bg-white p-6 rounded-2xl border-none shadow-2xl">
                 <DialogHeader className="flex flex-col items-center gap-2">
                   <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mb-2">
                     <Image
-                      src={logout}
+                      src={logoutIcon}
                       alt="Logout"
                       width={24}
                       height={24}
@@ -153,9 +176,9 @@ const Sidebar = () => {
                   <DialogTitle className="text-xl font-bold text-gray-900">
                     Sign Out?
                   </DialogTitle>
-                  <p className="text-sm text-gray-500 text-center">
+                  <DialogDescription className="text-sm text-gray-500 text-center">
                     Are you sure you want to log out of your account?
-                  </p>
+                  </DialogDescription>
                 </DialogHeader>
                 <div className="flex gap-3 mt-4">
                   <DialogClose asChild>

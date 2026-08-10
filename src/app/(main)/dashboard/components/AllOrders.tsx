@@ -24,7 +24,7 @@ const AllOrders = () => {
     to: addDays(new Date(new Date().getFullYear(), 0, 12), 30),
   });
   const { data: orders, isLoading } = useGetAllOrdersQuery();
-  console.log(orders);
+
   return (
     <div className="flex flex-col gap-2 bg-white rounded-lg px-4 py-2 h-[calc(100vh-250px)]">
       <div className="flex justify-between items-center">
@@ -155,7 +155,6 @@ const AllOrders = () => {
               </TableCell>
             </TableRow>
           ) : (
-            // Data Render State
             orders.data.map((order) => (
               <TableRow key={order.id}>
                 <TableCell>{order.order_number}</TableCell>
@@ -171,7 +170,7 @@ const AllOrders = () => {
                     {order.status}
                   </Badge>
                 </TableCell>
-                <TableCell>{formatPrice(order.total)}</TableCell>
+                <TableCell>{formatPrice(order.total || order.amount || 0)}</TableCell>
                 <TableCell>
                   <Badge className={getStatusBadgeClassName(order.status)}>
                     {order.status}

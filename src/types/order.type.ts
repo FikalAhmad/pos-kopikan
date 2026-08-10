@@ -1,6 +1,6 @@
 import { ProductWithOption } from "./product.types";
 
-export interface OrderDataProps {
+export interface OrderDataRequest {
   customer_name?: string;
   table_id?: string;
   shift_id?: string;
@@ -24,23 +24,39 @@ export interface OrderDataProps {
   }[];
 }
 
-export interface OrderDataResponse {
+export interface PaymentData {
   id: string;
-  customer_name: string;
-  order_date: string;
-  order_number: string;
-  order_source: string;
-  order_type: string;
-  shift_id?: string;
-  table_id?: string;
-  order_details: OrderDetailResponse[];
-  total: number;
+  order_id: string;
+  amount: number;
   status: string;
+  payment_method: string;
+  midtrans_order_id?: string;
+  qr_url?: string;
+  expiry_time: string;
+  refunded_amount?: number;
+  refund_reason?: string;
   createdAt: string;
 }
+export interface PaymentDataResponse {
+  data: PaymentData;
+  success: boolean;
+}
 
-export interface OrderState {
-  data: OrderDataResponse[];
+export interface OrderData {
+  id: string;
+  customer_name: string | null;
+  createdAt: Date;
+  status: string;
+  order_number: string;
+  table_id: string | null;
+  shift_id: string | null;
+  order_source: string;
+  order_type: string;
+  total: number;
+}
+
+export interface OrderDataResponse {
+  data: OrderData[];
   success: boolean;
   pagination: {
     page: number;
@@ -74,6 +90,23 @@ export interface OrderDetailResponse {
   unit_price: number;
 }
 
+export interface TrackOrderResponse {
+  id: string;
+  customer_name: string | null;
+  createdAt: Date;
+  status: string;
+  order_number: string;
+  table_id: string | null;
+  order_details: OrderDetailResponse[];
+  table: {
+    table_number: string;
+    is_active: boolean;
+  } | null;
+  shift_id: string | null;
+  order_source: string;
+  order_type: string;
+  total: number;
+}
 export interface TableResponse {
   id: string;
   table_number: string;

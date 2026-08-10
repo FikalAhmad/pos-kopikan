@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFetch } from "@/hooks/api/useFetch";
-import { FilterIcon, PencilIcon, Plus, SearchIcon } from "lucide-react";
+import { FilterIcon, Plus } from "lucide-react";
 
 type TableResponse = {
   id: string;
@@ -42,21 +42,9 @@ const TablesSection = () => {
                 >
                   1st Floor
                 </TabsTrigger>
-                <TabsTrigger
-                  value="2"
-                  className="border border-transparent data-[state=active]:shadow-none data-[state=active]:border-hijaugelap data-[state=active]:bg-white data-[state=active]:text-hijaugelap rounded-full text-gray-500 px-10 py-2 text-sm transition-all bg-gray-100"
-                >
-                  2nd Floor
-                </TabsTrigger>
               </TabsList>
 
               <div className="flex gap-2 h-fit">
-                <Button className="rounded-full" size={"icon"}>
-                  <PencilIcon size={16} />
-                </Button>
-                <Button className="rounded-full" size={"icon"}>
-                  <SearchIcon size={16} />
-                </Button>
                 <Button className="rounded-full" size={"icon"}>
                   <FilterIcon size={16} />
                 </Button>

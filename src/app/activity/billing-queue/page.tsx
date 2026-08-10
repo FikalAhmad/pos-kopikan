@@ -1,3 +1,5 @@
+"use client";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import QueueCard from "./components/QueueCard";
 import { Button } from "@/components/ui/button";
@@ -5,8 +7,23 @@ import { EllipsisIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import TrackOrderCard from "./components/TrackOrderCard";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useGetTrackOrderQuery } from "@/redux/features/api/ordersApi";
+import { TrackOrderResponse } from "@/types/order.type";
+
+export const OrderStatusType = ["PAID", "PREPARING", "READY"];
 
 const BillingPage = () => {
+  const { data: orderList } = useGetTrackOrderQuery();
+
+  const trackorder = orderList?.data.filter((item: TrackOrderResponse) =>
+    OrderStatusType.includes(item.status),
+  );
+  const queueorder = orderList?.data.filter((item: TrackOrderResponse) =>
+    Boolean(item.table_id || item.table?.table_number),
+  );
+
+  console.log(queueorder);
+
   return (
     <div className="w-full flex flex-col gap-2 justify-between">
       <Tabs
@@ -37,7 +54,7 @@ const BillingPage = () => {
 
           <div className="flex gap-2 h-fit">
             <div className="px-4 py-2 text-hijaugelap bg-hijaugelap/20 rounded-full text-sm font-semibold">
-              2 Active Queue
+              {queueorder?.length} Active Queue
             </div>
             <Button className="rounded-full" size={"icon"}>
               <EllipsisIcon size={16} />
@@ -53,23 +70,41 @@ const BillingPage = () => {
             value="all"
             className="w-full data-[state=inactive]:hidden flex flex-col gap-2"
           >
-            <QueueCard />
-            <QueueCard />
-            <QueueCard />
-            <QueueCard />
-            <QueueCard />
+            {queueorder?.map((item: TrackOrderResponse) => {
+              return (
+                <div key={item.id}>
+                  <QueueCard order={item} />
+                </div>
+              );
+            })}
           </TabsContent>
           <TabsContent
             value="active"
             className="w-full data-[state=inactive]:hidden flex flex-col gap-2"
           >
-            <QueueCard />
+            {queueorder
+              ?.filter((item) => item.table?.is_active == true)
+              .map((item: TrackOrderResponse) => {
+                return (
+                  <div key={item.id}>
+                    <QueueCard order={item} />
+                  </div>
+                );
+              })}
           </TabsContent>
           <TabsContent
             value="closed"
             className="w-full data-[state=inactive]:hidden flex flex-col gap-2"
           >
-            <QueueCard />
+            {queueorder
+              ?.filter((item) => item.table?.is_active == false)
+              .map((item: TrackOrderResponse) => {
+                return (
+                  <div key={item.id}>
+                    <QueueCard order={item} />
+                  </div>
+                );
+              })}
           </TabsContent>
         </ScrollArea>
       </Tabs>
@@ -99,10 +134,13 @@ const BillingPage = () => {
         </div>
 
         <div className="grid grid-cols-4 gap-2 px-4 py-2 bg-white rounded-lg shadow-sm justify-items-center">
-          <TrackOrderCard />
-          <TrackOrderCard />
-          <TrackOrderCard />
-          <TrackOrderCard />
+          {trackorder?.map((item: TrackOrderResponse) => {
+            return (
+              <div key={item.id}>
+                <TrackOrderCard order={item} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

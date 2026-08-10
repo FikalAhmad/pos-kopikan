@@ -18,7 +18,7 @@ import { useGetAllUsersQuery } from "@/redux/features/api/usersApi";
 import AddTeam from "./add-team";
 import EditTeam from "./edit-team";
 
-export const TeamsPage = () => {
+const TeamsPage = () => {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("All");
 

@@ -13,12 +13,12 @@ export const shiftApi = createApi({
   tagTypes: ["Shift"],
   endpoints: (builder) => ({
     openShift: builder.mutation<ApiResponse<ShiftResponse>, OpenShiftTypes>({
-      query: (body) => ({ url: "/shift/open", method: "POST", body }),
+      query: (body) => ({ url: "api/shift/open", method: "POST", body }),
       invalidatesTags: ["Shift"],
     }),
     closeShift: builder.mutation<ApiResponse<ShiftResponse>, CloseShiftTypes>({
       query: (body) => ({
-        url: `/shift/${body.shift_id}/close`,
+        url: `api/shift/close`,
         method: "POST",
         body,
       }),

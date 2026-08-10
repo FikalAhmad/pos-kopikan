@@ -3,17 +3,15 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CartItem from "./CartItem";
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { selectCartTotals } from "@/redux/features/carts/cartSelectors";
 import { CartDataProps } from "@/types/cart.types";
 import { toast } from "sonner";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import Discount from "./Discount";
@@ -32,18 +30,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  useCreateOrderMutation,
-  useGetAllOrdersQuery,
-} from "@/redux/features/api/ordersApi";
-import { TableResponse } from "@/types/order.type";
+import { useCreateOrderMutation } from "@/redux/features/api/ordersApi";
+import { PaymentData, TableResponse } from "@/types/order.type";
+import QRWidget from "./QR";
+import { removeAllCart } from "@/redux/features/carts/cartSlice";
 
 const Cart = () => {
+  const dispatch = useAppDispatch();
   const { cart } = useAppSelector((state) => state.cart);
   const { totalPrice } = useAppSelector((state) => state.cart);
-  const { user } = useAppSelector((state) => state.auth);
-  const { data: orders } = useGetAllOrdersQuery();
-  const discountData = useFetch<DiscountProps[]>(
+  const { shift_id } = useAppSelector((state) => state.shift);
+
+  const { data: discountData } = useFetch<DiscountProps[]>(
     ["discounts"],
     "/api/discounts",
   );
@@ -57,11 +55,13 @@ const Cart = () => {
     useState<string>("TAKE_AWAY");
   const [selectedDiscountId, setSelectedDiscountId] = useState<string>("none");
   const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
+  const [openCheckoutDialog, setOpenCheckoutDialog] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [totalCash, setTotalCash] = useState(0);
   const [customerName, setCustomerName] = useState<string>("");
+  const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
 
-  const selectedDiscount = discountData.data?.find(
+  const selectedDiscount = discountData?.find(
     (d) => d.id === selectedDiscountId,
   );
 
@@ -72,22 +72,37 @@ const Cart = () => {
 
   const [createOrder, { isLoading }] = useCreateOrderMutation();
 
+  const resetFormAndCart = () => {
+    dispatch(removeAllCart({ silent: true }));
+    setCustomerName("");
+    setSelectedTableId("");
+    setSelectedDiscountId("none");
+    setPaymentMethod("");
+    setTotalCash(0);
+    setPaymentData(null);
+    setOpenCheckoutDialog(false);
+  };
+
   const handleCheckout = async () => {
     const cartItem = cart?.map((item: CartDataProps) => ({
       product_id: item.productItem.id,
       qty: item.qty,
       options: item.productItem.options,
     }));
-    if (!user) {
-      throw new Error("User not found");
+    if (!shift_id) {
+      toast.error("Shift tidak ditemukan!");
+      return;
     }
     if (cartItem.length <= 0) {
-      toast.error("Produk Belum Ditambahkan");
-    } else {
-      await createOrder({
+      toast.error("Produk belum ditambahkan");
+      return;
+    }
+
+    try {
+      const response = await createOrder({
         customer_name: customerName,
         table_id: selectedTableId,
-        shift_id: user.id,
+        shift_id: shift_id,
         order_source: "CASHIER",
         order_type: selectedOrderType.toUpperCase(),
         total: totalPaymentAfterTax,
@@ -97,20 +112,36 @@ const Cart = () => {
             ? [selectedDiscountId]
             : [],
         order_items: cartItem,
-      });
+      }).unwrap();
+
+      const orderResult = response.data;
+
+      if (paymentMethod.toLowerCase() === "cash") {
+        toast.success("Pembayaran Cash Berhasil!");
+        resetFormAndCart();
+      } else if (orderResult && orderResult.qr_url) {
+        setPaymentData(orderResult);
+      }
+    } catch (error) {
+      console.error("Checkout failed:", error);
+      toast.error((error as string) || "Gagal memproses pembayaran");
     }
+  };
+
+  const handleCheckoutDialogChange = (open: boolean) => {
+    if (!open) {
+      setPaymentData(null);
+    }
+    setOpenCheckoutDialog(open);
   };
 
   const isFormValid =
     cart.length > 0 &&
     Boolean(paymentMethod) &&
     Boolean(selectedOrderType) &&
+    Boolean(customerName) &&
     (selectedOrderType !== "DINE_IN" || Boolean(selectedTableId)) &&
     (paymentMethod !== "cash" || totalCash >= totalPaymentAfterTax);
-
-  const nextOrderSeq = (orders?.data?.length || 0) + 1;
-  const todayStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  const currentOrderNumber = `ORD-${todayStr}-${String(nextOrderSeq).padStart(4, "0")}`;
 
   return (
     <div className="flex flex-col justify-between w-[309px] min-w-[309px] max-w-[309px]">
@@ -122,9 +153,6 @@ const Cart = () => {
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
           />
-          <span className="text-[10px] text-gray-400">
-            Order Number {currentOrderNumber}
-          </span>
         </div>
         <div className="flex gap-2 justify-between items-center">
           <Select value={selectedTableId} onValueChange={setSelectedTableId}>
@@ -162,18 +190,18 @@ const Cart = () => {
             </SelectContent>
           </Select>
         </div>
-        <ScrollArea className="h-full max-h-[calc(100vh-320px)] pr-4">
+        <ScrollArea className="h-full max-h-[calc(100vh-380px)] pr-4">
           <div className="flex flex-col gap-5">
-            {cart?.map((item: CartDataProps, idx: number) => {
+            {cart?.map((item: CartDataProps) => {
               return (
-                <>
+                <div key={item.productItem.id}>
                   <CartItem
-                    key={item.productItem.id + idx}
+                    key={item.productItem.id}
                     data={item.productItem}
                     qty={item.qty}
                   />
                   <Separator />
-                </>
+                </div>
               );
             })}
           </div>
@@ -223,7 +251,7 @@ const Cart = () => {
             <Discount
               value={selectedDiscountId}
               onValueChange={setSelectedDiscountId}
-              discountData={discountData?.data || []}
+              discountData={discountData || []}
             />
           </div>
           <Button
@@ -248,40 +276,57 @@ const Cart = () => {
             setTotalCash={setTotalCash}
           />
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              className="rounded-none w-full"
-              size={"lg"}
-              disabled={!isFormValid}
-            >
-              Process to Payment
-            </Button>
-          </DialogTrigger>
+        <Dialog
+          open={openCheckoutDialog}
+          onOpenChange={handleCheckoutDialogChange}
+        >
+          <Button
+            className="rounded-none w-full"
+            size={"lg"}
+            disabled={!isFormValid}
+            onClick={() => setOpenCheckoutDialog(true)}
+          >
+            Process to Payment
+          </Button>
           <DialogContent className="max-w-[320px] bg-white p-6 rounded-2xl border-none shadow-2xl">
-            <DialogHeader className="flex flex-col items-center gap-2">
-              <DialogTitle className="text-xl font-bold text-gray-900">
-                Process to Payment?
-              </DialogTitle>
-              <p className="text-sm text-gray-500 text-center">
-                Are you sure you want to process to payment?
-              </p>
-            </DialogHeader>
-            <div className="flex gap-3 mt-4">
-              <DialogClose asChild>
-                <Button className="flex-1 rounded-xl h-11" variant="outline">
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button
-                className="flex-1 text-white rounded-xl h-11 transition-colors"
-                onClick={() => handleCheckout()}
-              >
-                <div className="text-center">
-                  {isLoading ? "Processing ..." : "Process to Payment"}
+            {paymentData && paymentData.qr_url ? (
+              <QRWidget
+                order_id={paymentData.order_id}
+                qr_url={paymentData.qr_url}
+                amount={paymentData.amount}
+                onSuccess={resetFormAndCart}
+              />
+            ) : (
+              <>
+                <DialogHeader className="flex flex-col items-center gap-2">
+                  <DialogTitle className="text-xl font-bold text-gray-900">
+                    Process to Payment?
+                  </DialogTitle>
+                  <p className="text-sm text-gray-500 text-center">
+                    Are you sure you want to process to payment?
+                  </p>
+                </DialogHeader>
+                <div className="flex gap-3 mt-4">
+                  <Button
+                    className="flex-1 rounded-xl h-11"
+                    variant="outline"
+                    onClick={() => setOpenCheckoutDialog(false)}
+                    disabled={isLoading}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="flex-1 text-white rounded-xl h-11 transition-colors"
+                    onClick={() => handleCheckout()}
+                    disabled={isLoading}
+                  >
+                    <div className="text-center">
+                      {isLoading ? "Processing ..." : "Process to Payment"}
+                    </div>
+                  </Button>
                 </div>
-              </Button>
-            </div>
+              </>
+            )}
           </DialogContent>
         </Dialog>
       </div>

@@ -8,10 +8,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useFetch } from "@/hooks/api/useFetch";
 import { SearchIcon } from "lucide-react";
 import Image from "next/image";
 
-const FavoriteProduct = () => {
+type FavouriteProductResponse = {
+  image: string;
+  product_name: string;
+  qty: number;
+};
+const FavoriteProduct = ({ period }: { period: string }) => {
+  const { data: favouriteProductData } = useFetch<FavouriteProductResponse[]>(
+    ["dashboard-favouriteproduct", period ?? ""],
+    `/api/dashboard/favourite-products?period=${period}`,
+  );
+
   return (
     <div className="flex flex-col gap-2 bg-white rounded-lg px-4 py-2">
       <div className="flex justify-between items-center">
@@ -46,97 +57,35 @@ const FavoriteProduct = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <Image
-                  src="https://kopikan.vercel.app/product-images/Matcha.png"
-                  alt="Matcha"
-                  width={40}
-                  height={40}
-                  className="rounded-lg"
-                />
-              </TableCell>
-              <TableCell>Matcha Latte</TableCell>
-              <TableCell>183 Items</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Image
-                  src="https://kopikan.vercel.app/product-images/Matcha.png"
-                  alt="Matcha"
-                  width={40}
-                  height={40}
-                  className="rounded-lg"
-                />
-              </TableCell>
-              <TableCell>Matcha Latte</TableCell>
-              <TableCell>183 Items</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Image
-                  src="https://kopikan.vercel.app/product-images/Matcha.png"
-                  alt="Matcha"
-                  width={40}
-                  height={40}
-                  className="rounded-lg"
-                />
-              </TableCell>
-              <TableCell>Matcha Latte</TableCell>
-              <TableCell>183 Items</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Image
-                  src="https://kopikan.vercel.app/product-images/Matcha.png"
-                  alt="Matcha"
-                  width={40}
-                  height={40}
-                  className="rounded-lg"
-                />
-              </TableCell>
-              <TableCell>Matcha Latte</TableCell>
-              <TableCell>183 Items</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Image
-                  src="https://kopikan.vercel.app/product-images/Matcha.png"
-                  alt="Matcha"
-                  width={40}
-                  height={40}
-                  className="rounded-lg"
-                />
-              </TableCell>
-              <TableCell>Matcha Latte</TableCell>
-              <TableCell>183 Items</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Image
-                  src="https://kopikan.vercel.app/product-images/Matcha.png"
-                  alt="Matcha"
-                  width={40}
-                  height={40}
-                  className="rounded-lg"
-                />
-              </TableCell>
-              <TableCell>Matcha Latte</TableCell>
-              <TableCell>183 Items</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Image
-                  src="https://kopikan.vercel.app/product-images/Matcha.png"
-                  alt="Matcha"
-                  width={40}
-                  height={40}
-                  className="rounded-lg"
-                />
-              </TableCell>
-              <TableCell>Matcha Latte</TableCell>
-              <TableCell>183 Items</TableCell>
-            </TableRow>
+            {favouriteProductData && favouriteProductData.length <= 0 ? (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <div className="text-sm">
+                    Belum ada product yang ditambahkan.
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : (
+              favouriteProductData?.map(
+                (product: FavouriteProductResponse, idx) => {
+                  return (
+                    <TableRow key={product.product_name + (idx + 1)}>
+                      <TableCell>
+                        <Image
+                          src={product.image}
+                          alt={product.product_name}
+                          width={40}
+                          height={40}
+                          className="rounded-lg"
+                        />
+                      </TableCell>
+                      <TableCell>{product.product_name}</TableCell>
+                      <TableCell>{product.qty} Items</TableCell>
+                    </TableRow>
+                  );
+                },
+              )
+            )}
           </TableBody>
         </Table>
       </ScrollArea>

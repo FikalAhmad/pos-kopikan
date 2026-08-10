@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { shiftApi } from "../api/shiftsApi";
 
 type ShiftState = {
+  shift_id: string;
   cashier_id: string;
   start_time: string;
   end_time?: string;
@@ -13,13 +14,14 @@ type ShiftState = {
 };
 
 const initialState: ShiftState = {
+  shift_id: "",
   cashier_id: "",
   start_time: "",
   end_time: "",
   starting_cash: 0,
   actual_cash: 0,
   expected_cash: 0,
-  status: "OPEN",
+  status: "CLOSED",
   notes: "",
 };
 
@@ -33,6 +35,7 @@ const shiftSlice = createSlice({
         shiftApi.endpoints.openShift.matchFulfilled,
         (state, action) => {
           if (action.payload?.data) {
+            state.shift_id = action.payload.data.id;
             state.cashier_id = action.payload.data.cashier_id;
             state.start_time = action.payload.data.start_time;
             state.starting_cash = action.payload.data.starting_cash;

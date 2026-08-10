@@ -19,12 +19,13 @@ import { cn } from "@/lib/utils";
 
 const ReportPage = () => {
   const [showGraph, setShowGraph] = useState<boolean>(true);
+  const [period, setPeriod] = useState<string>("monthly");
   return (
     <div className="w-full flex flex-col gap-2">
       <div className="flex justify-between bg-white rounded-lg px-4 py-2">
         <div className="flex gap-2 items-center">
           <div>Date Period:</div>
-          <Select>
+          <Select onValueChange={(v) => setPeriod(v)}>
             <SelectTrigger className="w-32 h-9 rounded-full [&>svg:last-of-type]:hidden flex items-center pl-2 pr-1">
               <SelectValue placeholder="Monthly" />
               <div className="p-1.5 rounded-full bg-hijaugelap/20">
@@ -32,10 +33,10 @@ const ReportPage = () => {
               </div>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Daily</SelectItem>
-              <SelectItem value="2">Weekly</SelectItem>
-              <SelectItem value="3">Monthly</SelectItem>
-              <SelectItem value="4">Yearly</SelectItem>
+              <SelectItem value="daily">Daily</SelectItem>
+              <SelectItem value="weekly">Weekly</SelectItem>
+              <SelectItem value="monthly">Monthly</SelectItem>
+              <SelectItem value="yearly">Yearly</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -57,15 +58,15 @@ const ReportPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2 h-[calc(100vh-150px)] overflow-y-auto pr-2">
         <div className="col-span-3">
-          <SummarySelling />
+          <SummarySelling period={period} />
         </div>
         {showGraph && (
           <div className="col-span-2">
-            <ReportGraph />
+            <ReportGraph period={period} />
           </div>
         )}
         <div className="col-span-1">
-          <FavoriteProduct />
+          <FavoriteProduct period={period} />
         </div>
         <div className={cn("col-span-3", !showGraph && "col-span-2")}>
           <AllOrders />

@@ -1,14 +1,11 @@
 export interface OpenShiftTypes {
   cashier_id: string;
-  start_time: Date;
   starting_cash: number;
 }
 
 export interface CloseShiftTypes {
   shift_id: string;
-  end_time?: Date;
   actual_cash?: number;
-  expecting_cash?: number;
   notes?: string;
 }
 
